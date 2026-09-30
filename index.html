@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>RénoDirect — Vos projets de rénovation</title>
+<title>Prototype inscription</title>
 <style>
 :root{--bg:#080a0b;--card:#111416;--line:#24292d;--text:#f7f8f8;--muted:#949ca2;--accent:#c9aa78;--field:#15191b}
 *{box-sizing:border-box} body{margin:0;background:#050607;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
@@ -2621,49 +2621,39 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 </script>
 <script id="rd72-feed-render">
 (function(){
- function read(){try{var a=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+ function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
  function render(){
-  var host=document.getElementById('rd62LiveProjects');if(!host)return;
-  host.textContent='';
-  read().filter(function(p){return p&&typeof p==='object'}).forEach(function(p){
-   var card=document.createElement('a');card.href='#contractorProject';card.className='rd58-job rd72-livejob';
-   function add(tag,value,cls){var el=document.createElement(tag);el.textContent=value;if(cls)el.className=cls;card.appendChild(el);return el}
-   add('small','PROJET CLIENT');add('h3',p.name||p.type||'Projet de rénovation');
-   add('p',p.city||'Votre secteur','rd58-place');add('p',p.description||'');
-   var tags=add('div','','rd58-tags');
-   [p.budget||'Budget à confirmer',p.timing||'Échéancier à confirmer'].forEach(function(value){var tag=document.createElement('span');tag.textContent=value;tags.appendChild(tag)});
-   card.addEventListener('click',function(){window.RD84Selected=p;try{localStorage.setItem('renodirect_selected_project_v1',JSON.stringify(p))}catch(e){}});
-   host.appendChild(card);
-  });
+  var host=document.getElementById('rd62LiveProjects');
+  if(!host)return;
+  var arr=[];
+  try{arr=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]')}catch(e){}
+  if(!arr.length){host.innerHTML='';return}
+  host.innerHTML=arr.map(function(p,i){
+   return '<a href="#contractorProject" class="rd58-job rd72-livejob" onclick="localStorage.setItem(\\'renodirect_selected_project_v1\\',JSON.stringify('+JSON.stringify(p).replace(/"/g,'&quot;')+'))">'+
+    '<div class="rd58-jobtop"><span class="rd58-match">NOUVEAU · CLIENT</span><small>'+esc(p.city)+'</small></div>'+
+    '<h3>'+esc(p.type)+'</h3>'+
+    '<p>'+esc(p.description)+'</p>'+
+    '<div class="rd58-tags"><span>'+esc(p.budget)+'</span><span>'+esc(p.timing)+'</span></div>'+
+   '</a>';
+  }).join('');
  }
- function init(){render();document.querySelectorAll('#contractorFeed a.rd58-job:not(.rd72-livejob)').forEach(function(a){a.addEventListener('click',function(){window.RD84Selected=null;try{localStorage.removeItem('renodirect_selected_project_v1')}catch(e){}})})}
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
  window.addEventListener('hashchange',function(){if(location.hash==='#contractorFeed')render()});
- window.addEventListener('rd84:published',render);
 })();
 </script><script id="rd77-detail-data">
 (function(){
- function read(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
- function put(id,value,fallback){var e=document.getElementById(id);if(e)e.textContent=value||fallback||'—'}
- var defaults=null;
+ function put(id,v){var e=document.getElementById(id);if(e&&v)e.textContent=v}
  function fill(){
-  var p=window.RD84Published||read('rd83PublishedProject');
-  if(p){
-   put('rd77Title',p.name||p.type||p.title,'Projet de rénovation');
-   put('rd77Type',p.type,'Projet de rénovation');put('rd77Budget',p.budget);put('rd77Timing',p.timing);put('rd77Description',p.description,'Aucune description');
-   var place=[p.city,p.postal].filter(Boolean).join(' · ');put('rd77Place',place,'Votre secteur');put('rd77Location',place,'Votre secteur');
-  }
-  var pro=document.getElementById('contractorProject');if(!pro)return;
-  var fields=[pro.querySelector('h1'),pro.querySelector('.rd58-place'),pro.querySelector('.rd58-clientfacts strong'),pro.querySelectorAll('.rd58-clientfacts strong')[1],pro.querySelector('.rd58-copy p'),pro.querySelector('.rd58-detailhead span'),pro.querySelector('.rd58-copy .rd58-tags')];
-  var previews=[pro.querySelector('.rd58-match'),pro.querySelector('.rd58-photo-grid')];
-  if(!defaults)defaults={texts:fields.map(function(e){return e?e.textContent:''}),display:previews.map(function(e){return e?e.style.display:''})};
-  var selected=window.RD84Selected===null?null:(window.RD84Selected||read('renodirect_selected_project_v1'));
-  var values=selected?[selected.name||selected.type||'Projet de rénovation',selected.city||'Votre secteur',selected.budget||'Budget à confirmer',selected.timing||'Échéancier à confirmer',selected.description||'Aucune description',selected.id||'Projet client',selected.type||'Projet de rénovation']:defaults.texts;
-  fields.forEach(function(e,i){if(e)e.textContent=values[i]});
-  previews.forEach(function(e,i){if(e)e.style.display=selected?'none':defaults.display[i]});
+  var p=null;
+  try{p=JSON.parse(localStorage.getItem('renodirect_selected_project_v1')||'null')}catch(e){}
+  if(!p&&window.RD74DATA)p=window.RD74DATA;
+  if(!p)return;
+  put('rd77Title',p.type||p.title);put('rd77Type',p.type||p.title);put('rd77Budget',p.budget);
+  put('rd77Timing',p.timing);put('rd77Description',p.description);
+  var loc=(p.city||'')+(p.postal?' · '+p.postal:'');put('rd77Place',loc);put('rd77Location',loc);
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill);else fill();
- window.addEventListener('hashchange',fill);window.addEventListener('rd84:published',fill);
+ window.addEventListener('hashchange',function(){if(location.hash==='#clientProjectDetail')fill()});
 })();
 </script><script id="rd81-name-persist">
 (function(){
@@ -2674,40 +2664,36 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 })();
 </script><script id="rd83-publish-fix">
 (function(){
- function read(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch(e){return fallback}}
- function txt(id){var el=document.getElementById(id);return el?String(el.value||'').trim():''}
- function put(id,value){var el=document.getElementById(id);if(el)el.textContent=value}
- function display(p){
-  put('rd74CardType',p.name||p.type||'Projet de rénovation');
-  put('rd74CardDesc',p.description||'Projet publié');
-  put('rd74CardBudget',p.budget||'Budget à confirmer');
-  put('rd74CardTiming',p.timing||'Échéancier à confirmer');
-  put('rd74CardLocation',[p.city,p.postal].filter(Boolean).join(' · ')||'Votre secteur');
-  put('rd79ActivityTitle',p.name||p.type||'Projet de rénovation');
-  document.documentElement.classList.add('rd74-has-project');
- }
+ function txt(id){var e=document.getElementById(id);return e?String(e.value||'').trim():''}
+ function set(id,v){var e=document.getElementById(id);if(e&&v)e.textContent=v}
  function publish(){
-  RD72.captureDescription();RD72.captureLocation();
-  var d=window.RD74DATA||{};
-  var p={id:window.RD84PublishId||(window.RD84PublishId='RD-'+Date.now()),name:txt('rd80ProjectName')||d.type||'Projet de rénovation',type:d.type||'',description:d.description||'',budget:d.budget||'',timing:d.timing||'',city:d.city||'',postal:d.postal||''};
-  window.RD84Published=p;display(p);
-  try{
-   var projects=read('renodirect_test_projects_v1',[]);
-   if(!Array.isArray(projects))projects=[];
-   projects=projects.filter(function(item){return item&&item.id!==p.id});
-   projects.unshift(p);
-   localStorage.setItem('rd83PublishedProject',JSON.stringify(p));
-   localStorage.setItem('renodirect_test_projects_v1',JSON.stringify(projects));
-  }catch(e){}
-  window.dispatchEvent(new Event('rd84:published'));
-  return true;
+   var name=txt('rd80ProjectName');
+   try{ if(!name) name=localStorage.getItem('rd81ProjectName')||''; }catch(e){}
+   var d=(window.RD72&&RD72.data)||{};
+   var title=name||d.type||'Mon projet';
+   set('rd74CardType',title);
+   set('rd74CardDesc',txt('rd62Description')||d.description||'Projet publié avec succès.');
+   set('rd74CardBudget',d.budget||'Budget à confirmer');
+   set('rd74CardTiming',d.timing||'Échéancier à confirmer');
+   var city=txt('rd62City'), postal=txt('rd62Postal');
+   set('rd74CardLocation',[city,postal].filter(Boolean).join(' · ')||'Votre secteur');
+   set('rd79ActivityTitle',title);
+   set('rd77Title',title);
+   document.documentElement.classList.add('rd74-has-project');
+   try{localStorage.setItem('rd83PublishedProject',JSON.stringify({name:title,description:txt('rd62Description'),budget:d.budget||'',timing:d.timing||'',city:city,postal:postal}))}catch(e){}
  }
- function init(){
-  var p=read('rd83PublishedProject',null);
-  if(p&&typeof p==='object'){window.RD84Published=p;display(p)}
-  var b=document.getElementById('rd72Publish');if(b)b.addEventListener('click',publish);
-  window.RD74.publish=publish;
+ function restore(){
+   try{
+     var p=JSON.parse(localStorage.getItem('rd83PublishedProject')||'null'); if(!p)return;
+     set('rd74CardType',p.name);set('rd74CardDesc',p.description||'Projet publié avec succès.');
+     set('rd74CardBudget',p.budget||'Budget à confirmer');set('rd74CardTiming',p.timing||'Échéancier à confirmer');
+     set('rd74CardLocation',[p.city,p.postal].filter(Boolean).join(' · ')||'Votre secteur');
+     set('rd79ActivityTitle',p.name);set('rd77Title',p.name);
+     document.documentElement.classList.add('rd74-has-project');
+   }catch(e){}
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);else restore();
+ var b=document.getElementById('rd72Publish');
+ if(b)b.addEventListener('click',publish);
 })();
 </script></body></html>
