@@ -1814,6 +1814,17 @@ body{min-height:100dvh!important}
  body,.app,.screen,.screen.active{min-height:100vh!important}
  #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
 }
+</style><style id="rd97-global-app-viewport">
+html{height:100%;overflow-x:hidden}
+body{margin:0!important;min-height:100dvh!important;overflow-x:hidden!important}
+.app{width:100%!important;min-height:100dvh!important;height:auto!important;overflow:visible!important}
+.app>.screen{box-sizing:border-box!important;width:100%!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow-x:hidden!important}
+.app>.screen.active{min-height:100dvh!important;height:auto!important;max-height:none!important}
+#intro,#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+@supports not (height:100dvh){
+ body,.app,.app>.screen,.app>.screen.active{min-height:100vh!important}
+ #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
+}
 </style></head>
 <body><main class="app">
 
