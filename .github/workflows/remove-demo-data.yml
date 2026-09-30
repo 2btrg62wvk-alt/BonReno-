@@ -1,0 +1,92 @@
+name: Remove Demo Data
+'on':
+  push:
+    paths:
+      - '.github/workflows/remove-demo-data.yml'
+permissions:
+  contents: write
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove hardcoded demo content
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+
+          # Remove hardcoded sample project cards from both client project screens.
+          s=re.sub(r'\s*<a class="rd57-project-card" href="#clientProjectDetail">.*?</a>\s*(?=<a class="rd57-new-project")','\n',s,flags=re.S)
+
+          # Remove hardcoded contractor jobs; real jobs are rendered in rd62LiveProjects.
+          s=re.sub(r'\s*<a class="rd58-job featured" href="#contractorProject">.*?</a>\s*','\n',s,count=1,flags=re.S)
+          s=re.sub(r'\s*<a class="rd58-job" href="#contractorProject">.*?</a>\s*','\n',s,count=1,flags=re.S)
+
+          # Replace hardcoded client quote with an actual empty state.
+          s=re.sub(r'<section class="rd77-card rd77-bids">.*?</section>',
+          '<section class="rd77-card rd77-bids"><div class="rd77-cardhead"><span>SOUMISSIONS</span><em>0 reçue</em></div><div class="rd87-empty">Aucune soumission pour le moment. Les offres des entrepreneurs apparaîtront ici.</div></section>',
+          s,count=1,flags=re.S)
+
+          # Neutralize demo-only screens so fake data can never appear through old links.
+          def neutral(screen_id, inner):
+              global s
+              pat=r'<section class="screen[^>]*id="'+re.escape(screen_id)+r'"[^>]*>.*?</section>'
+              s,n=re.subn(pat,inner,s,count=1,flags=re.S)
+              if not n: print("warning screen not replaced:",screen_id)
+
+          neutral('quoteDetail','<section class="screen rd57-screen" id="quoteDetail"><div class="rd57-shell"><header class="rd57-detail-head"><a class="rd57-back" href="#clientProjectDetail">←</a></header><span class="rd51-kicker">SOUMISSION</span><h1>Aucune soumission</h1><p class="rd57-location">Les détails apparaîtront ici lorsqu’un entrepreneur vous enverra une offre.</p></div></section>')
+          neutral('quoteAccepted','<section class="screen rd60-screen" id="quoteAccepted"><div class="rd60-shell"><a href="#clientProjectDetail">← Retour au projet</a><h1>Aucune soumission acceptée</h1><p>Vous pourrez choisir un entrepreneur après avoir reçu une vraie soumission.</p></div></section>')
+          neutral('clientMessages','<section class="screen rd60-screen" id="clientMessages"><div class="rd60-shell"><header><span class="rd51-kicker">ESPACE CLIENT</span><h1>Messages</h1></header><div class="rd87-empty">Aucun message pour le moment. Vos conversations avec les entrepreneurs apparaîtront ici.</div><nav class="rd51-nav"><a href="#clientDashboard"><span>⌂</span>Accueil</a><a href="#clientProjects"><span>▣</span>Projets</a><a href="#clientProjectDetail"><span>◇</span>Soumissions</a><a class="active" href="#clientMessages"><span>○</span>Messages</a></nav></div></section>')
+          neutral('clientChat','<section class="screen rd60-screen" id="clientChat"><div class="rd60-shell"><a href="#clientMessages">← Messages</a><h1>Aucune conversation</h1><p>Une conversation sera créée lorsqu’une vraie interaction avec un entrepreneur commencera.</p></div></section>')
+          neutral('clientAcceptedProject','<section class="screen rd60-screen" id="clientAcceptedProject"><div class="rd60-shell"><a href="#clientProjects">← Mes projets</a><h1>Aucun entrepreneur choisi</h1><p>Les informations apparaîtront ici après l’acceptation d’une vraie soumission.</p></div></section>')
+
+          # Contractor quote list: remove any demo quote/card content between its header/nav where possible.
+          m=re.search(r'<section class="screen[^>]*id="contractorQuotes"[^>]*>.*?</section>',s,re.S)
+          if m:
+              block=m.group(0)
+              # Keep shell/header/nav styling but hide demo content using a targeted marker/class.
+              block=block.replace('id="contractorQuotes"','id="contractorQuotes" data-rd87-empty="1"',1)
+              s=s[:m.start()]+block+s[m.end():]
+
+          # Counts should not claim fake matches.
+          s=s.replace('<span>Pour vous <b>4</b></span>','<span>Pour vous <b id="rd87MatchCount">0</b></span>',1)
+
+          style='''<style id="rd87-demo-clean">
+          .rd87-empty{padding:18px 0;font-size:8px;line-height:1.55;color:#756e64}
+          #contractorQuotes[data-rd87-empty="1"] .rd59-quote{display:none!important}
+          #contractorQuotes[data-rd87-empty="1"] .rd58-job{display:none!important}
+          </style>
+          <script id="rd87-demo-clean-script">
+          (function(){
+           function sync(){
+            var arr=[];try{arr=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]')}catch(e){}
+            var c=document.getElementById('rd87MatchCount');if(c)c.textContent=String(arr.length);
+           }
+           if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+           window.addEventListener('hashchange',sync);
+          })();
+          </script>'''
+          if 'id="rd87-demo-clean-script"' not in s:s=s.replace('</body></html>',style+'</body></html>',1)
+
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Verify demo strings removed from live client/contractor cards
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path("index.html").read_text(encoding="utf-8")
+          # Legacy CSS/JS may contain words; fail only if known live sample card fragments remain.
+          bad=['<h2>Rénovation salle de bain</h2>','<strong>ML Construction</strong><small>Entrepreneur vérifié</small>','<span>3 nouvelles soumissions</span>','<span class="rd58-match">98% compatible</span>']
+          left=[x for x in bad if x in s]
+          if left: raise SystemExit("Demo UI remains: "+repr(left))
+          print("live demo cards removed")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove hardcoded demo data from client and contractor"
+          git push
