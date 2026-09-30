@@ -1,0 +1,42 @@
+name: Photo CTA Hotspot
+'on':
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: python
+        run: |
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          marker='<div class="intro-actions single-entry"><a class="intro-discover" href="#accueil">Découvrir RénoDirect</a></div>'
+          replacement='<a class="rd94-photo-cta" href="#accueil" aria-label="Découvrir RénoDirect"></a>'
+          if marker not in s:
+              raise SystemExit("intro CTA marker not found")
+          s=s.replace(marker,replacement,1)
+          css='''<style id="rd94-photo-cta-style">
+#intro .intro-actions.single-entry{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#intro .rd43-hotspot{display:none!important;pointer-events:none!important}
+#intro .rd31{position:relative!important}
+#intro .rd94-photo-cta{
+ position:absolute!important;z-index:80!important;
+ left:15.8%!important;right:15.8%!important;
+ top:79.6%!important;height:7.2%!important;
+ display:block!important;visibility:visible!important;
+ pointer-events:auto!important;
+ background:transparent!important;border:0!important;
+ border-radius:999px!important;text-decoration:none!important;
+}
+</style>'''
+          s=s.replace("</head>",css+"</head>",1)
+          p.write_text(s,encoding="utf-8")
+      - run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Use photo button as intro CTA"
+          git push
