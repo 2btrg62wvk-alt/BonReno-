@@ -2026,7 +2026,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  <div class="field"><label>Courriel</label><input type="email" placeholder="nom@exemple.com"></div>
  <div class="field"><label>Mot de passe</label><input type="password" placeholder="Votre mot de passe"></div>
  <a class="forgot" href="#loginClient">Mot de passe oublié ?</a>
- <a class="primary" href="#clientHome">Se connecter →</a>
+ <a class="primary" href="#clientDashboard">Se connecter →</a>
  <div class="login">Pas encore de compte? <a href="#client" style="color:white;font-weight:800;text-decoration:none">Créer un compte client</a></div>
  </div>
 </section>
@@ -2038,7 +2038,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  <div class="field"><label>Courriel professionnel</label><input type="email" placeholder="nom@entreprise.ca"></div>
  <div class="field"><label>Mot de passe</label><input type="password" placeholder="Votre mot de passe"></div>
  <a class="forgot" href="#loginPro">Mot de passe oublié ?</a>
- <a class="primary" href="#proHome">Se connecter →</a>
+ <a class="primary" href="#contractorFeed">Se connecter →</a>
  <div class="login">Pas encore de compte? <a href="#pro1" style="color:white;font-weight:800;text-decoration:none">Créer un compte entrepreneur</a></div>
  </div>
 </section>
@@ -2645,10 +2645,11 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  function put(id,v){var e=document.getElementById(id);if(e&&v)e.textContent=v}
  function fill(){
   var p=null;
-  try{p=JSON.parse(localStorage.getItem('renodirect_selected_project_v1')||'null')}catch(e){}
+  try{p=JSON.parse(localStorage.getItem('rd83PublishedProject')||'null')}catch(e){}
+  if(!p){try{p=JSON.parse(localStorage.getItem('renodirect_selected_project_v1')||'null')}catch(e){}}
   if(!p&&window.RD74DATA)p=window.RD74DATA;
   if(!p)return;
-  put('rd77Title',p.type||p.title);put('rd77Type',p.type||p.title);put('rd77Budget',p.budget);
+  put('rd77Title',p.name||p.title||p.type);put('rd77Type',p.type||p.title||p.name);put('rd77Budget',p.budget);
   put('rd77Timing',p.timing);put('rd77Description',p.description);
   var loc=(p.city||'')+(p.postal?' · '+p.postal:'');put('rd77Place',loc);put('rd77Location',loc);
  }
@@ -2680,7 +2681,15 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
    set('rd79ActivityTitle',title);
    set('rd77Title',title);
    document.documentElement.classList.add('rd74-has-project');
-   try{localStorage.setItem('rd83PublishedProject',JSON.stringify({name:title,description:txt('rd62Description'),budget:d.budget||'',timing:d.timing||'',city:city,postal:postal}))}catch(e){}
+   var project={name:title,title:title,type:d.type||title,description:txt('rd62Description')||d.description||'',budget:d.budget||'',timing:d.timing||'',city:city,postal:postal,publishedAt:new Date().toISOString()};
+   try{
+     localStorage.setItem('rd83PublishedProject',JSON.stringify(project));
+     localStorage.setItem('renodirect_selected_project_v1',JSON.stringify(project));
+     var projects=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]');
+     projects=projects.filter(function(p){return !(p.name===project.name&&p.city===project.city&&p.postal===project.postal)});
+     projects.unshift(project);
+     localStorage.setItem('renodirect_test_projects_v1',JSON.stringify(projects.slice(0,25)));
+   }catch(e){}
  }
  function restore(){
    try{
