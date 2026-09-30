@@ -1841,6 +1841,17 @@ body{height:100dvh!important;max-height:100dvh!important}
 .app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch}
 #intro,#accueil{overflow:hidden!important}
 @supports not (height:100dvh){body,.app{height:100vh!important;min-height:100vh!important;max-height:100vh!important}}
+</style><style id="rd98-smart-scroll">
+html,body{margin:0!important;min-height:100%!important}
+body{min-height:100dvh!important;overflow-y:auto!important}
+.app{min-height:100dvh!important;height:auto!important;overflow:visible!important}
+.app>.screen{box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
+.app>.screen.active{display:block;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#intro,#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+@supports not (height:100dvh){
+ body,.app,.app>.screen,.app>.screen.active{min-height:100vh!important}
+ #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
+}
 </style></head>
 <body><main class="app">
 
