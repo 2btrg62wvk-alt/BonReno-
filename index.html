@@ -1788,43 +1788,6 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 #intro .intro-actions.single-entry{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #intro .rd43-hotspot{display:none!important;pointer-events:none!important}
 #intro .rd94-photo-cta{position:absolute!important;z-index:80!important;left:15.8%!important;right:15.8%!important;top:79.6%!important;height:7.2%!important;display:block!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important;border:0!important;border-radius:999px!important;text-decoration:none!important}
-</style><style id="rd95-responsive-viewport">
-html,body{min-height:100%;margin:0}
-body{min-height:100dvh}
-.app{min-height:100dvh!important}
-.screen{min-height:100dvh!important}
-#intro{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-@supports not (height:100dvh){
- body,.app,.screen{min-height:100vh!important}
- #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
-}
-</style><style id="rd96-client-dashboard-viewport">
-#clientDashboard{min-height:100dvh!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-#clientDashboard .rd51-client{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow-y:auto!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
-@supports not (height:100dvh){#clientDashboard,#clientDashboard .rd51-client{height:100vh!important;max-height:100vh!important}}
-</style><style id="rd96-all-pages-viewport">
-html,body{margin:0!important;min-height:100%!important}
-body{min-height:100dvh!important}
-.app{min-height:100dvh!important;height:auto!important}
-.screen{box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;overflow-x:hidden!important}
-.screen.active{min-height:100dvh!important}
-#intro,#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-@supports not (height:100dvh){
- body,.app,.screen,.screen.active{min-height:100vh!important}
- #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
-}
-</style><style id="rd97-global-app-viewport">
-html{height:100%;overflow-x:hidden}
-body{margin:0!important;min-height:100dvh!important;overflow-x:hidden!important}
-.app{width:100%!important;min-height:100dvh!important;height:auto!important;overflow:visible!important}
-.app>.screen{box-sizing:border-box!important;width:100%!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow-x:hidden!important}
-.app>.screen.active{min-height:100dvh!important;height:auto!important;max-height:none!important}
-#intro,#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-@supports not (height:100dvh){
- body,.app,.app>.screen,.app>.screen.active{min-height:100vh!important}
- #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
-}
 </style><style id="rd98-native-fixed-pages">
 html,body{width:100%!important;height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important;overscroll-behavior:none!important}
 body{height:100dvh!important}
@@ -1841,16 +1804,16 @@ body{height:100dvh!important;max-height:100dvh!important}
 .app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch}
 #intro,#accueil{overflow:hidden!important}
 @supports not (height:100dvh){body,.app{height:100vh!important;min-height:100vh!important;max-height:100vh!important}}
-</style><style id="rd98-smart-scroll">
+</style><style id="rd100-viewport-fix">
 html,body{margin:0!important;min-height:100%!important}
-body{min-height:100dvh!important;overflow-y:auto!important}
-.app{min-height:100dvh!important;height:auto!important;overflow:visible!important}
-.app>.screen{box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
-.app>.screen.active{display:block;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
-#intro,#accueil{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+body{overflow-x:hidden!important;overflow-y:auto!important}
+.app{box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
+.app>.screen{box-sizing:border-box!important;min-height:calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#intro{height:calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;min-height:0!important;max-height:none!important;overflow:hidden!important}
 @supports not (height:100dvh){
- body,.app,.app>.screen,.app>.screen.active{min-height:100vh!important}
- #intro,#accueil{height:100vh!important;min-height:100vh!important;max-height:100vh!important}
+ .app{min-height:100vh!important}
+ .app>.screen{min-height:calc(100vh - 42px)!important}
+ #intro{height:calc(100vh - 42px)!important}
 }
 </style></head>
 <body><main class="app">
