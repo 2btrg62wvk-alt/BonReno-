@@ -1,5 +1,6 @@
 name: Fix My Projects Data
 'on':
+  workflow_dispatch:
   push:
     paths:
       - '.github/workflows/fix-my-projects-data.yml'
@@ -10,45 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fix project card bindings
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path("index.html")
-          s=p.read_text(encoding="utf-8")
-          marker="</body></html>"
-          patch=r"""<script id="rd85-my-projects-sync">
-(function(){
- function set(id,v,f){var e=document.getElementById(id);if(e)e.textContent=(v||f||'')}
- function sync(p){
-  if(!p)return;
-  var title=p.name||p.title||p.type||'Mon projet';
-  var loc=[p.city,p.postal].filter(Boolean).join(' · ');
-  set('rd84CardType',title,'Mon projet');
-  set('rd84CardDesc',p.description,'Projet publié avec succès.');
-  set('rd84CardBudget',p.budget,'Budget à confirmer');
-  set('rd84CardTiming',p.timing,'Échéancier à confirmer');
-  set('rd84CardLocation',loc,'Votre secteur');
-  var wrap=document.getElementById('rd84PublishedWrap');if(wrap)wrap.style.display='block';
-  var g=document.querySelector('#clientProjectsPublished .rd84-project-top h3');if(g)g.textContent=title;
-  var gp=document.querySelector('#clientProjectsPublished .rd84-project-link>p');if(gp)gp.textContent=p.description||'Votre projet a été publié avec succès.';
- }
- function restore(){
-  try{sync(JSON.parse(localStorage.getItem('rd83PublishedProject')||'null'))}catch(e){}
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);else restore();
- window.addEventListener('hashchange',function(){
-  if(location.hash==='#clientProjects'||location.hash==='#clientProjectsPublished')restore();
- });
- var b=document.getElementById('rd72Publish');
- if(b)b.addEventListener('click',function(){setTimeout(restore,0)});
-})();
-</script>"""
-          if 'id="rd85-my-projects-sync"' not in s:
-              if marker not in s: raise SystemExit("body marker missing")
-              s=s.replace(marker,patch+marker,1)
-          p.write_text(s,encoding="utf-8")
-          PY
+      - name: Fix bindings
+        run: python3 -c "from pathlib import Path;p=Path('index.html');s=p.read_text(encoding='utf-8');m='</body></html>';x='<script id=\"rd85-my-projects-sync\">(function(){function q(i,v,f){var e=document.getElementById(i);if(e)e.textContent=v||f||\"\"}function r(){var p=null;try{p=JSON.parse(localStorage.getItem(\"rd83PublishedProject\")||\"null\")}catch(e){}if(!p)return;var t=p.name||p.title||p.type||\"Mon projet\",l=[p.city,p.postal].filter(Boolean).join(\" · \");q(\"rd84CardType\",t,\"Mon projet\");q(\"rd84CardDesc\",p.description,\"Projet publié avec succès.\");q(\"rd84CardBudget\",p.budget,\"Budget à confirmer\");q(\"rd84CardTiming\",p.timing,\"Échéancier à confirmer\");q(\"rd84CardLocation\",l,\"Votre secteur\")}if(document.readyState===\"loading\")document.addEventListener(\"DOMContentLoaded\",r);else r();window.addEventListener(\"hashchange\",r);var b=document.getElementById(\"rd72Publish\");if(b)b.addEventListener(\"click\",function(){setTimeout(r,0)})})();</script>';assert m in s;s=s if 'rd85-my-projects-sync' in s else s.replace(m,x+m,1);p.write_text(s,encoding='utf-8')"
       - name: Commit
         run: |
           git config user.name "RenoDirect Bot"
