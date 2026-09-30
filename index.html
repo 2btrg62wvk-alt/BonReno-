@@ -2219,7 +2219,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
   <div class="rd72-ready-icon">✓</div>
   <h1>Votre projet est prêt.</h1>
   <p>Publiez-le maintenant pour qu’il soit visible par les entrepreneurs correspondant à votre projet et à votre secteur.</p>
-  <a class="rd52-publish" id="rd72Publish" href="#clientProjectsPublished">Publier le projet <b>→</b></a>
+  <a class="rd52-publish" id="rd72Publish" href="#clientProjects">Publier le projet <b>→</b></a>
   <small class="rd52-note center">Vous pourrez retrouver votre projet dans « Mes projets ».</small>
  </div>
 </section>
@@ -2670,7 +2670,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  function publish(){
    var name=txt('rd80ProjectName');
    try{ if(!name) name=localStorage.getItem('rd81ProjectName')||''; }catch(e){}
-   var d=(window.RD72&&RD72.data)||{};
+   var d=window.RD74DATA||{};
    var title=name||d.type||'Mon projet';
    set('rd74CardType',title);
    set('rd74CardDesc',txt('rd62Description')||d.description||'Projet publié avec succès.');
