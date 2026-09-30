@@ -1833,6 +1833,14 @@ body{height:100dvh!important}
 .app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
 #intro,#accueil{overflow:hidden!important}
 @supports not (height:100dvh){body,.app{height:100vh!important;max-height:100vh!important}}
+</style><style id="rd98-native-fixed-screens">
+html,body{height:100%!important;max-height:100%!important;overflow:hidden!important;margin:0!important}
+body{height:100dvh!important;max-height:100dvh!important}
+.app{box-sizing:border-box!important;width:100%!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+.app>.screen{box-sizing:border-box!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;overflow:hidden!important}
+.app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch}
+#intro,#accueil{overflow:hidden!important}
+@supports not (height:100dvh){body,.app{height:100vh!important;min-height:100vh!important;max-height:100vh!important}}
 </style></head>
 <body><main class="app">
 
