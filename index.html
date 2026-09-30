@@ -2087,8 +2087,8 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
     </section>
 
     <section class="rd51-quick">
-      <a href="#clientDashboard"><span>◇</span><strong>Soumissions</strong><small>Comparez les offres reçues</small></a>
-      <a href="#clientDashboard"><span>○</span><strong>Messages</strong><small>Discutez avec les entrepreneurs</small></a>
+      <a href="#clientProjectDetail"><span>◇</span><strong>Soumissions</strong><small>Comparez les offres reçues</small></a>
+      <a href="#clientMessages"><span>○</span><strong>Messages</strong><small>Discutez avec les entrepreneurs</small></a>
     </section>
 
     <section class="rd51-section rd79-activity">
@@ -2110,7 +2110,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
     <nav class="rd51-nav" aria-label="Navigation client">
       <a class="active" href="#clientDashboard"><span>⌂</span>Accueil</a>
       <a href="#newProject"><span>＋</span>Projet</a>
-      <a href="#clientDashboard"><span>◇</span>Soumissions</a>
+      <a href="#clientProjectDetail"><span>◇</span>Soumissions</a>
       <a href="#clientMessages"><span>○</span>Messages</a>
     </nav>
   </div>
@@ -2705,4 +2705,28 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  var b=document.getElementById('rd72Publish');
  if(b)b.addEventListener('click',publish);
 })();
-</script><script id="rd85-my-projects-sync">(function(){function q(i,v,f){var e=document.getElementById(i);if(e)e.textContent=v||f||""}function r(){var p=null;try{p=JSON.parse(localStorage.getItem("rd83PublishedProject")||"null")}catch(e){}if(!p)return;var t=p.name||p.title||p.type||"Mon projet",l=[p.city,p.postal].filter(Boolean).join(" · ");q("rd84CardType",t,"Mon projet");q("rd84CardDesc",p.description,"Projet publié avec succès.");q("rd84CardBudget",p.budget,"Budget à confirmer");q("rd84CardTiming",p.timing,"Échéancier à confirmer");q("rd84CardLocation",l,"Votre secteur")}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",r);else r();window.addEventListener("hashchange",r);var b=document.getElementById("rd72Publish");if(b)b.addEventListener("click",function(){setTimeout(r,0)})})();</script></body></html>
+</script><script id="rd85-my-projects-sync">(function(){function q(i,v,f){var e=document.getElementById(i);if(e)e.textContent=v||f||""}function r(){var p=null;try{p=JSON.parse(localStorage.getItem("rd83PublishedProject")||"null")}catch(e){}if(!p)return;var t=p.name||p.title||p.type||"Mon projet",l=[p.city,p.postal].filter(Boolean).join(" · ");q("rd84CardType",t,"Mon projet");q("rd84CardDesc",p.description,"Projet publié avec succès.");q("rd84CardBudget",p.budget,"Budget à confirmer");q("rd84CardTiming",p.timing,"Échéancier à confirmer");q("rd84CardLocation",l,"Votre secteur")}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",r);else r();window.addEventListener("hashchange",r);var b=document.getElementById("rd72Publish");if(b)b.addEventListener("click",function(){setTimeout(r,0)})})();</script><style id="rd86-client-clean-style">
+html.rd86-no-quotes #clientProjectDetail .rd77-bids .rd78-bid{display:none}
+html.rd86-no-quotes #clientProjectDetail .rd77-bids:after{content:"Aucune soumission pour le moment. Les offres des entrepreneurs apparaîtront ici.";display:block;font-size:8px;line-height:1.5;color:#756e64;padding:12px 0 2px}
+</style>
+<script id="rd86-client-clean">
+(function(){
+ function project(){try{return JSON.parse(localStorage.getItem('rd83PublishedProject')||'null')}catch(e){return null}}
+ function sync(){
+  var p=project();if(!p)return;
+  var card=document.querySelector('#clientDashboard .rd51-project');if(card){
+   var st=card.querySelector('.rd51-status'),h=card.querySelector('h3'),meta=card.querySelector('p'),sub=card.querySelector('.rd51-project-bottom span');
+   if(st)st.textContent='PUBLIÉ';if(h)h.textContent=p.name||p.title||p.type||'Mon projet';
+   if(meta)meta.textContent=[p.city,p.timing].filter(Boolean).join(' · ')||'Projet publié';
+   if(sub)sub.textContent='0 soumission';
+  }
+  var bids=document.querySelector('#clientProjectDetail .rd77-bids');if(bids){
+   var em=bids.querySelector('.rd77-cardhead em');if(em)em.textContent='0 reçue';
+   document.documentElement.classList.add('rd86-no-quotes');
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+ window.addEventListener('hashchange',sync);
+ var b=document.getElementById('rd72Publish');if(b)b.addEventListener('click',function(){setTimeout(sync,0)});
+})();
+</script></body></html>
