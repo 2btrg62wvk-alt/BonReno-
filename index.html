@@ -2802,4 +2802,18 @@ body.rd96-lock #intro,body.rd96-lock #accueil{height:100dvh!important;min-height
  document.addEventListener('DOMContentLoaded',bind);
  window.addEventListener('load',bind);
 })();
+</script><script id="rd100-intro-anywhere">
+(function(){
+ function enter(e){
+  var intro=document.getElementById('intro');
+  if(!intro||!intro.classList.contains('active')) return;
+  if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ') return;
+  window.location.hash='accueil';
+ }
+ document.addEventListener('click',function(e){
+  var intro=e.target.closest&&e.target.closest('#intro');
+  if(intro) enter(e);
+ });
+ document.addEventListener('keydown',enter);
+})();
 </script></body></html>
