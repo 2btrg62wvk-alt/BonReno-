@@ -2590,6 +2590,9 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
    set('rd79ActivityTitle',title);
    set('rd77Title',title);
    document.documentElement.classList.add('rd74-has-project');
+   var w=document.getElementById('rd74PublishedWrap');if(w)w.style.display='block';
+   var dp=document.querySelector('#clientDashboard .rd51-project');if(dp)dp.style.display='';
+   var pc=document.querySelector('#clientProjects .rd57-tabs .active b');if(pc)pc.textContent='1';
    var project={name:title,title:title,type:d.type||title,description:txt('rd62Description')||d.description||'',budget:d.budget||'',timing:d.timing||'',city:city,postal:postal,publishedAt:new Date().toISOString()};
    try{
      localStorage.setItem('rd83PublishedProject',JSON.stringify(project));
