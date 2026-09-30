@@ -1,0 +1,58 @@
+name: Client Dashboard Coherence
+'on':
+  push:
+    paths:
+      - '.github/workflows/client-dashboard-coherence.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch client experience
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html");s=p.read_text(encoding="utf-8")
+          s=s.replace('<a href="#clientDashboard"><span>◇</span><strong>Soumissions</strong><small>Comparez les offres reçues</small></a>','<a href="#clientProjectDetail"><span>◇</span><strong>Soumissions</strong><small>Comparez les offres reçues</small></a>',1)
+          s=s.replace('<a href="#clientDashboard"><span>○</span><strong>Messages</strong><small>Discutez avec les entrepreneurs</small></a>','<a href="#clientMessages"><span>○</span><strong>Messages</strong><small>Discutez avec les entrepreneurs</small></a>',1)
+          s=s.replace('<a href="#clientDashboard"><span>◇</span>Soumissions</a>','<a href="#clientProjectDetail"><span>◇</span>Soumissions</a>',1)
+          marker='</body></html>'
+          patch=r'''<style id="rd86-client-clean-style">
+          html.rd86-no-quotes #clientProjectDetail .rd77-bids .rd78-bid{display:none}
+          html.rd86-no-quotes #clientProjectDetail .rd77-bids:after{content:"Aucune soumission pour le moment. Les offres des entrepreneurs apparaîtront ici.";display:block;font-size:8px;line-height:1.5;color:#756e64;padding:12px 0 2px}
+          </style>
+          <script id="rd86-client-clean">
+          (function(){
+           function project(){try{return JSON.parse(localStorage.getItem('rd83PublishedProject')||'null')}catch(e){return null}}
+           function sync(){
+            var p=project();if(!p)return;
+            var card=document.querySelector('#clientDashboard .rd51-project');if(card){
+             var st=card.querySelector('.rd51-status'),h=card.querySelector('h3'),meta=card.querySelector('p'),sub=card.querySelector('.rd51-project-bottom span');
+             if(st)st.textContent='PUBLIÉ';if(h)h.textContent=p.name||p.title||p.type||'Mon projet';
+             if(meta)meta.textContent=[p.city,p.timing].filter(Boolean).join(' · ')||'Projet publié';
+             if(sub)sub.textContent='0 soumission';
+            }
+            var bids=document.querySelector('#clientProjectDetail .rd77-bids');if(bids){
+             var em=bids.querySelector('.rd77-cardhead em');if(em)em.textContent='0 reçue';
+             document.documentElement.classList.add('rd86-no-quotes');
+            }
+           }
+           if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+           window.addEventListener('hashchange',sync);
+           var b=document.getElementById('rd72Publish');if(b)b.addEventListener('click',function(){setTimeout(sync,0)});
+          })();
+          </script>'''
+          if 'id="rd86-client-clean"' not in s:
+              if marker not in s: raise SystemExit("body marker missing")
+              s=s.replace(marker,patch+marker,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Improve client dashboard after project publication"
+          git push
