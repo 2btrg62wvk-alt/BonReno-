@@ -1788,7 +1788,25 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 #intro .intro-actions.single-entry{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #intro .rd43-hotspot{display:none!important;pointer-events:none!important}
 #intro .rd94-photo-cta{position:absolute!important;z-index:80!important;left:15.8%!important;right:15.8%!important;top:79.6%!important;height:7.2%!important;display:block!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important;border:0!important;border-radius:999px!important;text-decoration:none!important}
-</style></head>
+</style><style id="rd94-compact-spacing">
+/* Remove stacked padding (.app + .screen + .top) and forced full-height gaps on app screens. The intro keeps its full-bleed layout. */
+.app:has(.screen:not(#intro):target){padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important}
+.screen:not(#intro){min-height:0!important;padding-top:12px!important;padding-left:16px!important;padding-right:16px!important}
+.screen:not(#intro) .top{padding:4px 0 20px!important}
+#accueil .top{padding-top:8px!important}
+.screen:not(#intro) .back{margin-bottom:10px!important;padding-bottom:4px!important}
+.screen:not(#intro) .progress{margin:8px 0 18px!important}
+.screen:not(#intro) .sub{margin-bottom:16px!important}
+.hero{padding-top:16px!important}
+.login-card{padding-top:8px!important}
+.success{min-height:0!important;padding:32px 0!important}
+.build-wrap{min-height:0!important;padding:32px 0!important}
+.rd51-client,.rd52,.rd57-shell,.rd58-shell,.rd60-shell,.rd60-confirm{min-height:0!important;padding-left:0!important;padding-right:0!important;padding-top:calc(8px + env(safe-area-inset-top))!important}
+.mp-section{margin:18px 0!important}
+.mp-topline{margin-bottom:18px!important}
+.mp-stats{margin:14px 0 18px!important}
+</style>
+</head>
 <body><main class="app">
 
 <section id="intro" class="screen">
