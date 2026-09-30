@@ -2331,7 +2331,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 
 <section class="screen rd77-detail" id="clientProjectDetail">
  <div class="rd77-shell">
-  <div class="rd77-top"><a href="#clientProjects">←</a><span>Mon projet</span><button type="button">•••</button></div>
+  <div class="rd77-top"><a href="#clientProjects">←</a><span>Mon projet</span><button type="button" id="rd88MenuBtn" aria-label="Options du projet">•••</button></div><div class="rd88-menu" id="rd88Menu"><button type="button" id="rd88Edit">Modifier le projet</button><button type="button" class="danger" id="rd88Delete">Supprimer le projet</button></div>
   <div class="rd77-statusrow"><span class="rd77-live">PUBLIÉ</span><small>En attente de soumissions</small></div>
   <h1 id="rd77Title">Projet de rénovation</h1>
   <p class="rd77-place" id="rd77Place">Votre secteur</p>
@@ -2651,5 +2651,68 @@ html.rd86-no-quotes #clientProjectDetail .rd77-bids:after{content:"Aucune soumis
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
  window.addEventListener('hashchange',sync);
+})();
+</script><style id="rd88-project-actions-style">
+.rd77-shell{position:relative}.rd88-menu{display:none;position:absolute;right:15px;top:52px;z-index:20;width:150px;background:#fffdf8;border:1px solid #ded5c7;border-radius:14px;padding:5px;box-shadow:0 10px 30px rgba(23,21,18,.14)}
+.rd88-menu.open{display:block}.rd88-menu button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:10px 9px;border-radius:9px;font:inherit;font-size:8px;font-weight:800;color:#171512}.rd88-menu button:active{background:#f1ede5}.rd88-menu .danger{color:#a13d32}
+html:not(.rd74-has-project) #rd74PublishedWrap{display:none!important}
+</style>
+<script id="rd88-project-actions">
+(function(){
+ function getProject(){try{return JSON.parse(localStorage.getItem('rd83PublishedProject')||'null')}catch(e){return null}}
+ function fillEdit(p){
+  if(!p)return;
+  window.RD74DATA=window.RD74DATA||{};
+  ['type','description','budget','timing','city','postal'].forEach(function(k){RD74DATA[k]=p[k]||''});
+  var map={rd80ProjectName:p.name||p.title||'',rd62Description:p.description||'',rd62City:p.city||'',rd62Postal:p.postal||''};
+  Object.keys(map).forEach(function(id){var e=document.getElementById(id);if(e)e.value=map[id]});
+  try{localStorage.setItem('rd81ProjectName',p.name||p.title||'');localStorage.setItem('rd88EditingProject',JSON.stringify(p))}catch(e){}
+ }
+ function removeFromFeed(p){
+  try{
+   var arr=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]');
+   arr=arr.filter(function(x){return !(x.name===p.name&&x.city===p.city&&x.postal===p.postal)});
+   localStorage.setItem('renodirect_test_projects_v1',JSON.stringify(arr));
+  }catch(e){}
+ }
+ function del(){
+  var p=getProject();if(!p)return;
+  if(!confirm('Supprimer ce projet? Cette action est irréversible.'))return;
+  removeFromFeed(p);
+  try{
+   localStorage.removeItem('rd83PublishedProject');
+   localStorage.removeItem('renodirect_selected_project_v1');
+   localStorage.removeItem('rd81ProjectName');
+   localStorage.removeItem('rd88EditingProject');
+  }catch(e){}
+  document.documentElement.classList.remove('rd74-has-project');
+  var wrap=document.getElementById('rd74PublishedWrap');if(wrap)wrap.style.display='none';
+  var dash=document.querySelector('#clientDashboard .rd51-project');if(dash)dash.style.display='none';
+  var count=document.querySelector('#clientProjects .rd57-tabs .active b');if(count)count.textContent='0';
+  location.hash='#clientProjects';
+ }
+ function edit(){var p=getProject();if(!p)return;fillEdit(p);location.hash='#projectDetails'}
+ function init(){
+  var btn=document.getElementById('rd88MenuBtn'),menu=document.getElementById('rd88Menu'),ed=document.getElementById('rd88Edit'),de=document.getElementById('rd88Delete');
+  if(btn&&menu)btn.onclick=function(e){e.stopPropagation();menu.classList.toggle('open')};
+  if(ed)ed.onclick=edit;if(de)de.onclick=del;
+  document.addEventListener('click',function(e){if(menu&&!menu.contains(e.target)&&e.target!==btn)menu.classList.remove('open')});
+  var p=getProject();if(!p){document.documentElement.classList.remove('rd74-has-project');var w=document.getElementById('rd74PublishedWrap');if(w)w.style.display='none';var c=document.querySelector('#clientProjects .rd57-tabs .active b');if(c)c.textContent='0'}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="rd88-edit-dedupe">
+(function(){
+ var b=document.getElementById('rd72Publish');if(!b)return;
+ b.addEventListener('click',function(){
+  try{
+   var old=JSON.parse(localStorage.getItem('rd88EditingProject')||'null');if(!old)return;
+   var arr=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]');
+   arr=arr.filter(function(x){return !(x.name===old.name&&x.city===old.city&&x.postal===old.postal)});
+   localStorage.setItem('renodirect_test_projects_v1',JSON.stringify(arr));
+   localStorage.removeItem('rd88EditingProject');
+  }catch(e){}
+ },true);
 })();
 </script></body></html>
