@@ -2705,4 +2705,4 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  var b=document.getElementById('rd72Publish');
  if(b)b.addEventListener('click',publish);
 })();
-</script></body></html>
+</script><script id="rd85-my-projects-sync">(function(){function q(i,v,f){var e=document.getElementById(i);if(e)e.textContent=v||f||""}function r(){var p=null;try{p=JSON.parse(localStorage.getItem("rd83PublishedProject")||"null")}catch(e){}if(!p)return;var t=p.name||p.title||p.type||"Mon projet",l=[p.city,p.postal].filter(Boolean).join(" · ");q("rd84CardType",t,"Mon projet");q("rd84CardDesc",p.description,"Projet publié avec succès.");q("rd84CardBudget",p.budget,"Budget à confirmer");q("rd84CardTiming",p.timing,"Échéancier à confirmer");q("rd84CardLocation",l,"Votre secteur")}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",r);else r();window.addEventListener("hashchange",r);var b=document.getElementById("rd72Publish");if(b)b.addEventListener("click",function(){setTimeout(r,0)})})();</script></body></html>
