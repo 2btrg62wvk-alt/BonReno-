@@ -2784,4 +2784,22 @@ body.rd96-lock #intro,body.rd96-lock #accueil{height:100dvh!important;min-height
 @supports not (height:100dvh){body.rd96-lock,body.rd96-lock .app,body.rd96-lock #intro,body.rd96-lock #accueil{height:100vh!important;max-height:100vh!important}}
 </style><script id="rd96-no-empty-scroll-script">
 (function(){function sync(){var h=location.hash||'';var lock=!h||h==='#intro'||h==='#accueil';document.body.classList.toggle('rd96-lock',lock);if(lock)window.scrollTo(0,0)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();window.addEventListener('hashchange',sync)})();
+</script><style id="rd100-intro-cta-fix">
+#intro{position:relative!important;overflow:hidden!important}
+#intro .rd94-photo-cta{display:block!important;visibility:visible!important;pointer-events:auto!important;z-index:9999!important;position:absolute!important}
+</style>
+<script id="rd100-intro-cta-script">
+(function(){
+ function bind(){
+  var b=document.querySelector('#intro .rd94-photo-cta');
+  if(!b||b.dataset.rd100)return;
+  b.dataset.rd100='1';
+  b.addEventListener('click',function(e){
+   e.preventDefault();
+   location.hash='accueil';
+  });
+ }
+ document.addEventListener('DOMContentLoaded',bind);
+ window.addEventListener('load',bind);
+})();
 </script></body></html>
