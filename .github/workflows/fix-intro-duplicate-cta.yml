@@ -1,0 +1,32 @@
+name: Fix Intro Duplicate CTA
+'on':
+  push:
+    paths:
+      - '.github/workflows/fix-intro-duplicate-cta.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text(encoding='utf-8')
+          code="""<style id="rd90-single-intro-cta">
+/* Final intro CTA override: one real button only. */
+#intro .rd43-hotspot{display:none!important;pointer-events:none!important}
+#intro .intro-actions.single-entry{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+#intro .intro-actions.single-entry .intro-discover{display:flex!important;visibility:visible!important;pointer-events:auto!important}
+#intro .intro-actions.single-entry > *:not(.intro-discover){display:none!important}
+</style>"""
+          if 'id="rd90-single-intro-cta"' not in s:
+              s=s.replace('</head>',code+'</head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove duplicate intro CTA behavior"
+          git push
