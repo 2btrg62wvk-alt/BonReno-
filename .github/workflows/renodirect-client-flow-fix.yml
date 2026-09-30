@@ -1,0 +1,54 @@
+name: RenoDirect client flow fix
+on:
+  push:
+    paths:
+      - '.github/workflows/renodirect-client-flow-fix.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch client flow
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          s=s.replace('href="#clientHome">Se connecter →</a>','href="#clientDashboard">Se connecter →</a>',1)
+          s=s.replace('href="#proHome">Se connecter →</a>','href="#contractorFeed">Se connecter →</a>',1)
+          old="""   try{localStorage.setItem('rd83PublishedProject',JSON.stringify({name:title,description:txt('rd62Description'),budget:d.budget||'',timing:d.timing||'',city:city,postal:postal}))}catch(e){}"""
+          new="""   var project={name:title,title:title,type:d.type||title,description:txt('rd62Description')||d.description||'',budget:d.budget||'',timing:d.timing||'',city:city,postal:postal,publishedAt:new Date().toISOString()};
+   try{
+     localStorage.setItem('rd83PublishedProject',JSON.stringify(project));
+     localStorage.setItem('renodirect_selected_project_v1',JSON.stringify(project));
+     var projects=JSON.parse(localStorage.getItem('renodirect_test_projects_v1')||'[]');
+     projects=projects.filter(function(p){return !(p.name===project.name&&p.city===project.city&&p.postal===project.postal)});
+     projects.unshift(project);
+     localStorage.setItem('renodirect_test_projects_v1',JSON.stringify(projects.slice(0,25)));
+   }catch(e){}"""
+          if old not in s: raise SystemExit("publish target not found")
+          s=s.replace(old,new,1)
+          old2="""  var p=null;
+  try{p=JSON.parse(localStorage.getItem('renodirect_selected_project_v1')||'null')}catch(e){}
+  if(!p&&window.RD74DATA)p=window.RD74DATA;
+  if(!p)return;
+  put('rd77Title',p.type||p.title);put('rd77Type',p.type||p.title);put('rd77Budget',p.budget);"""
+          new2="""  var p=null;
+  try{p=JSON.parse(localStorage.getItem('rd83PublishedProject')||'null')}catch(e){}
+  if(!p){try{p=JSON.parse(localStorage.getItem('renodirect_selected_project_v1')||'null')}catch(e){}}
+  if(!p&&window.RD74DATA)p=window.RD74DATA;
+  if(!p)return;
+  put('rd77Title',p.name||p.title||p.type);put('rd77Type',p.type||p.title||p.name);put('rd77Budget',p.budget);"""
+          if old2 not in s: raise SystemExit("detail target not found")
+          s=s.replace(old2,new2,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Complete client project publishing flow"
+          git push
