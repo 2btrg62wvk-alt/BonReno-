@@ -1,0 +1,29 @@
+name: Remove Remaining Demo Bids
+'on':
+  push:
+    paths:
+      - '.github/workflows/remove-remaining-demo-bids.yml'
+permissions:
+  contents: write
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html');s=p.read_text(encoding='utf-8')
+          # Remove orphaned accepted-contractor demo block after neutral clientAcceptedProject.
+          s=re.sub(r'</section></div>\s*<div class="rd60-card"><span class="rd51-kicker">ENTREPRENEUR CHOISI</span>.*?</div>\s*</div></section>\s*(?=<script id="rd61-messaging-script">)', '</section>\n', s, count=1, flags=re.S)
+          # Remove old hardcoded contractor bid card and reset count.
+          s=re.sub(r'\s*<a class="rd58-bidcard" href="#contractorProject">.*?</a>\s*(?=<nav class="rd58-nav">)', '\n', s, count=1, flags=re.S)
+          s=s.replace('<div class="rd58-tabs"><span class="active">En attente <b>1</b></span><span>Acceptées</span><span>Terminées</span></div>','<div class="rd58-tabs"><span class="active">En attente <b>0</b></span><span>Acceptées</span><span>Terminées</span></div>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove remaining fake submissions"
+          git push
