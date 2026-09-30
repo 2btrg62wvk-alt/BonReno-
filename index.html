@@ -1788,33 +1788,6 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 #intro .intro-actions.single-entry{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #intro .rd43-hotspot{display:none!important;pointer-events:none!important}
 #intro .rd94-photo-cta{position:absolute!important;z-index:80!important;left:15.8%!important;right:15.8%!important;top:79.6%!important;height:7.2%!important;display:block!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important;border:0!important;border-radius:999px!important;text-decoration:none!important}
-</style><style id="rd98-native-fixed-pages">
-html,body{width:100%!important;height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important;overscroll-behavior:none!important}
-body{height:100dvh!important}
-.app{box-sizing:border-box!important;width:100%!important;height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important}
-.app>.screen{box-sizing:border-box!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;overflow:hidden!important}
-.app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
-#intro,#accueil{overflow:hidden!important}
-@supports not (height:100dvh){body,.app{height:100vh!important;max-height:100vh!important}}
-</style><style id="rd98-native-fixed-screens">
-html,body{height:100%!important;max-height:100%!important;overflow:hidden!important;margin:0!important}
-body{height:100dvh!important;max-height:100dvh!important}
-.app{box-sizing:border-box!important;width:100%!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-.app>.screen{box-sizing:border-box!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;overflow:hidden!important}
-.app>.screen.active{height:100%!important;min-height:0!important;max-height:100%!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch}
-#intro,#accueil{overflow:hidden!important}
-@supports not (height:100dvh){body,.app{height:100vh!important;min-height:100vh!important;max-height:100vh!important}}
-</style><style id="rd100-viewport-fix">
-html,body{margin:0!important;min-height:100%!important}
-body{overflow-x:hidden!important;overflow-y:auto!important}
-.app{box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;max-height:none!important;overflow:visible!important}
-.app>.screen{box-sizing:border-box!important;min-height:calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;height:auto!important;max-height:none!important;overflow:visible!important}
-#intro{height:calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;min-height:0!important;max-height:none!important;overflow:hidden!important}
-@supports not (height:100dvh){
- .app{min-height:100vh!important}
- .app>.screen{min-height:calc(100vh - 42px)!important}
- #intro{height:calc(100vh - 42px)!important}
-}
 </style></head>
 <body><main class="app">
 
@@ -2738,45 +2711,5 @@ html:not(.rd74-has-project) #rd74PublishedWrap{display:none!important}
    localStorage.removeItem('rd88EditingProject');
   }catch(e){}
  },true);
-})();
-</script><style id="rd96-no-empty-scroll">
-html,body{margin:0!important}
-body.rd96-lock{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important}
-body.rd96-lock .app{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important}
-body.rd96-lock #intro,body.rd96-lock #accueil{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important;box-sizing:border-box!important}
-@supports not (height:100dvh){body.rd96-lock,body.rd96-lock .app,body.rd96-lock #intro,body.rd96-lock #accueil{height:100vh!important;max-height:100vh!important}}
-</style><script id="rd96-no-empty-scroll-script">
-(function(){function sync(){var h=location.hash||'';var lock=!h||h==='#intro'||h==='#accueil';document.body.classList.toggle('rd96-lock',lock);if(lock)window.scrollTo(0,0)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();window.addEventListener('hashchange',sync)})();
-</script><style id="rd100-intro-cta-fix">
-#intro{position:relative!important;overflow:hidden!important}
-#intro .rd94-photo-cta{display:block!important;visibility:visible!important;pointer-events:auto!important;z-index:9999!important;position:absolute!important}
-</style>
-<script id="rd100-intro-cta-script">
-(function(){
- function bind(){
-  var b=document.querySelector('#intro .rd94-photo-cta');
-  if(!b||b.dataset.rd100)return;
-  b.dataset.rd100='1';
-  b.addEventListener('click',function(e){
-   e.preventDefault();
-   location.hash='accueil';
-  });
- }
- document.addEventListener('DOMContentLoaded',bind);
- window.addEventListener('load',bind);
-})();
-</script><script id="rd100-intro-anywhere">
-(function(){
- function enter(e){
-  var intro=document.getElementById('intro');
-  if(!intro||!intro.classList.contains('active')) return;
-  if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ') return;
-  window.location.hash='accueil';
- }
- document.addEventListener('click',function(e){
-  var intro=e.target.closest&&e.target.closest('#intro');
-  if(intro) enter(e);
- });
- document.addEventListener('keydown',enter);
 })();
 </script></body></html>
