@@ -1,6 +1,8 @@
 name: Photo CTA Hotspot
 'on':
-  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/photo-cta-hotspot.yml'
 permissions:
   contents: write
 jobs:
