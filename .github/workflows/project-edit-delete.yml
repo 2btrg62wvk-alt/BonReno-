@@ -14,14 +14,13 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           p=Path('index.html');s=p.read_text(encoding='utf-8')
-          needle="document.documentElement.classList.add('rd74-has-project');"
-          repl=needle+"\n   var w=document.getElementById('rd74PublishedWrap');if(w)w.style.display='block';\n   var dp=document.querySelector('#clientDashboard .rd51-project');if(dp)dp.style.display='';\n   var pc=document.querySelector('#clientProjects .rd57-tabs .active b');if(pc)pc.textContent='1';"
-          pos=s.find('<script id="rd83-publish-fix">')
-          end=s.find('</script>',pos)
-          block=s[pos:end]
-          if "var w=document.getElementById('rd74PublishedWrap')" not in block:
-              block=block.replace(needle,repl,1)
-              s=s[:pos]+block+s[end:]
+          code="""<style id="rd90-single-intro-cta">
+#intro .rd43-hotspot{display:none!important;pointer-events:none!important}
+#intro .intro-actions.single-entry{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+#intro .intro-actions.single-entry .intro-discover{display:flex!important;visibility:visible!important;pointer-events:auto!important}
+#intro .intro-actions.single-entry > *:not(.intro-discover){display:none!important}
+</style>"""
+          if 'id="rd90-single-intro-cta"' not in s:s=s.replace('</head>',code+'</head>',1)
           p.write_text(s,encoding='utf-8')
           PY
           git config user.name "RenoDirect Bot"
