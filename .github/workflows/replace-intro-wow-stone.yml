@@ -1,0 +1,41 @@
+name: Replace Intro WOW Stone
+'on':
+  push:
+    paths: ['.github/workflows/replace-intro-wow-stone.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace runtime intro with approved animated stone intro
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+          css='''<style id="rd105-wow-stone">
+          #rd105{position:fixed;inset:0;z-index:2147483000;overflow:hidden;background:linear-gradient(135deg,#d3d3ca 0%,#e4e1d7 43%,#c7cdc5 100%);color:#122019;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+          #rd105.hide{opacity:0;pointer-events:none;transition:opacity .38s ease}.rd105-shell{position:relative;z-index:8;height:100%;box-sizing:border-box;padding:calc(31px + env(safe-area-inset-top)) 29px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column}.rd105-brand{font-size:21px;font-weight:720;letter-spacing:-.045em;color:#102018}
+          .rd105-halo{position:absolute;width:620px;height:620px;right:-320px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,247,.82),rgba(255,255,247,.22) 37%,transparent 69%);animation:r105halo 7s ease-in-out infinite alternate}.rd105-halo2{position:absolute;width:420px;height:420px;left:-250px;bottom:-130px;border-radius:50%;background:radial-gradient(circle,rgba(47,71,54,.2),rgba(47,71,54,.05) 46%,transparent 70%);animation:r105halo2 9s ease-in-out infinite alternate}.rd105-grid{position:absolute;inset:0;opacity:.15;background-image:linear-gradient(rgba(42,60,47,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(42,60,47,.13) 1px,transparent 1px);background-size:58px 58px;mask-image:linear-gradient(to bottom,transparent,black 30%,black 75%,transparent);animation:r105grid 18s linear infinite}.rd105-beam{position:absolute;top:-20%;left:-45%;width:34%;height:145%;background:linear-gradient(90deg,transparent,rgba(255,255,250,.48),transparent);transform:skewX(-17deg);animation:r105beam 7s ease-in-out 1.7s infinite}
+          .rd105-house{position:absolute;width:390px;height:430px;right:-88px;top:55px;z-index:3;animation:r105house 6s ease-in-out 3.5s infinite alternate}.rd105-line{fill:none;stroke:#4d6254;stroke-opacity:.25;stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1500;stroke-dashoffset:1500;animation:r105draw 3.5s cubic-bezier(.18,.8,.2,1) forwards}.rd105-mainline{stroke:#263e2e;stroke-opacity:.65;animation-delay:.25s}.rd105-fill{fill:rgba(255,255,248,.17);opacity:0;animation:r105appear 1.3s 1.65s forwards}.rd105-node{fill:#38513f;opacity:0;animation:r105node 3s 2.2s ease-in-out infinite}.rd105-orbit{position:absolute;width:235px;height:235px;border-radius:50%;border:1px solid rgba(39,59,44,.13);right:-70px;top:215px;z-index:2;animation:r105spin 20s linear infinite}.rd105-orbdot{position:absolute;width:7px;height:7px;border-radius:50%;background:#3f5946;left:25px;top:28px;box-shadow:0 0 0 7px rgba(63,89,70,.08)}
+          .rd105-main{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:10}.rd105-over{font-size:9px;font-weight:750;letter-spacing:.25em;color:#425449;margin-bottom:23px;opacity:0;transform:translateY(10px);animation:r105reveal .75s .2s forwards}#rd105 h1{font-size:53px;line-height:.92;letter-spacing:-.062em;font-weight:460;margin:0;max-width:365px;color:#112018;opacity:0;transform:translateY(23px);animation:r105reveal 1s cubic-bezier(.2,.75,.2,1) .4s forwards}.rd105-serif{font-family:Georgia,serif;font-style:italic;font-weight:400;color:#3e5b48}.rd105-desc{margin-top:27px;width:280px;font-size:14px;font-weight:450;line-height:1.68;color:#45574b;opacity:0;transform:translateY(13px);animation:r105reveal .9s .72s forwards}
+          .rd105-footer{position:relative;z-index:10;border-top:1px solid rgba(20,32,25,.18);padding-top:20px;display:flex;justify-content:space-between;align-items:center;opacity:0;animation:r105reveal .9s 1s forwards}.rd105-enter{font-size:13px;font-weight:700}.rd105-hint{font-size:10px;font-weight:500;color:#506158;margin-top:5px}.rd105-go{position:relative;width:58px;height:58px;border-radius:50%;background:#17291d;color:#f7f3e8;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 14px 35px rgba(22,39,28,.2);animation:r105go 2.6s ease-in-out infinite}.rd105-ring{position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(31,54,38,.18);animation:r105ring 2.6s ease-out infinite}
+          @keyframes r105reveal{to{opacity:1;transform:translateY(0)}}@keyframes r105draw{to{stroke-dashoffset:0}}@keyframes r105appear{to{opacity:1}}@keyframes r105halo{to{transform:translate(-55px,55px) scale(1.18)}}@keyframes r105halo2{to{transform:translate(50px,-38px) scale(1.12)}}@keyframes r105grid{to{background-position:58px 58px}}@keyframes r105beam{0%,60%{left:-45%;opacity:0}68%{opacity:1}90%,100%{left:125%;opacity:0}}@keyframes r105house{to{transform:translate(-5px,-13px)}}@keyframes r105spin{to{transform:rotate(360deg)}}@keyframes r105node{0%,100%{opacity:.2}50%{opacity:.9;transform:scale(1.8)}}@keyframes r105go{50%{transform:translate(3px,-4px);box-shadow:0 19px 42px rgba(22,39,28,.25)}}@keyframes r105ring{0%{transform:scale(.85);opacity:.65}100%{transform:scale(1.35);opacity:0}}
+          @media(max-width:360px){.rd105-shell{padding-left:23px;padding-right:23px}#rd105 h1{font-size:46px}}@media(prefers-reduced-motion:reduce){#rd105 *{animation:none!important;opacity:1!important;transform:none!important}.rd105-line{stroke-dashoffset:0!important}}
+          </style>'''
+          js='''<script id="rd105-wow-stone-runtime">(function(){if(document.getElementById("rd105"))return;var d=document.createElement("div");d.id="rd105";d.innerHTML='<div class="rd105-halo"></div><div class="rd105-halo2"></div><div class="rd105-grid"></div><div class="rd105-beam"></div><div class="rd105-orbit"><span class="rd105-orbdot"></span></div><svg class="rd105-house" viewBox="0 0 390 430" aria-hidden="true"><path class="rd105-fill" d="M64 379V158L195 67l131 91v221z"/><path class="rd105-line" d="M18 379V135L195 17l177 118v244M64 379V158l131-91 131 91v221M119 379V222h151v157"/><path class="rd105-line rd105-mainline" d="M18 135L195 17l177 118M119 222h151"/><circle class="rd105-node" cx="195" cy="17" r="3"/><circle class="rd105-node" cx="18" cy="135" r="2.5"/><circle class="rd105-node" cx="372" cy="135" r="2.5"/></svg><div class="rd105-shell"><header><div class="rd105-brand">RénoDirect</div></header><main class="rd105-main"><div class="rd105-over">VOTRE PROJET COMMENCE ICI</div><h1>Imaginez.<br>Comparez.<br><span class="rd105-serif">Réalisez.</span></h1><div class="rd105-desc">La façon moderne de trouver les bons professionnels et de concrétiser vos projets de rénovation.</div></main><footer class="rd105-footer"><div><div class="rd105-enter">Entrer dans RénoDirect</div><div class="rd105-hint">Touchez n’importe où pour commencer</div></div><div class="rd105-go"><span class="rd105-ring"></span>↗</div></footer></div>';document.body.appendChild(d);d.addEventListener("click",function(){d.classList.add("hide");setTimeout(function(){d.remove()},400);var old=document.querySelector(".rd94-photo-cta");if(old)old.click()},{once:true})})();</script>'''
+          s=re.sub(r'<style id="rd104-premium-runtime">.*?</style>', '', s, flags=re.S)
+          s=re.sub(r'<script id="rd104-premium-runtime">.*?</script>', '', s, flags=re.S)
+          if 'id="rd105-wow-stone"' not in s: s=s.replace('</head>',css+'</head>',1)
+          if 'id="rd105-wow-stone-runtime"' not in s: s=s.replace('</body>',js+'</body>',1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Replace intro with animated stone design"
+          git push
