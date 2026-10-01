@@ -1,0 +1,35 @@
+name: Intro Fullscreen Hotspot
+'on':
+  push:
+    paths:
+      - '.github/workflows/intro-fullscreen-hotspot.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Expand existing intro hotspot to full screen
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          marker='</head>'
+          if 'id="rd102-full-intro-hotspot"' in s: raise SystemExit(0)
+          css='''<style id="rd102-full-intro-hotspot">
+          #intro .rd94-photo-cta{position:absolute!important;z-index:80!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important;border:0!important;border-radius:0!important}
+          </style>'''
+          if marker not in s: raise SystemExit("head marker missing")
+          s=s.replace(marker,css+marker,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Expand intro entry hotspot to full screen"
+          git push
