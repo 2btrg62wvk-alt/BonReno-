@@ -1,0 +1,92 @@
+name: Rebuild screen 2 clean
+on:
+  push:
+    paths:
+      - '.github/workflows/rebuild-screen2-clean.yml'
+permissions:
+  contents: write
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Replace screen 2 visual shell, preserve routes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html")
+          s=p.read_text()
+          start=s.find('<section id="accueil"')
+          if start < 0: raise SystemExit("accueil not found")
+          end=s.find('</section>',start)
+          if end < 0: raise SystemExit("accueil end not found")
+          end += len('</section>')
+          new='''<section id="accueil" class="screen active rd120-choice">
+  <main class="rd120-wrap">
+    <div class="rd120-kicker">RÉNODIRECT</div>
+    <h1>Comment souhaitez-vous utiliser RénoDirect?</h1>
+    <p class="rd120-sub">Choisissez votre espace pour continuer.</p>
+    <div class="rd120-grid">
+      <a class="rd120-card" href="#client">
+        <span class="rd120-num">01</span>
+        <h2>Je suis client</h2>
+        <p>Je veux réaliser un projet de rénovation et trouver le bon entrepreneur.</p>
+        <span class="rd120-go">Continuer <b>→</b></span>
+      </a>
+      <a class="rd120-card" href="#pro1">
+        <span class="rd120-num">02</span>
+        <h2>Je suis entrepreneur</h2>
+        <p>Je veux développer mon entreprise et accéder à de nouveaux projets.</p>
+        <span class="rd120-go">Continuer <b>→</b></span>
+      </a>
+    </div>
+    <div class="rd120-login">
+      <span>Vous avez déjà un compte?</span>
+      <a href="#loginClient">Connexion client</a>
+      <i></i>
+      <a href="#loginPro">Connexion entrepreneur</a>
+    </div>
+  </main>
+</section>'''
+          s=s[:start]+new+s[end:]
+          css='''<style id="rd120-screen2-clean">
+#accueil.rd120-choice{position:relative;min-height:100svh;width:100%;overflow:hidden;background:#e7e4dc;color:#173d2b;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:clamp(24px,4vw,64px);box-sizing:border-box}
+#accueil.rd120-choice:before{content:"";position:absolute;inset:-25%;background:radial-gradient(circle at 18% 22%,rgba(255,255,255,.95),transparent 30%),radial-gradient(circle at 82% 75%,rgba(112,145,119,.22),transparent 32%);animation:rd120move 12s ease-in-out infinite alternate;pointer-events:none}
+#accueil .rd120-wrap{position:relative;z-index:1;width:min(1120px,100%);margin:auto}
+#accueil .rd120-kicker{font-size:12px;letter-spacing:.24em;font-weight:800;margin-bottom:18px;opacity:.68}
+#accueil .rd120-wrap>h1{font-size:clamp(38px,5vw,72px);line-height:.98;letter-spacing:-.045em;max-width:850px;margin:0;font-weight:760}
+#accueil .rd120-sub{font-size:clamp(16px,1.5vw,20px);opacity:.65;margin:18px 0 38px}
+#accueil .rd120-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+#accueil .rd120-card{position:relative;min-height:260px;padding:30px;border-radius:28px;text-decoration:none;color:#173d2b;background:rgba(255,255,255,.54);border:1px solid rgba(255,255,255,.72);box-shadow:0 18px 60px rgba(36,54,41,.08);backdrop-filter:blur(16px);display:flex;flex-direction:column;transition:transform .28s ease,background .28s ease,box-shadow .28s ease}
+#accueil .rd120-card:hover{transform:translateY(-7px);background:rgba(255,255,255,.78);box-shadow:0 28px 70px rgba(36,54,41,.13)}
+#accueil .rd120-num{font-size:12px;letter-spacing:.16em;opacity:.5}
+#accueil .rd120-card h2{font-size:clamp(28px,3vw,42px);letter-spacing:-.035em;margin:38px 0 10px}
+#accueil .rd120-card p{max-width:440px;line-height:1.55;margin:0;opacity:.7}
+#accueil .rd120-go{margin-top:auto;padding-top:28px;font-weight:750;display:flex;justify-content:space-between;align-items:center}
+#accueil .rd120-go b{font-size:24px;transition:transform .25s ease}
+#accueil .rd120-card:hover .rd120-go b{transform:translateX(7px)}
+#accueil .rd120-login{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:24px;font-size:14px}
+#accueil .rd120-login span{opacity:.55}
+#accueil .rd120-login a{color:#173d2b;font-weight:700;text-decoration:none}
+#accueil .rd120-login i{width:1px;height:14px;background:rgba(23,61,43,.2)}
+@keyframes rd120move{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(2%,1%,0) scale(1.04)}}
+@media(max-width:720px){#accueil.rd120-choice{padding:24px 18px;overflow:auto;align-items:flex-start}#accueil .rd120-wrap{margin:auto 0}#accueil .rd120-wrap>h1{font-size:42px}#accueil .rd120-grid{grid-template-columns:1fr}#accueil .rd120-card{min-height:210px;padding:24px}#accueil .rd120-card h2{margin-top:22px}#accueil .rd120-login{padding-bottom:10px}}
+</style>
+'''
+          if 'id="rd120-screen2-clean"' not in s:
+              s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s)
+          for route in ['href="#client"','href="#pro1"','href="#loginClient"','href="#loginPro"']:
+              if route not in new: raise SystemExit("missing route "+route)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Rebuild role selection screen from scratch"
+          git push origin main
