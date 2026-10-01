@@ -1789,6 +1789,11 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 #intro .rd43-hotspot{display:none!important;pointer-events:none!important}
 #intro .rd94-photo-cta{position:absolute!important;z-index:80!important;left:15.8%!important;right:15.8%!important;top:79.6%!important;height:7.2%!important;display:block!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important;border:0!important;border-radius:999px!important;text-decoration:none!important}
 </style><style id="rd94-compact-spacing">
+/* Only scroll when content is taller than the screen: no forced full-height containers, no elastic bounce. */
+html,body{overscroll-behavior:none!important;min-height:0!important;height:auto!important}
+.app{min-height:0!important;box-sizing:border-box!important}
+.rd51-client,.rd52,.rd57-shell,.rd58-shell,.rd60-confirm,.rd60-shell{min-height:0!important}
+.build-wrap{min-height:0!important}
 /* Remove stacked padding (.app + .screen + .top) and forced full-height gaps on app screens. The intro keeps its full-bleed layout. */
 .app:has(.screen:not(#intro):target){padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important}
 .screen:not(#intro){min-height:0!important;padding-top:12px!important;padding-left:16px!important;padding-right:16px!important}
