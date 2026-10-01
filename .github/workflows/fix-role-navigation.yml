@@ -1,0 +1,30 @@
+name: Fix Role Navigation
+'on':
+  push:
+    paths: ['.github/workflows/fix-role-navigation.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix premium role navigation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+          old=re.search(r'<script id="rd106-role-premium-runtime">.*?</script>',s,re.S)
+          if not old: raise SystemExit("rd106 runtime not found")
+          js='''<script id="rd106-role-premium-runtime">(function(){var overlay=null,client=null,pro=null;function norm(x){return (x||"").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"")}function scan(){var all=Array.from(document.querySelectorAll("button,a,[role=button],.choice,.option,.card"));client=all.find(function(e){if(e.closest("#rd105")||e.closest("#rd106"))return false;var t=norm(e.innerText||e.textContent);return t.includes("client")});pro=all.find(function(e){if(e.closest("#rd105")||e.closest("#rd106"))return false;var t=norm(e.innerText||e.textContent);return t.includes("entrepreneur")});return client&&pro}function activate(el){if(!el)return;if(overlay){overlay.remove();overlay=null}setTimeout(function(){try{el.dispatchEvent(new PointerEvent("pointerdown",{bubbles:true,pointerType:"touch"}))}catch(e){}try{el.dispatchEvent(new MouseEvent("mousedown",{bubbles:true}))}catch(e){}el.click()},30)}function show(){if(overlay||!scan())return;overlay=document.createElement("div");overlay.id="rd106";overlay.innerHTML='<div class="rd106-glow"></div><div class="rd106-grid"></div><div class="rd106-orbit"></div><div class="rd106-top"><div class="rd106-brand">RénoDirect</div><div class="rd106-step"></div></div><section class="rd106-intro"><div class="rd106-kicker">BIENVENUE CHEZ RÉNODIRECT</div><h1 class="rd106-title">Vous êtes ici pour <em>quoi?</em></h1><p class="rd106-sub">Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.</p></section><div class="rd106-choices"><button type="button" class="rd106-card" data-r="c"><span class="rd106-num">01</span><span class="rd106-icon">⌂</span><b>Je suis client</b><small>J’ai un projet et je veux trouver les bons professionnels.</small><span class="rd106-arrow">↗</span></button><button type="button" class="rd106-card" data-r="p"><span class="rd106-num">02</span><span class="rd106-icon">◇</span><b>Je suis entrepreneur</b><small>Je veux découvrir des projets et développer mon entreprise.</small><span class="rd106-arrow">↗</span></button></div>';document.body.appendChild(overlay);overlay.querySelector('[data-r="c"]').addEventListener("click",function(e){e.preventDefault();e.stopPropagation();activate(client)});overlay.querySelector('[data-r="p"]').addEventListener("click",function(e){e.preventDefault();e.stopPropagation();activate(pro)})}document.addEventListener("click",function(e){if(e.target&&e.target.closest&&e.target.closest("#rd106"))return;setTimeout(show,120)},true);setTimeout(show,700)})();</script>'''
+          s=s[:old.start()]+js+s[old.end():]
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix client entrepreneur navigation"
+          git push
