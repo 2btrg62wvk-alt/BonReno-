@@ -2784,4 +2784,34 @@ body.rd96-lock #intro,body.rd96-lock #accueil{height:100dvh!important;min-height
 @supports not (height:100dvh){body.rd96-lock,body.rd96-lock .app,body.rd96-lock #intro,body.rd96-lock #accueil{height:100vh!important;max-height:100vh!important}}
 </style><script id="rd96-no-empty-scroll-script">
 (function(){function sync(){var h=location.hash||'';var lock=!h||h==='#intro'||h==='#accueil';document.body.classList.toggle('rd96-lock',lock);if(lock)window.scrollTo(0,0)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();window.addEventListener('hashchange',sync)})();
+</script><style id="rd100-fit-one-screen">
+.app>.screen.rd100-compact{padding-top:max(8px,env(safe-area-inset-top))!important;padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+.app>.screen.rd100-compact .hero{padding-top:clamp(12px,4vh,38px)!important}
+.app>.screen.rd100-compact .top{padding-top:0!important}
+.app>.screen.rd100-compact h1,.app>.screen.rd100-compact .form-title{margin-top:6px!important;margin-bottom:6px!important}
+.app>.screen.rd100-compact .sub{margin-bottom:12px!important}
+.app>.screen.rd100-compact .role{margin-top:14px!important;gap:8px!important}
+.app>.screen.rd100-compact .role button,.app>.screen.rd100-compact .primary{padding:13px 15px!important}
+.app>.screen.rd100-compact .progress{margin-bottom:14px!important}
+.app>.screen.rd100-compact .back{padding-bottom:8px!important}
+.app>.screen.rd100-compact .field{margin-bottom:8px!important}
+.app>.screen.rd100-compact .rd51-client{padding-top:8px!important;padding-bottom:8px!important}
+</style>
+<script id="rd100-fit-one-screen-script">
+(function(){
+ function fit(){
+  var el=document.querySelector('.app>.screen.active'); if(!el)return;
+  var v=window.innerHeight||document.documentElement.clientHeight;
+  el.classList.remove('rd100-compact','rd99-scroll');
+  requestAnimationFrame(function(){
+   if(el.scrollHeight>v+2) el.classList.add('rd100-compact');
+   requestAnimationFrame(function(){
+    el.classList.toggle('rd99-scroll',el.scrollHeight>v+2);
+   });
+  });
+ }
+ window.addEventListener('load',fit);window.addEventListener('resize',fit);window.addEventListener('orientationchange',fit);window.addEventListener('hashchange',function(){requestAnimationFrame(fit)});
+ new MutationObserver(function(){requestAnimationFrame(fit)}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style']});
+ window.RD100Fit=fit;
+})();
 </script></body></html>
