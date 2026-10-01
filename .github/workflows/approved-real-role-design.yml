@@ -1,0 +1,57 @@
+name: Approved Real Role Design
+'on':
+  push:
+    paths: ['.github/workflows/approved-real-role-design.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply approved design to real role screen
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+          s=re.sub(r'<style id="rd107-real-role">.*?</style>','',s,flags=re.S)
+          css='''<style id="rd108-approved-real-role">
+          #home{position:relative!important;overflow:hidden!important;margin:calc(-18px - env(safe-area-inset-top)) -22px calc(-24px - env(safe-area-inset-bottom))!important;padding:calc(30px + env(safe-area-inset-top)) 25px calc(25px + env(safe-area-inset-bottom))!important;min-height:100dvh!important;background:linear-gradient(145deg,#c9cbc2 0%,#e3e0d6 48%,#c2c9c0 100%)!important;color:#09150d!important}
+          #home:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-300px;top:-190px;background:radial-gradient(circle,rgba(255,255,248,.86),rgba(255,255,248,.14) 52%,transparent 72%);animation:rd108glow 7s ease-in-out infinite alternate;pointer-events:none}
+          #home:after{content:"";position:absolute;inset:-55px;opacity:.12;background-image:linear-gradient(rgba(25,44,31,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(25,44,31,.18) 1px,transparent 1px);background-size:55px 55px;animation:rd108grid 20s linear infinite;pointer-events:none}
+          #home>*{position:relative;z-index:3}
+          #home .brand{width:auto!important;height:auto!important;border-radius:0!important;background:none!important;box-shadow:none!important;display:block!important;color:#09160e!important;font-size:21px!important;font-weight:820!important;letter-spacing:-.045em!important}
+          #home .brand::after{content:"";position:absolute;right:0;top:9px;width:38px;height:4px;border-radius:99px;background:linear-gradient(90deg,#284532 50%,rgba(13,30,19,.18) 50%)}
+          #home .hero{padding-top:64px!important}
+          #home .eyebrow{font-size:9px!important;font-weight:850!important;letter-spacing:.23em!important;color:#203629!important;margin:0 0 16px!important;text-transform:uppercase!important}
+          #home h1{font-size:0!important;line-height:.96!important;margin:0!important;max-width:335px!important;color:#07130b!important}
+          #home h1:after{content:"Vous êtes ici pour quoi?";display:block;font-size:43px;line-height:.96;letter-spacing:-.055em;font-weight:590;color:#07130b}
+          #home p{font-size:0!important;margin:15px 0 0!important;max-width:305px!important}
+          #home p:after{content:"Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.";display:block;font-size:13px;line-height:1.55;color:#26392e;font-weight:540}
+          #home .role{margin-top:37px!important;display:grid!important;gap:12px!important}
+          #home .role a,#home .role button,#home a.navbtn{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-height:142px!important;border:1px solid rgba(15,34,21,.20)!important;border-radius:25px!important;padding:20px 66px 20px 20px!important;background:rgba(250,249,242,.78)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;color:#08140c!important;text-decoration:none!important;font-size:23px!important;line-height:1.05!important;letter-spacing:-.04em!important;font-weight:780!important;box-shadow:0 14px 40px rgba(35,47,39,.055)!important;transition:transform .22s ease,background .22s ease,color .22s ease!important;overflow:hidden!important}
+          #home .role a:before,#home .role button:before,#home a.navbtn:before{content:"";position:absolute;right:18px;top:18px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(20,40,27,.22);background:rgba(255,255,250,.22)}
+          #home .role a:after,#home .role button:after,#home a.navbtn:after{content:"↗";position:absolute;right:31px;top:27px;font-size:20px;font-weight:500;color:#254330;transition:transform .25s ease}
+          #home .role a:hover:after,#home .role button:hover:after,#home a.navbtn:hover:after{transform:translate(2px,-2px)}
+          #home .role a:active,#home .role button:active,#home a.navbtn:active{transform:scale(.985)!important;background:#14271b!important;color:#fffdf7!important}
+          #home .role a:active:after,#home .role button:active:after,#home a.navbtn:active:after{color:#fff!important}
+          #home .role small,#home a.navbtn small{display:block!important;font-size:11px!important;line-height:1.45!important;color:#35483c!important;font-weight:540!important;margin-top:7px!important;max-width:250px!important;letter-spacing:0!important}
+          #home .role a:active small,#home .role button:active small,#home a.navbtn:active small{color:#dfe7e1!important}
+          #home .existing{border-color:rgba(25,44,31,.14)!important;margin-top:22px!important;padding-top:18px!important}
+          #home .existing-title{color:#405047!important}
+          #home .existing-links a{background:rgba(250,249,242,.52)!important;color:#14251a!important;border-color:rgba(15,34,21,.15)!important}
+          @keyframes rd108glow{to{transform:translate(-55px,55px) scale(1.13)}}@keyframes rd108grid{to{transform:translate(55px,55px)}}
+          @media(max-width:360px){#home{padding-left:21px!important;padding-right:21px!important}#home h1:after{font-size:38px}.#home .role a{min-height:132px!important}}
+          @media(prefers-reduced-motion:reduce){#home:before,#home:after{animation:none!important}}
+          </style>'''
+          s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Apply approved premium design to real role screen"
+          git push
