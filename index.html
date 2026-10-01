@@ -1807,35 +1807,7 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
 .rd105-footer{position:relative;z-index:10;border-top:1px solid rgba(20,32,25,.18);padding-top:20px;display:flex;justify-content:space-between;align-items:center;opacity:0;animation:r105reveal .9s 1s forwards}.rd105-enter{font-size:13px;font-weight:700}.rd105-hint{font-size:10px;font-weight:500;color:#506158;margin-top:5px}.rd105-go{position:relative;width:58px;height:58px;border-radius:50%;background:#17291d;color:#f7f3e8;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 14px 35px rgba(22,39,28,.2);animation:r105go 2.6s ease-in-out infinite}.rd105-ring{position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(31,54,38,.18);animation:r105ring 2.6s ease-out infinite}
 @keyframes r105reveal{to{opacity:1;transform:translateY(0)}}@keyframes r105draw{to{stroke-dashoffset:0}}@keyframes r105appear{to{opacity:1}}@keyframes r105halo{to{transform:translate(-55px,55px) scale(1.18)}}@keyframes r105halo2{to{transform:translate(50px,-38px) scale(1.12)}}@keyframes r105grid{to{background-position:58px 58px}}@keyframes r105beam{0%,60%{left:-45%;opacity:0}68%{opacity:1}90%,100%{left:125%;opacity:0}}@keyframes r105house{to{transform:translate(-5px,-13px)}}@keyframes r105spin{to{transform:rotate(360deg)}}@keyframes r105node{0%,100%{opacity:.2}50%{opacity:.9;transform:scale(1.8)}}@keyframes r105go{50%{transform:translate(3px,-4px);box-shadow:0 19px 42px rgba(22,39,28,.25)}}@keyframes r105ring{0%{transform:scale(.85);opacity:.65}100%{transform:scale(1.35);opacity:0}}
 @media(max-width:360px){.rd105-shell{padding-left:23px;padding-right:23px}#rd105 h1{font-size:46px}}@media(prefers-reduced-motion:reduce){#rd105 *{animation:none!important;opacity:1!important;transform:none!important}.rd105-line{stroke-dashoffset:0!important}}
-</style><style id="rd109-approved-accueil">
-#accueil{position:relative!important;overflow:hidden!important;margin:calc(-18px - env(safe-area-inset-top)) -22px calc(-24px - env(safe-area-inset-bottom))!important;padding:calc(30px + env(safe-area-inset-top)) 25px calc(25px + env(safe-area-inset-bottom))!important;min-height:100dvh!important;background:linear-gradient(145deg,#c9cbc2 0%,#e3e0d6 48%,#c2c9c0 100%)!important;color:#09150d!important}
-#accueil:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-300px;top:-190px;background:radial-gradient(circle,rgba(255,255,248,.86),rgba(255,255,248,.14) 52%,transparent 72%);animation:rd109glow 7s ease-in-out infinite alternate;pointer-events:none}
-#accueil:after{content:"";position:absolute;inset:-55px;opacity:.12;background-image:linear-gradient(rgba(25,44,31,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(25,44,31,.18) 1px,transparent 1px);background-size:55px 55px;animation:rd109grid 20s linear infinite;pointer-events:none}
-#accueil .hero{position:relative;z-index:3;padding-top:0!important}
-#accueil .brand{width:auto!important;height:auto!important;border-radius:0!important;background:none!important;box-shadow:none!important;display:block!important;color:#09160e!important;font-size:0!important;font-weight:820!important;letter-spacing:-.045em!important}
-#accueil .brand:before{content:"RénoDirect";font-size:21px}
-#accueil .brand:after{content:"";position:absolute;right:0;top:10px;width:38px;height:4px;border-radius:99px;background:linear-gradient(90deg,#284532 50%,rgba(13,30,19,.18) 50%)}
-#accueil .eyebrow{font-size:9px!important;font-weight:850!important;letter-spacing:.23em!important;color:#203629!important;margin:64px 0 16px!important;text-transform:uppercase!important}
-#accueil .eyebrow{font-size:0!important}
-#accueil .eyebrow:after{content:"BIENVENUE CHEZ RÉNODIRECT";font-size:9px}
-#accueil h1{font-size:0!important;line-height:.96!important;margin:0!important;max-width:335px!important}
-#accueil h1:after{content:"Vous êtes ici pour quoi?";display:block;font-size:43px;line-height:.96;letter-spacing:-.055em;font-weight:590;color:#07130b}
-#accueil .hero>p{font-size:0!important;margin:15px 0 0!important;max-width:305px!important}
-#accueil .hero>p:after{content:"Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.";display:block;font-size:13px;line-height:1.55;color:#26392e;font-weight:540}
-#accueil .role{margin-top:37px!important;display:grid!important;gap:12px!important}
-#accueil .role .navbtn{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;min-height:142px!important;border:1px solid rgba(15,34,21,.20)!important;border-radius:25px!important;padding:20px 66px 20px 20px!important;background:rgba(250,249,242,.78)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;color:#08140c!important;text-decoration:none!important;font-size:23px!important;line-height:1.05!important;letter-spacing:-.04em!important;font-weight:780!important;box-shadow:0 14px 40px rgba(35,47,39,.055)!important;transition:transform .22s ease,background .22s ease,color .22s ease!important;overflow:hidden!important}
-#accueil .role .navbtn:before{content:"";position:absolute;right:18px;top:18px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(20,40,27,.22);background:rgba(255,255,250,.22)}
-#accueil .role .navbtn:after{content:"↗";position:absolute;right:31px;top:27px;font-size:20px;font-weight:500;color:#254330}
-#accueil .role .navbtn:active{transform:scale(.985)!important;background:#14271b!important;color:#fffdf7!important}
-#accueil .role .navbtn small{display:block!important;font-size:11px!important;line-height:1.45!important;color:#35483c!important;font-weight:540!important;margin-top:7px!important;max-width:250px!important;letter-spacing:0!important}
-#accueil .role .navbtn:active small{color:#dfe7e1!important}
-#accueil .existing{border-color:rgba(25,44,31,.14)!important;margin-top:22px!important;padding-top:18px!important}
-#accueil .existing-title{color:#405047!important}
-#accueil .existing-links a{background:rgba(250,249,242,.52)!important;color:#14251a!important;border-color:rgba(15,34,21,.15)!important}
-@keyframes rd109glow{to{transform:translate(-55px,55px) scale(1.13)}}@keyframes rd109grid{to{transform:translate(55px,55px)}}
-@media(max-width:360px){#accueil{padding-left:21px!important;padding-right:21px!important}#accueil h1:after{font-size:38px}}
-@media(prefers-reduced-motion:reduce){#accueil:before,#accueil:after{animation:none!important}}
-</style></head>
+</style><style id="rd110-choice-design">#accueil.rd110-choice{position:relative!important;overflow:hidden!important;min-height:100dvh!important;margin:calc(-18px - env(safe-area-inset-top)) -22px calc(-24px - env(safe-area-inset-bottom))!important;padding:calc(30px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))!important;background:linear-gradient(145deg,#c9cbc2,#e4e1d7 48%,#c3c9c0)!important;color:#09150d!important}.rd110-light{position:absolute;width:560px;height:560px;border-radius:50%;right:-320px;top:-210px;background:radial-gradient(circle,rgba(255,255,248,.9),rgba(255,255,248,.13) 53%,transparent 72%);animation:rd110light 7s ease-in-out infinite alternate;pointer-events:none}.rd110-head,.rd110-main{position:relative;z-index:2}.rd110-head{display:flex;justify-content:space-between;align-items:center}.rd110-logo{font-size:21px;font-weight:820;letter-spacing:-.045em}.rd110-progress{width:38px;height:4px;border-radius:99px;background:#17301e2e;overflow:hidden}.rd110-progress i{display:block;width:50%;height:100%;background:#284532}.rd110-main{padding-top:61px}.rd110-kicker{font-size:9px;font-weight:850;letter-spacing:.23em;color:#203629;margin-bottom:16px}.rd110-main h1{font-size:43px!important;line-height:.96!important;letter-spacing:-.055em!important;font-weight:590!important;color:#07130b!important;margin:0!important}.rd110-main h1 em{font-family:Georgia,serif;font-weight:500;color:#274a34}.rd110-main>p{font-size:13px!important;line-height:1.55!important;color:#26392e!important;margin:15px 0 0!important;max-width:305px}.rd110-cards{display:grid;gap:12px;margin-top:36px}.rd110-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:142px;border:1px solid #0f221533;border-radius:25px;padding:20px 62px 20px 20px;background:#faf9f2c9;color:#08140c;text-decoration:none}.rd110-card span{position:absolute;left:20px;top:19px;font-size:9px;font-weight:800;letter-spacing:.16em;color:#405148}.rd110-card strong{font-size:23px;line-height:1.05;letter-spacing:-.04em}.rd110-card small{font-size:11px;line-height:1.45;color:#35483c;margin-top:7px}.rd110-card b{position:absolute;right:28px;bottom:20px;font-size:19px;color:#254330}.rd110-card:active{transform:scale(.985);background:#14271b;color:#fff}.rd110-existing{margin-top:21px;padding-top:17px;border-top:1px solid #192c1f24;text-align:center;font-size:11px;color:#405047}.rd110-existing>div{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.rd110-existing a{text-decoration:none;color:#14251a;background:#faf9f280;border:1px solid #0f221526;border-radius:13px;padding:11px 7px;font-weight:750}@keyframes rd110light{to{transform:translate(-55px,55px) scale(1.13)}}@media(max-width:360px){.rd110-main h1{font-size:38px!important}.rd110-card{min-height:132px}}</style></head>
 <body><main class="app">
 
 <section id="intro" class="screen">
@@ -1856,22 +1828,11 @@ html.rd74-has-project #rd79ActivityEmpty{display:none}
  </div>
 </section>
 
-<section id="accueil" class="screen active">
-  <div class="hero"><div class="brand">RD</div><div class="eyebrow" style="margin-top:28px">RénoDirect</div>
-  <h1>Bienvenue.<br>Commençons votre projet.</h1><p>Choisissez le type de compte que vous souhaitez créer.</p>
-  <div class="role">
-    <a class="navbtn" href="#client">Je suis un client<small>Je veux publier un projet de rénovation.</small></a>
-    <a class="navbtn" href="#pro1">Je suis un entrepreneur<small>Je veux découvrir des projets qui correspondent à mes services.</small></a>
-  </div>
-  <div class="existing">
-    <div class="existing-title">Vous avez déjà un compte ?</div>
-    <div class="existing-links">
-      <a href="#loginClient">Connexion client</a>
-      <a href="#loginPro">Connexion entrepreneur</a>
-    </div>
-  </div>
-  </div>
-</section>
+<section id="accueil" class="screen active rd110-choice">
+<div class="rd110-light"></div><header class="rd110-head"><div class="rd110-logo">RénoDirect</div><div class="rd110-progress"><i></i></div></header>
+<main class="rd110-main"><div class="rd110-kicker">BIENVENUE CHEZ RÉNODIRECT</div><h1>Vous êtes ici<br>pour <em>quoi?</em></h1><p>Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.</p>
+<div class="rd110-cards"><a class="rd110-card" href="#client"><span>01</span><strong>Je suis client</strong><small>J’ai un projet et je veux trouver les bons professionnels.</small><b>↗</b></a><a class="rd110-card" href="#pro1"><span>02</span><strong>Je suis entrepreneur</strong><small>Je veux découvrir des projets et développer mon entreprise.</small><b>↗</b></a></div>
+<div class="rd110-existing">Vous avez déjà un compte ?<div><a href="#loginClient">Connexion client</a><a href="#loginPro">Connexion entrepreneur</a></div></div></main></section>
 
 <section id="client" class="screen">
  <div class="top"><a class="back" href="#accueil">‹ Back</a>
