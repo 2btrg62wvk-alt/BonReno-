@@ -1,0 +1,43 @@
+name: Remove Empty Space Safe
+'on':
+  push:
+    paths:
+      - '.github/workflows/remove-empty-space-safe.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove artificial blank space only
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          if 'id="rd100-remove-empty-space"' in s:
+              raise SystemExit(0)
+          marker='</head>'
+          patch='''<style id="rd100-remove-empty-space">
+          /* Remove artificial blank space while preserving normal component spacing */
+          .app>.screen{margin-bottom:0!important}
+          .app>.screen>div:last-child,.app>.screen>main:last-child,.app>.screen>section:last-child{margin-bottom:0!important}
+          .rd51-client{padding-bottom:calc(88px + env(safe-area-inset-bottom))!important}
+          .rd51-create,.rd57-detail,.rd58-detail{padding-bottom:20px!important}
+          .rd52{padding-bottom:20px!important}
+          .rd51-section:last-of-type,.rd57-section:last-of-type{margin-bottom:0!important}
+          </style>'''
+          if marker not in s:
+              raise SystemExit("head marker missing")
+          s=s.replace(marker,patch+marker,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit safe spacing patch
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Remove artificial empty space safely"
+          git push
