@@ -1,0 +1,61 @@
+name: Rebuild Role With Original Links
+'on':
+  push:
+    paths: ['.github/workflows/rebuild-role-with-original-links.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace accueil markup, preserve original navigation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+          # Remove failed styling attempts
+          for sid in ["rd107-real-role","rd108-approved-real-role","rd109-approved-accueil"]:
+              s=re.sub(r'<style id="'+re.escape(sid)+r'">.*?</style>','',s,flags=re.S)
+          # Replace ONLY the actual accueil section. Preserve original href destinations.
+          pat=r'<section id="accueil" class="screen active">.*?</section>'
+          new='''<section id="accueil" class="screen active rd110-choice">
+  <div class="rd110-grid"></div><div class="rd110-light"></div><div class="rd110-orbit"><i></i></div>
+  <header class="rd110-head"><div class="rd110-logo">RénoDirect</div><div class="rd110-progress"><i></i></div></header>
+  <main class="rd110-main">
+    <div class="rd110-kicker">BIENVENUE CHEZ RÉNODIRECT</div>
+    <h1>Vous êtes ici<br>pour <em>quoi?</em></h1>
+    <p>Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.</p>
+    <div class="rd110-cards">
+      <a class="rd110-card" href="#client"><span class="rd110-num">01</span><span class="rd110-icon">⌂</span><strong>Je suis client</strong><small>J’ai un projet et je veux trouver les bons professionnels.</small><b>↗</b></a>
+      <a class="rd110-card" href="#pro1"><span class="rd110-num">02</span><span class="rd110-icon">◇</span><strong>Je suis entrepreneur</strong><small>Je veux découvrir des projets et développer mon entreprise.</small><b>↗</b></a>
+    </div>
+    <div class="rd110-existing"><span>Vous avez déjà un compte ?</span><div><a href="#loginClient">Connexion client</a><a href="#loginPro">Connexion entrepreneur</a></div></div>
+  </main>
+</section>'''
+          s,n=re.subn(pat,new,s,count=1,flags=re.S)
+          if n!=1: raise SystemExit("accueil section not found exactly once")
+          css='''<style id="rd110-choice-design">
+          #accueil.rd110-choice{position:relative!important;isolation:isolate;overflow:hidden!important;min-height:100dvh!important;margin:calc(-18px - env(safe-area-inset-top)) -22px calc(-24px - env(safe-area-inset-bottom))!important;padding:calc(29px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))!important;background:linear-gradient(145deg,#c9cbc2 0%,#e4e1d7 48%,#c3c9c0 100%)!important;color:#09150d!important}
+          .rd110-grid{position:absolute!important;z-index:-2!important;inset:-60px!important;opacity:.11;background-image:linear-gradient(rgba(24,47,31,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(24,47,31,.2) 1px,transparent 1px);background-size:54px 54px;animation:rd110grid 22s linear infinite}
+          .rd110-light{position:absolute!important;z-index:-1!important;width:560px;height:560px;border-radius:50%;right:-320px;top:-210px;background:radial-gradient(circle,rgba(255,255,248,.9),rgba(255,255,248,.13) 53%,transparent 72%);animation:rd110light 7s ease-in-out infinite alternate}
+          .rd110-orbit{position:absolute;z-index:-1;width:190px;height:190px;border:1px solid rgba(34,62,43,.16);border-radius:50%;right:-112px;top:245px;animation:rd110spin 18s linear infinite}.rd110-orbit i{position:absolute;width:7px;height:7px;border-radius:50%;background:#294b35;left:20px;top:22px;box-shadow:0 0 0 7px rgba(41,75,53,.09)}
+          .rd110-head{display:flex;align-items:center;justify-content:space-between}.rd110-logo{font-size:21px;font-weight:820;letter-spacing:-.045em}.rd110-progress{width:38px;height:4px;border-radius:99px;background:rgba(13,30,19,.18);overflow:hidden}.rd110-progress i{display:block;width:50%;height:100%;background:#284532}
+          .rd110-main{padding-top:61px}.rd110-kicker{font-size:9px;font-weight:850;letter-spacing:.23em;color:#203629;margin-bottom:16px}.rd110-main h1{font-size:43px!important;line-height:.96!important;letter-spacing:-.055em!important;font-weight:590!important;color:#07130b!important;margin:0!important;max-width:335px}.rd110-main h1 em{font-family:Georgia,serif;font-weight:500;color:#274a34}.rd110-main>p{font-size:13px!important;line-height:1.55!important;color:#26392e!important;font-weight:540!important;margin:15px 0 0!important;max-width:305px}
+          .rd110-cards{display:grid;gap:12px;margin-top:36px}.rd110-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:142px;border:1px solid rgba(15,34,21,.2);border-radius:25px;padding:20px 66px 20px 20px;background:rgba(250,249,242,.79);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#08140c;text-decoration:none;box-shadow:0 14px 40px rgba(35,47,39,.055);transition:.22s ease;overflow:hidden}.rd110-card:active{transform:scale(.985);background:#14271b;color:#fffdf7}.rd110-num{position:absolute;left:20px;top:19px;font-size:9px;font-weight:800;letter-spacing:.16em;color:#405148}.rd110-icon{position:absolute;right:18px;top:18px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(20,40,27,.22);display:flex;align-items:center;justify-content:center;font-size:20px}.rd110-card strong{font-size:23px;line-height:1.05;letter-spacing:-.04em}.rd110-card small{font-size:11px;line-height:1.45;color:#35483c;font-weight:540;margin-top:7px;max-width:250px}.rd110-card>b{position:absolute;right:30px;bottom:20px;font-size:18px;font-weight:500;color:#254330}.rd110-card:active small,.rd110-card:active b{color:#e3eae5}
+          .rd110-existing{margin-top:21px;padding-top:17px;border-top:1px solid rgba(25,44,31,.14);text-align:center}.rd110-existing>span{font-size:11px;color:#405047}.rd110-existing>div{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.rd110-existing a{text-decoration:none;color:#14251a;background:rgba(250,249,242,.5);border:1px solid rgba(15,34,21,.14);border-radius:13px;padding:11px 7px;font-size:11px;font-weight:750}
+          @keyframes rd110grid{to{transform:translate(54px,54px)}}@keyframes rd110light{to{transform:translate(-55px,55px) scale(1.13)}}@keyframes rd110spin{to{transform:rotate(360deg)}}@media(max-width:360px){#accueil.rd110-choice{padding-left:20px!important;padding-right:20px!important}.rd110-main h1{font-size:38px!important}.rd110-card{min-height:132px}}@media(prefers-reduced-motion:reduce){.rd110-grid,.rd110-light,.rd110-orbit{animation:none!important}}
+          </style>'''
+          # Remove duplicate if rerun, then insert
+          s=re.sub(r'<style id="rd110-choice-design">.*?</style>','',s,flags=re.S)
+          s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Rebuild role screen with approved design and original links"
+          git push
