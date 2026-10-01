@@ -1,0 +1,46 @@
+name: Remove old house background
+on:
+  push:
+    paths:
+      - '.github/workflows/remove-old-house-bg.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Disable legacy accueil background layers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text()
+          marker='rd111-remove-old-house-bg'
+          if marker not in s:
+            css='''<style id="rd111-remove-old-house-bg">
+#accueil.rd110-choice,
+#accueil.rd110-choice::before,
+#accueil.rd110-choice::after{
+  background-image:none !important;
+}
+#accueil.rd110-choice > .hero,
+#accueil.rd110-choice .hero::before,
+#accueil.rd110-choice .hero::after{
+  background-image:none !important;
+}
+</style>
+'''
+            s=s.replace('</head>',css+'</head>',1)
+            p.write_text(s)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Remove legacy house background from role screen"
+          git push origin main
