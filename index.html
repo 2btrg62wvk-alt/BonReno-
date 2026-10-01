@@ -2720,4 +2720,18 @@ html:not(.rd74-has-project) #rd74PublishedWrap{display:none!important}
   }catch(e){}
  },true);
 })();
+</script><script id="rd101-intro-tap-anywhere">
+(function(){
+  var intro=document.getElementById('intro');
+  if(!intro)return;
+  intro.style.cursor='pointer';
+  intro.addEventListener('click',function(e){
+    if(e.defaultPrevented)return;
+    var interactive=e.target.closest('a,button,input,select,textarea,label');
+    if(interactive)return;
+    var entry=intro.querySelector('.rd94-photo-cta,a[href="#accueil"],button[data-target="accueil"],[data-screen="accueil"]');
+    if(entry){entry.click();return;}
+    location.hash='#accueil';
+  });
+})();
 </script></body></html>
