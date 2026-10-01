@@ -1,0 +1,49 @@
+name: Intro Tap Anywhere
+'on':
+  push:
+    paths:
+      - '.github/workflows/intro-tap-anywhere.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make intro screen tappable
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          if 'id="rd101-intro-tap-anywhere"' in s:
+              raise SystemExit(0)
+          marker='</body>'
+          patch=r'''<script id="rd101-intro-tap-anywhere">
+          (function(){
+            var intro=document.getElementById('intro');
+            if(!intro)return;
+            intro.style.cursor='pointer';
+            intro.addEventListener('click',function(e){
+              if(e.defaultPrevented)return;
+              var interactive=e.target.closest('a,button,input,select,textarea,label');
+              if(interactive)return;
+              var entry=intro.querySelector('.rd94-photo-cta,a[href="#accueil"],button[data-target="accueil"],[data-screen="accueil"]');
+              if(entry){entry.click();return;}
+              location.hash='#accueil';
+            });
+          })();
+          </script>'''
+          if marker not in s:
+              raise SystemExit("body marker missing")
+          s=s.replace(marker,patch+marker,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Make intro screen tappable anywhere"
+          git push
