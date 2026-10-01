@@ -1,0 +1,27 @@
+name: Inspect Role Screen
+'on':
+  push:
+    paths: ['.github/workflows/inspect-role-screen.yml']
+permissions: {contents: write}
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract role screen context
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path("index.html").read_text(encoding="utf-8")
+          hits=[]
+          for m in re.finditer(r'(?i)(client|entrepreneur)',s):
+              a=max(0,m.start()-1200); b=min(len(s),m.end()+1800)
+              hits.append(s[a:b])
+          Path("role-context.txt").write_text("\n\n--- HIT ---\n\n".join(hits[:40]),encoding="utf-8")
+          PY
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add role-context.txt
+          git commit -m "Inspect role screen markup"
+          git push
