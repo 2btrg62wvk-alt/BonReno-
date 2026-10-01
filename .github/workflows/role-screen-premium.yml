@@ -1,0 +1,33 @@
+name: Premium Role Screen
+'on':
+  push:
+    paths: ['.github/workflows/role-screen-premium.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install premium role screen skin
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html"); s=p.read_text(encoding="utf-8")
+          css='''<style id="rd106-role-premium">
+          #rd106{position:fixed;inset:0;z-index:2147482000;overflow:auto;background:linear-gradient(145deg,#cecfc6 0%,#e2dfd5 46%,#c5cbc2 100%);color:#0b1710;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;padding:calc(30px + env(safe-area-inset-top)) 25px calc(25px + env(safe-area-inset-bottom));box-sizing:border-box}
+          #rd106[hidden]{display:none!important}.rd106-glow{position:absolute;width:480px;height:480px;border-radius:50%;right:-270px;top:-170px;background:radial-gradient(circle,rgba(255,255,248,.75),rgba(255,255,248,.1) 50%,transparent 70%);animation:r106g 7s ease-in-out infinite alternate}.rd106-grid{position:absolute;inset:0;opacity:.1;background-image:linear-gradient(rgba(25,44,31,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(25,44,31,.15) 1px,transparent 1px);background-size:55px 55px;animation:r106grid 20s linear infinite}.rd106-top,.rd106-intro,.rd106-choices{position:relative;z-index:4}.rd106-top{display:flex;align-items:center;justify-content:space-between}.rd106-brand{font-size:21px;font-weight:800;letter-spacing:-.045em;color:#09160e}.rd106-step{width:38px;height:4px;border-radius:99px;background:rgba(13,30,19,.2);overflow:hidden}.rd106-step:after{content:"";display:block;width:50%;height:100%;background:#284532}.rd106-intro{margin-top:62px}.rd106-kicker{font-size:9px;font-weight:800;letter-spacing:.23em;color:#263a2d;margin-bottom:15px}.rd106-title{font-size:43px;line-height:.96;letter-spacing:-.055em;font-weight:560;margin:0;max-width:315px;color:#0a160e}.rd106-title em{font-family:Georgia,serif;font-weight:500;color:#274a34}.rd106-sub{font-size:13px;line-height:1.55;color:#283a30;font-weight:520;margin-top:15px;max-width:290px}.rd106-choices{display:grid;gap:12px;margin-top:36px}.rd106-card{position:relative;width:100%;min-height:130px;text-align:left;border:1px solid rgba(15,34,21,.19);border-radius:24px;padding:20px;background:rgba(250,249,242,.7);color:#0a160e;overflow:hidden;transition:.28s ease}.rd106-card:active{transform:scale(.985)}.rd106-card b{display:block;font-size:23px;letter-spacing:-.04em;margin:20px 0 4px}.rd106-card small{font-size:11px;line-height:1.45;color:#3b4a41;font-weight:520}.rd106-num{font-size:9px;font-weight:750;letter-spacing:.16em;color:#405148}.rd106-icon{position:absolute;right:18px;top:18px;width:46px;height:46px;border-radius:50%;border:1px solid rgba(20,40,27,.2);display:flex;align-items:center;justify-content:center;font-size:20px}.rd106-arrow{position:absolute;right:21px;bottom:19px;font-size:18px;color:#263a2d}.rd106-orbit{position:absolute;width:170px;height:170px;border:1px solid rgba(34,62,43,.18);border-radius:50%;right:-100px;top:205px;animation:r106spin 17s linear infinite}.rd106-orbit:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#294b35;left:18px;top:19px;box-shadow:0 0 0 7px rgba(41,75,53,.1)}
+          @keyframes r106g{to{transform:translate(-45px,50px) scale(1.14)}}@keyframes r106grid{to{background-position:55px 55px}}@keyframes r106spin{to{transform:rotate(360deg)}}@media(max-width:360px){#rd106{padding-left:21px;padding-right:21px}.rd106-title{font-size:38px}}@media(prefers-reduced-motion:reduce){#rd106 *{animation:none!important;transition:none!important}}
+          </style>'''
+          js='''<script id="rd106-role-premium-runtime">(function(){var overlay=null;function norm(x){return (x||"").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"")}function candidates(){return Array.from(document.querySelectorAll("button,a,[role=button]")).filter(function(e){if(e.closest("#rd105")||e.closest("#rd106"))return false;var t=norm(e.innerText||e.textContent);return t.includes("client")||t.includes("entrepreneur")})}function show(){if(overlay)return;var cs=candidates(),client=cs.find(function(e){return norm(e.innerText||e.textContent).includes("client")}),pro=cs.find(function(e){return norm(e.innerText||e.textContent).includes("entrepreneur")});if(!client||!pro)return;overlay=document.createElement("div");overlay.id="rd106";overlay.innerHTML='<div class="rd106-glow"></div><div class="rd106-grid"></div><div class="rd106-orbit"></div><div class="rd106-top"><div class="rd106-brand">RénoDirect</div><div class="rd106-step"></div></div><section class="rd106-intro"><div class="rd106-kicker">BIENVENUE CHEZ RÉNODIRECT</div><h1 class="rd106-title">Vous êtes ici pour <em>quoi?</em></h1><p class="rd106-sub">Choisissez votre espace. RénoDirect adaptera l’expérience à votre façon de rénover.</p></section><div class="rd106-choices"><button class="rd106-card" data-r="c"><span class="rd106-num">01</span><span class="rd106-icon">⌂</span><b>Je suis client</b><small>J’ai un projet et je veux trouver les bons professionnels.</small><span class="rd106-arrow">↗</span></button><button class="rd106-card" data-r="p"><span class="rd106-num">02</span><span class="rd106-icon">◇</span><b>Je suis entrepreneur</b><small>Je veux découvrir des projets et développer mon entreprise.</small><span class="rd106-arrow">↗</span></button></div>';document.body.appendChild(overlay);overlay.querySelector('[data-r="c"]').onclick=function(){overlay.remove();overlay=null;client.click()};overlay.querySelector('[data-r="p"]').onclick=function(){overlay.remove();overlay=null;pro.click()}}document.addEventListener("click",function(){setTimeout(show,80)},true);setTimeout(show,600)})();</script>'''
+          if 'id="rd106-role-premium"' not in s:s=s.replace('</head>',css+'</head>',1)
+          if 'id="rd106-role-premium-runtime"' not in s:s=s.replace('</body>',js+'</body>',1)
+          p.write_text(s,encoding="utf-8")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Style client entrepreneur choice screen"
+          git push
