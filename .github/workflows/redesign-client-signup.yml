@@ -1,0 +1,80 @@
+name: Redesign client signup
+on:
+  push:
+    paths: ['.github/workflows/redesign-client-signup.yml']
+permissions: {contents: write}
+jobs:
+  redesign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Add premium client signup skin
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text()
+          if 'id="rd-client-luxe-v1"' in s: raise SystemExit('already applied')
+          css=r'''<style id="rd-client-luxe-v1">
+          /* Client signup — light architectural luxury */
+          #client{background:#f5f3ec!important;background-image:
+            radial-gradient(circle at 88% 12%,rgba(52,103,74,.07) 0 1px,transparent 2px),
+            linear-gradient(rgba(15,38,26,.025) 1px,transparent 1px),
+            linear-gradient(90deg,rgba(15,38,26,.025) 1px,transparent 1px)!important;
+            background-size:auto,42px 42px,42px 42px!important;color:#132019!important;
+            min-height:100svh!important;padding:clamp(18px,3vw,36px)!important;overflow:auto!important}
+          #client:before,#client:after{opacity:.18!important;filter:blur(1px)}
+          #client .form-card,#client .card,#client>div:not(.progress):not(.progress-bar){
+            border-color:rgba(24,48,35,.11)!important;box-shadow:0 24px 70px rgba(20,34,26,.08)!important}
+          #client h1,#client h2{color:#101914!important;letter-spacing:-.035em!important;font-weight:600!important}
+          #client p,#client .subtitle{color:#69736c!important}
+          #client label{color:#26332c!important;font-size:11px!important;font-weight:700!important;letter-spacing:.075em!important;text-transform:uppercase!important}
+          #client input,#client select,#client textarea{
+            background:rgba(255,255,255,.78)!important;color:#152019!important;
+            border:1px solid rgba(28,50,38,.13)!important;border-radius:14px!important;
+            box-shadow:0 1px 0 rgba(255,255,255,.8) inset!important;
+            transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease!important}
+          #client input:focus,#client select:focus,#client textarea:focus{
+            outline:none!important;border-color:rgba(34,88,57,.48)!important;
+            box-shadow:0 0 0 4px rgba(34,88,57,.07)!important;transform:translateY(-1px)}
+          #client input::placeholder,#client textarea::placeholder{color:#a0a7a2!important}
+          #client .primary,#client button.primary{
+            background:#17231c!important;color:#fff!important;border:0!important;border-radius:999px!important;
+            box-shadow:0 10px 28px rgba(15,30,21,.14)!important;transition:transform .2s ease,box-shadow .2s ease!important}
+          #client .primary:hover,#client button.primary:hover{transform:translateY(-2px)!important;box-shadow:0 15px 34px rgba(15,30,21,.18)!important}
+          #client .primary:active,#client button.primary:active{transform:scale(.985)!important}
+          #client .back,#client .login{color:#31443a!important}
+          #client .progress,#client .progress-bar{accent-color:#315f47!important}
+          #client.rd-client-enter>*{animation:rdClientIn .62s cubic-bezier(.2,.75,.25,1) both}
+          #client.rd-client-enter>*:nth-child(2){animation-delay:.05s}
+          #client.rd-client-enter>*:nth-child(3){animation-delay:.1s}
+          @keyframes rdClientIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+          @media(max-width:640px){
+            #client{padding:16px!important}
+            #client .form-card,#client .card{border-radius:24px!important}
+            #client input,#client select,#client textarea{min-height:50px!important}
+          }
+          @media(prefers-reduced-motion:reduce){#client.rd-client-enter>*{animation:none!important}}
+          </style>'''
+          js=r'''<script id="rd-client-luxe-v1-js">
+          (function(){
+            var c=document.getElementById('client'); if(!c)return;
+            var obs=new MutationObserver(function(){
+              if(c.classList.contains('active')){
+                c.classList.remove('rd-client-enter'); void c.offsetWidth; c.classList.add('rd-client-enter');
+              }
+            });
+            obs.observe(c,{attributes:true,attributeFilter:['class']});
+            if(location.hash==='#client') c.classList.add('rd-client-enter');
+          })();
+          </script>'''
+          s=s.replace('</head>',css+'</head>',1).replace('</body>',js+'</body>',1)
+          p.write_text(s)
+          PY
+      - name: Commit and push
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Redesign client signup in light luxury style"
+          git push origin main
