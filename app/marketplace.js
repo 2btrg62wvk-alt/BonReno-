@@ -16,6 +16,33 @@ const sharedRoutes=new Set(['quoteDetail','quoteAccepted','clientMessages','clie
 const editingRoutes=new Set(['pro2','services','territory','building','profilePreview']);
 function route(){return location.hash.slice(1).split('?')[0];}
 function go(id){location.hash=id;}
+function installPageTransitions(){
+ const style=document.createElement('style');style.id='rd-page-motion';
+ style.textContent='.screen:target,.screen:target > .top,.screen:target > .success{animation:none!important}';document.head.append(style);
+ const tabs=new Set(['clientDashboard','clientProjects','clientProjectsPublished','clientMessages','contractorFeed','contractorQuotes','profilePreview']);
+ let trail=[route()||'home'],intent='',animation=null,frame=0;
+ document.addEventListener('click',e=>{const link=e.target.closest('a,button');if(!link)return;
+  const classes=String(link.className);const label=(link.getAttribute('aria-label')||link.textContent||'').trim();
+  intent=/back|retour|close/i.test(classes+' '+label)||/^[‹❮←✕×]$/.test(label)?'back':link.closest('nav,.bottom-nav,.rd51-nav,.rd58-nav')?'tab':'';
+ },true);
+ window.addEventListener('hashchange',e=>{
+  const next=new URL(e.newURL).hash.slice(1).split('?')[0]||'home',previous=new URL(e.oldURL).hash.slice(1).split('?')[0]||'home';
+  if(next===previous)return;
+  const known=trail.lastIndexOf(next),back=intent==='back'||known>=0,tab=intent==='tab'||(tabs.has(previous)&&tabs.has(next));intent='';
+  if(known>=0)trail=trail.slice(0,known+1);else{trail.push(next);if(trail.length>60)trail.shift();}
+  if(animation){animation.cancel();animation=null;}if(typeof requestAnimationFrame!=='function')return;cancelAnimationFrame(frame);
+  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+  frame=requestAnimationFrame(()=>{
+   if((route()||'home')!==next)return;
+   const screen=byId(next)||(['home','intro'].includes(next)?byId('rd105'):null);
+   if(!screen||typeof screen.animate!=='function')return;
+   // Individual translate avoids the fixed-screen transform overrides. No persistent styles.
+   animation=screen.animate([{opacity:tab ? .76 : .6,translate:tab?'0 5px':(back?'-18px 0':'18px 0')},{opacity:1,translate:'0 0'}],{duration:tab?150:230,easing:'cubic-bezier(.22,1,.36,1)'});
+   const current=animation;current.onfinish=()=>{if(animation===current)animation=null;};
+  });
+ });
+}
+
 function notify(message){let e=byId('rd-live-notice');if(!e){e=document.createElement('div');e.id='rd-live-notice';e.className='rd-live-notice';e.setAttribute('role','status');document.body.append(e);}e.textContent=message;clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.remove(),6500);}
 function err(e){const text=e?.message||'Connexion impossible. Réessayez.';if(/invalid login/i.test(text))return 'Courriel ou mot de passe incorrect.';if(/email not confirmed/i.test(text))return 'Confirmez votre courriel avant de vous connecter.';if(/rate limit|too many/i.test(text))return 'Trop de tentatives. Patientez un moment puis réessayez.';if(/already registered/i.test(text))return 'Ce courriel a déjà un compte. Connectez-vous.';if(/duplicate key/i.test(text))return 'Vous avez déjà envoyé une soumission pour ce projet.';if(/fetch|network/i.test(text))return 'Vérifiez votre connexion Internet et réessayez.';return text;}
 function pageError(message){let page=byId(route());if(!page)return;let e=page.querySelector('.rd-live-error');if(!e){e=document.createElement('div');e.className='rd-live-error';e.setAttribute('role','alert');(page.querySelector('.rd-signup-card,.login-card,.rd52,.rd-live-detail,.rd58-shell')||page).append(e);}e.textContent=message;e.scrollIntoView({block:'nearest'});}
@@ -136,7 +163,7 @@ async function publish(){preparePublicationAudio();required(profile?.role==='cli
 }
 async function accept(id){const q=await quote(id);required(q,'Soumission introuvable.');if(!confirm('Choisir cet entrepreneur pour '+money(q.amount)+' ? Les autres offres seront indiquées comme non retenues.'))return;await result(db.rpc('rd_accept_quote',{quote:id}));selectedQuote=await quote(id);remember('quote',id);go('quoteAccepted');}
 async function progress(status){const p=await loadSelectedProject();const question=status==='completed'?'Confirmer que les travaux sont terminés ?':status==='archived'?'Archiver ce projet ? Il ne sera plus proposé aux entrepreneurs.':'Indiquer que les travaux ont commencé ?';if(!confirm(question))return;await result(db.rpc('rd_progress_project',{project:p.id,next_status:status}));selectedProject=await project(p.id);await render();notify('Statut du projet mis à jour.');}
-function bind(){document.documentElement.classList.add('rd-live-app');
+function bind(){installPageTransitions();document.documentElement.classList.add('rd-live-app');
  document.querySelectorAll('.rd62-switch').forEach(a=>{a.textContent='Se déconnecter';a.href='#accueil';a.dataset.logout='1';});
  $('#pro1 .login button').onclick=()=>go('loginPro');
  $('#contractorFeed .rd58-filterbar a').textContent='Mes services ⚙';$('#contractorFeed .rd58-filterbar a').href='#services';
