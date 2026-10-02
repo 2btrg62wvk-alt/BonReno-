@@ -1,0 +1,34 @@
+name: Finish entrepreneur palette
+on:
+  push:
+    paths: ['.github/workflows/entrepreneur-green-finish.yml']
+permissions: {contents: write}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Finish scoped colors
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text()
+          css=r'''<style id="rd-entrepreneur-color-finish">
+          :is(#pro1,#pro2,#services,#territory):is(#pro1,#pro2,#services,#territory) a.primary{background:linear-gradient(120deg,#274e35,#183d2a)!important;color:#fffef8!important;border-radius:15px!important;box-shadow:0 8px 20px rgba(30,69,42,.13)!important}
+          :is(#pro1,#pro2,#services,#territory):is(#pro1,#pro2,#services,#territory) .step{color:#54705b!important}
+          :is(#pro1,#pro2,#services,#territory):is(#pro1,#pro2,#services,#territory) .progress i{background:linear-gradient(90deg,#315d40,#9fba8c)!important}
+          #pro1#pro1 .login button{color:#2d573a!important;text-decoration:underline;text-underline-offset:4px;min-height:44px}
+          #services#services .service-option label,#territory#territory .radius-choice label{background:#f9faf5!important;color:#3c5142!important;border:1px solid #e0e6da!important;box-shadow:none!important}
+          #services#services .service-option input:checked+label,#territory#territory .radius-choice input:checked+label{background:#e8efdf!important;color:#244a31!important;border-color:#69936c!important;box-shadow:inset 0 0 0 1px #69936c!important}
+          #services#services .service-option input:checked+label::after{color:#315d40!important}
+          </style>'''
+          if 'id="rd-entrepreneur-color-finish"' not in s:
+              p.write_text(s.replace('</body>',css+'</body>',1))
+          PY
+          git config user.name 'RenoDirect Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Finish entrepreneur green accents and selected states'
+          git push
