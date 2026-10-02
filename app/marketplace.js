@@ -66,6 +66,39 @@ function installPageTransitions(){
 }
 
 function notify(message){let e=byId('rd-live-notice');if(!e){e=document.createElement('div');e.id='rd-live-notice';e.className='rd-live-notice';e.setAttribute('role','status');document.body.append(e);}e.textContent=message;clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.remove(),6500);}
+let quoteNoticeRows=[],quoteNoticeOwner=null,quoteNoticeLoading=false;
+function clearQuoteNotice(){byId('rd-quote-notice')?.remove();quoteNoticeRows=[];quoteNoticeOwner=null;}
+function readQuoteNoticeIds(id){try{return new Set(JSON.parse(localStorage.getItem('rd-quote-read-'+id)||'[]'));}catch(e){return new Set();}}
+function markQuoteNoticeRead(ids){if(!user||profile?.role!=='client')return;const seen=readQuoteNoticeIds(user.id);ids.forEach(id=>seen.add(id));try{localStorage.setItem('rd-quote-read-'+user.id,JSON.stringify([...seen].slice(-2000)));}catch(e){}quoteNoticeRows=quoteNoticeRows.filter(q=>!seen.has(q.id));paintQuoteNotice();}
+function paintQuoteNotice(){
+ byId('rd-quote-notice')?.remove();if(profile?.role!=='client'||user?.id!==quoteNoticeOwner||!quoteNoticeRows.length)return;
+ const q=quoteNoticeRows[0],box=document.createElement('aside');box.id='rd-quote-notice';box.setAttribute('role','status');box.setAttribute('aria-live','polite');
+ box.innerHTML='<span class="rd-quote-notice-icon" aria-hidden="true">✦</span><a href="#quoteDetail" data-quote="'+esc(q.id)+'"><strong>'+ (quoteNoticeRows.length>1?quoteNoticeRows.length+' nouvelles soumissions':'Nouvelle soumission reçue')+'</strong><span>'+esc(money(q.amount))+' · '+esc(q.project_title)+'</span><b>Consulter →</b></a><button type="button" data-dismiss-quotes aria-label="Fermer la notification">×</button>';
+ document.body.append(box);
+}
+async function checkQuoteNotifications(){
+ if(document.hidden)return;if(!user||profile?.role!=='client'){clearQuoteNotice();return;}if(quoteNoticeLoading)return;
+ const owner=user.id;quoteNoticeLoading=true;
+ try{const qs=await result(db.from('rd_quotes').select('id,project_id,amount,created_at').eq('status','pending').order('created_at',{ascending:false}).limit(50));
+  if(user?.id!==owner||profile?.role!=='client')return;
+  const seen=readQuoteNoticeIds(owner),unread=qs.filter(q=>!seen.has(q.id));
+  if(!unread.length){clearQuoteNotice();return;}
+  const ps=await result(db.from('rd_projects').select('id,title,client_id').eq('client_id',owner).in('id',[...new Set(unread.map(q=>q.project_id))]));
+  if(user?.id!==owner||profile?.role!=='client')return;
+  const rows=unread.filter(q=>ps.some(p=>p.id===q.project_id)).map(q=>({...q,project_title:ps.find(p=>p.id===q.project_id).title}));
+  const changed=quoteNoticeOwner!==owner||rows.map(q=>q.id).join()!==quoteNoticeRows.map(q=>q.id).join();quoteNoticeOwner=owner;quoteNoticeRows=rows;if(changed)paintQuoteNotice();
+ }catch(e){/* A background notification must not interrupt the current form. */}finally{quoteNoticeLoading=false;}
+}
+function installQuoteNotifications(){
+ const css=document.createElement('style');css.id='rd-quote-notice-style';css.textContent=`
+ #rd-quote-notice{position:fixed;z-index:350;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(410px,calc(100% - 24px));box-sizing:border-box;display:flex;align-items:flex-start;gap:11px;padding:16px 8px 16px 16px;border-radius:20px;background:#fffef4;border:1px solid #d8e2d3;box-shadow:0 12px 36px #173d292b;color:#234731}
+ #rd-quote-notice a{flex:1;min-width:0;color:inherit;text-decoration:none}#rd-quote-notice strong,#rd-quote-notice span,#rd-quote-notice b{display:block}#rd-quote-notice strong{font-size:14px;line-height:1.4}#rd-quote-notice a span{font-size:12px;line-height:1.5;margin-top:4px;overflow-wrap:anywhere;color:#64705e}#rd-quote-notice b{font-size:12px;margin-top:8px}#rd-quote-notice .rd-quote-notice-icon{font-size:23px;color:#b99560}#rd-quote-notice button{width:44px;height:44px;flex:0 0 44px;border:0;background:transparent;color:#64705e;font-size:25px;border-radius:12px}#rd-quote-notice a:focus-visible,#rd-quote-notice button:focus-visible{outline:2px solid #315d40;outline-offset:3px}
+ `;document.head.append(css);
+ document.addEventListener('click',e=>{const dismiss=e.target.closest('[data-dismiss-quotes]'),link=e.target.closest('[data-quote]');if(dismiss){e.preventDefault();e.stopImmediatePropagation();markQuoteNoticeRead(quoteNoticeRows.map(q=>q.id));}else if(link&&profile?.role==='client'){markQuoteNoticeRead([link.dataset.quote]);}},true);
+ window.addEventListener('focus',()=>void checkQuoteNotifications());document.addEventListener('visibilitychange',()=>void checkQuoteNotifications());
+ setInterval(()=>void checkQuoteNotifications(),10000);
+}
+
 function err(e){const text=e?.message||'Connexion impossible. Réessayez.';if(/invalid login/i.test(text))return 'Courriel ou mot de passe incorrect.';if(/email not confirmed/i.test(text))return 'Confirmez votre courriel avant de vous connecter.';if(/rate limit|too many/i.test(text))return 'Trop de tentatives. Patientez un moment puis réessayez.';if(/already registered/i.test(text))return 'Ce courriel a déjà un compte. Connectez-vous.';if(/duplicate key/i.test(text))return 'Vous avez déjà envoyé une soumission pour ce projet.';if(/fetch|network/i.test(text))return 'Vérifiez votre connexion Internet et réessayez.';return text;}
 function pageError(message){let page=byId(route());if(!page)return;let e=page.querySelector('.rd-live-error');if(!e){e=document.createElement('div');e.className='rd-live-error';e.setAttribute('role','alert');(page.querySelector('.rd-signup-card,.login-card,.rd52,.rd-live-detail,.rd58-shell')||page).append(e);}e.textContent=message;e.scrollIntoView({block:'nearest'});}
 async function result(request){const {data,error}=await request;if(error)throw error;return data;}
@@ -185,7 +218,7 @@ async function publish(){preparePublicationAudio();required(profile?.role==='cli
 }
 async function accept(id){const q=await quote(id);required(q,'Soumission introuvable.');if(!confirm('Choisir cet entrepreneur pour '+money(q.amount)+' ? Les autres offres seront indiquées comme non retenues.'))return;await result(db.rpc('rd_accept_quote',{quote:id}));selectedQuote=await quote(id);remember('quote',id);go('quoteAccepted');}
 async function progress(status){const p=await loadSelectedProject();const question=status==='completed'?'Confirmer que les travaux sont terminés ?':status==='archived'?'Archiver ce projet ? Il ne sera plus proposé aux entrepreneurs.':'Indiquer que les travaux ont commencé ?';if(!confirm(question))return;await result(db.rpc('rd_progress_project',{project:p.id,next_status:status}));selectedProject=await project(p.id);await render();notify('Statut du projet mis à jour.');}
-function bind(){installPageTransitions();document.documentElement.classList.add('rd-live-app');
+function bind(){installPageTransitions();installQuoteNotifications();document.documentElement.classList.add('rd-live-app');
  document.querySelectorAll('.rd62-switch').forEach(a=>{a.textContent='Se déconnecter';a.href='#accueil';a.dataset.logout='1';});
  $('#pro1 .login button').onclick=()=>go('loginPro');
  $('#contractorFeed .rd58-filterbar a').textContent='Mes services ⚙';$('#contractorFeed .rd58-filterbar a').href='#services';
@@ -196,7 +229,7 @@ function bind(){installPageTransitions();document.documentElement.classList.add(
  byId('rd62Description').setAttribute('aria-label','Description des travaux');byId('rd62Description').maxLength=10000;byId('rd80ProjectName').maxLength=160;
  document.addEventListener('click',e=>{const a=e.target.closest('a,button');if(!a)return;const r=route();
   const run=fn=>{e.preventDefault();e.stopImmediatePropagation();void action(a,fn);};
-  if(a.dataset.logout){run(async()=>{await db.auth.signOut();user=null;profile=null;accountDetails=null;selectedProject=null;selectedQuote=null;go('accueil');});return;}
+  if(a.dataset.logout){run(async()=>{await db.auth.signOut();user=null;profile=null;accountDetails=null;selectedProject=null;selectedQuote=null;clearQuoteNotice();go('accueil');});return;}
   if(a.dataset.account||a.matches('#clientDashboard .rd51-avatar')){e.preventDefault();notify(profile.display_name+' · '+profile.city+' · '+user.email);return;}
   if(a.dataset.refresh!==undefined){run(render);return;}
   if(a.dataset.projectTab){e.preventDefault();projectTab=a.dataset.projectTab;void render();return;}
@@ -233,8 +266,8 @@ function bind(){installPageTransitions();document.documentElement.classList.add(
  setInterval(()=>{if(document.hidden||busy||!user)return;if(route()==='clientChat')void chatMessages().catch(()=>{});else if(['clientDashboard','contractorFeed','contractorQuotes','clientMessages','clientProjectDetail'].includes(route()))void render();},15000);
 }
 async function initialize(){try{cities=await fetch('/app/cities.json').then(r=>{if(!r.ok)throw Error('La liste des villes n’est pas disponible. Rechargez l’app.');return r.json();});const list=document.createElement('datalist');list.id='rd-city-list';list.innerHTML=cities.map(c=>'<option value="'+esc(c[0])+'"></option>').join('');document.body.append(list);['rd-signup-address-level2','rd-pro2-field-5','rd-territory-field-1','rd62City'].forEach(id=>byId(id).setAttribute('list',list.id));
- bind();const {data,error}=await db.auth.getSession();if(error)throw error;user=data.session?.user||null;if(user)await loadProfile();fillProfile();
- db.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{try{user=session?.user||null;if(user)await loadProfile();else{profile=null;accountDetails=null;selectedProject=null;selectedQuote=null;}if(busy)return;if(event==='PASSWORD_RECOVERY'){shell('resetPassword','<h1 class="rd-live-heading">Nouveau mot de passe</h1><form id="rd-live-reset"><label for="rd-live-new-password">Mot de passe</label><input id="rd-live-new-password" type="password" autocomplete="new-password" minlength="8" required><button class="rd-live-button">Enregistrer →</button></form>');go('resetPassword');}else if(user&&(!route()||route().startsWith('access_token')||route()==='loginClient'||route()==='loginPro'))go(profile?.role==='contractor'?'contractorFeed':'clientDashboard');else await render();}catch(e){pageError(err(e));}},0);});
+ bind();const {data,error}=await db.auth.getSession();if(error)throw error;user=data.session?.user||null;if(user)await loadProfile();fillProfile();void checkQuoteNotifications();
+ db.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{try{clearQuoteNotice();user=session?.user||null;if(user)await loadProfile();else{profile=null;accountDetails=null;selectedProject=null;selectedQuote=null;}void checkQuoteNotifications();if(busy)return;if(event==='PASSWORD_RECOVERY'){shell('resetPassword','<h1 class="rd-live-heading">Nouveau mot de passe</h1><form id="rd-live-reset"><label for="rd-live-new-password">Mot de passe</label><input id="rd-live-new-password" type="password" autocomplete="new-password" minlength="8" required><button class="rd-live-button">Enregistrer →</button></form>');go('resetPassword');}else if(user&&(!route()||route().startsWith('access_token')||route()==='loginClient'||route()==='loginPro'))go(profile?.role==='contractor'?'contractorFeed':'clientDashboard');else await render();}catch(e){pageError(err(e));}},0);});
  if(user&&(!route()||route().startsWith('access_token')))go(profile?.role==='contractor'?'contractorFeed':'clientDashboard');else await render();
  }catch(e){notify(err(e));}}
  void initialize();
