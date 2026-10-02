@@ -51,6 +51,8 @@ function noError(){assert.equal(w.document.querySelector('.rd-live-error'),null,
  await route('clientMessages');let fail=true;queryDelay=q=>{if(fail&&q.table==='rd_projects'){fail=false;throw Error('Failed to fetch');}};await route('clientProjects');assert.match(w.document.querySelector('#clientProjects .rd-live-error').textContent,/connexion Internet/);queryDelay=null;await click('#clientProjects [data-refresh]');noError();assert.match(w.document.getElementById('clientProjects').textContent,/Projet A/);
  // An unchanged background refresh preserves the selected card and focus.
  await route('clientProjects');const stable=w.document.querySelector('[data-project="race-a"]');stable.focus();await click('[data-project-tab="active"]');assert.equal(w.document.querySelector('[data-project="race-a"]'),stable);
+ // Startup redirect must update CSS :target as well as the URL after the intro.
+ const originalReplaceState=w.history.replaceState;w.history.replaceState=()=>{throw Error('replaceState does not update the CSS target');};await route('home');assert.equal(w.location.hash,'#clientDashboard');w.history.replaceState=originalReplaceState;
  // Signed-in navigation cannot return to the public entry flow, including native history back.
  for(const id of ['accueil','home','intro','client','pro1','loginClient','loginPro']){await route(id);assert.equal(w.location.hash,'#clientDashboard',id);}
  await route('clientProjects');w.history.back();await pause();assert.equal(w.location.hash,'#clientDashboard');
