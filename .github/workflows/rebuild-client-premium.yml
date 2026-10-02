@@ -1,7 +1,10 @@
 name: Rebuild client signup premium
 on:
   push:
-    paths: ['.github/workflows/rebuild-client-premium.yml']
+    paths:
+      - '.github/workflows/rebuild-client-premium.yml'
+      - '.github/workflows/rebuild-client-premium-trigger.txt'
+  workflow_dispatch:
 permissions: {contents: write}
 jobs:
   rebuild:
