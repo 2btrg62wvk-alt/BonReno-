@@ -1,0 +1,67 @@
+name: Rebuild client signup premium
+on:
+  push:
+    paths: ['.github/workflows/rebuild-client-premium.yml']
+permissions: {contents: write}
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Rebuild exact client screen while preserving fields and handlers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html'); s=p.read_text()
+          if 'id="rd-client-rebuild-v2"' in s: raise SystemExit('already applied')
+          m=re.search(r'<section\\b[^>]*\\bid=["\\\']client["\\\'][^>]*>',s,re.I)
+          if not m: raise SystemExit('client section not found')
+          start=m.start(); end=s.find('</section>',m.end())
+          if end<0: raise SystemExit('client close not found')
+          end+=len('</section>')
+          old=s[start:end]
+          # Preserve actual controls and actions from existing form, but radically change layout through scoped CSS.
+          # This avoids renaming IDs / handlers that existing JS depends on.
+          old=old.replace(m.group(0),m.group(0).replace('>', ' class="rd-client-v2" data-rd-premium="true">') if 'class=' not in m.group(0) else m.group(0).replace('class="','class="rd-client-v2 ',1),1)
+          s=s[:start]+old+s[end:]
+          css=r'''<style id="rd-client-rebuild-v2">
+          #client.rd-client-v2{position:relative!important;min-height:100svh!important;background:#f6f4ed!important;color:#121914!important;padding:0!important;overflow:auto!important;isolation:isolate}
+          #client.rd-client-v2:before{content:""!important;position:fixed!important;inset:0!important;z-index:-2!important;opacity:1!important;background:
+            radial-gradient(circle at 12% 18%,rgba(50,91,67,.08),transparent 28%),
+            radial-gradient(circle at 88% 82%,rgba(191,174,137,.11),transparent 30%),
+            linear-gradient(90deg,rgba(18,35,25,.025) 1px,transparent 1px),
+            linear-gradient(rgba(18,35,25,.025) 1px,transparent 1px)!important;background-size:auto,auto,52px 52px,52px 52px!important}
+          #client.rd-client-v2:after{content:"R"!important;position:fixed!important;right:-.04em!important;bottom:-.26em!important;z-index:-1!important;font:600 min(58vw,680px)/1 Georgia,serif!important;color:rgba(31,64,45,.025)!important;pointer-events:none!important}
+          #client.rd-client-v2>div{max-width:940px!important;margin-inline:auto!important}
+          #client.rd-client-v2 .form-card,#client.rd-client-v2 .card{background:rgba(255,255,255,.68)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;border:1px solid rgba(25,43,32,.09)!important;border-radius:32px!important;box-shadow:0 30px 90px rgba(31,38,33,.08)!important}
+          #client.rd-client-v2 h1,#client.rd-client-v2 h2{font-family:Georgia,"Times New Roman",serif!important;font-weight:400!important;font-size:clamp(38px,5vw,62px)!important;line-height:.98!important;letter-spacing:-.045em!important;color:#121914!important;margin-bottom:14px!important}
+          #client.rd-client-v2 .eyebrow,#client.rd-client-v2 .kicker{font:700 11px/1.2 system-ui,sans-serif!important;letter-spacing:.16em!important;text-transform:uppercase!important;color:#315b44!important}
+          #client.rd-client-v2 .subtitle,#client.rd-client-v2 p{color:#707872!important;line-height:1.6!important}
+          #client.rd-client-v2 form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px 16px!important}
+          #client.rd-client-v2 form>*{min-width:0}
+          #client.rd-client-v2 label{display:block!important;margin:0 0 8px!important;color:#26322b!important;font:700 10px/1.2 system-ui,sans-serif!important;letter-spacing:.105em!important;text-transform:uppercase!important}
+          #client.rd-client-v2 input,#client.rd-client-v2 select,#client.rd-client-v2 textarea{width:100%!important;min-height:56px!important;background:#fff!important;border:1px solid rgba(25,43,32,.11)!important;border-radius:16px!important;padding:0 17px!important;color:#152019!important;box-shadow:0 8px 28px rgba(20,31,24,.025)!important;transition:.22s ease!important}
+          #client.rd-client-v2 input:focus,#client.rd-client-v2 select:focus,#client.rd-client-v2 textarea:focus{outline:0!important;border-color:rgba(43,93,63,.5)!important;box-shadow:0 0 0 5px rgba(43,93,63,.065),0 12px 32px rgba(20,31,24,.05)!important;transform:translateY(-1px)}
+          #client.rd-client-v2 .primary,#client.rd-client-v2 button.primary{min-height:58px!important;border-radius:999px!important;background:#17221c!important;color:white!important;border:0!important;padding:0 26px!important;font-weight:650!important;letter-spacing:-.01em!important;box-shadow:0 13px 30px rgba(20,33,25,.14)!important;transition:.22s cubic-bezier(.2,.8,.2,1)!important}
+          #client.rd-client-v2 .primary:hover{transform:translateY(-2px) scale(1.008)!important;box-shadow:0 18px 38px rgba(20,33,25,.18)!important}
+          #client.rd-client-v2 .primary:active{transform:scale(.98)!important}
+          #client.rd-client-v2 .back{display:inline-grid!important;place-items:center!important;min-width:44px!important;min-height:44px!important;border:1px solid rgba(25,43,32,.1)!important;border-radius:50%!important;background:rgba(255,255,255,.7)!important;color:#1d2c23!important;box-shadow:0 8px 22px rgba(20,31,24,.04)!important}
+          #client.rd-client-v2 .login{color:#284d39!important;text-decoration:none!important;border-bottom:1px solid rgba(40,77,57,.24)!important}
+          #client.rd-client-v2.rd-v2-in>*{animation:rdv2in .7s cubic-bezier(.18,.8,.22,1) both}
+          @keyframes rdv2in{from{opacity:0;transform:translateY(18px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+          @media(max-width:700px){#client.rd-client-v2{padding:18px!important}#client.rd-client-v2 form{grid-template-columns:1fr!important;gap:14px!important}#client.rd-client-v2 .form-card,#client.rd-client-v2 .card{border-radius:26px!important}#client.rd-client-v2 h1,#client.rd-client-v2 h2{font-size:clamp(38px,12vw,52px)!important}}
+          @media(prefers-reduced-motion:reduce){#client.rd-client-v2.rd-v2-in>*{animation:none!important}}
+          </style>'''
+          js=r'''<script id="rd-client-rebuild-v2-js">(function(){var c=document.getElementById('client');if(!c)return;function a(){if(c.classList.contains('active')||location.hash==='#client'){c.classList.remove('rd-v2-in');void c.offsetWidth;c.classList.add('rd-v2-in')}}new MutationObserver(a).observe(c,{attributes:true,attributeFilter:['class']});addEventListener('hashchange',a);a()})();</script>'''
+          s=s.replace('</head>',css+'</head>',1).replace('</body>',js+'</body>',1)
+          p.write_text(s)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Rebuild client signup as premium light experience"
+          git push origin main
