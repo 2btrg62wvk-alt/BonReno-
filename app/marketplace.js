@@ -111,10 +111,28 @@ async function render(){const r=route(),version=++routeVersion;if(!r||r==='intro
 }
 function review(){const host=$('#projectReview .rd72-publish-page');let summary=byId('rd-live-review');if(!summary){summary=document.createElement('div');summary.id='rd-live-review';summary.className='rd-live-card';byId('rd72Publish').before(summary);}summary.innerHTML='<strong>'+esc(value('rd80ProjectName')||draft.type)+'</strong><p>'+esc(value('rd62Description'))+'</p><div class="rd-live-meta"><span>'+esc(draft.type)+'</span><span>'+esc(value('rd62City'))+'</span></div><p>'+esc(draft.budget)+' · '+esc(draft.timing)+'</p>';}
 async function compressPhoto(file){required(file.type.startsWith('image/'),'Sélectionnez uniquement des images.');const url=URL.createObjectURL(file);try{const image=new Image();image.src=url;await image.decode();const canvas=document.createElement('canvas'),scale=Math.min(1,1600/Math.max(image.width,image.height));canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);return await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.82));}finally{URL.revokeObjectURL(url);}}
-async function publish(){required(profile?.role==='client','Connectez-vous avec un compte client.');required(draft.service,'Choisissez le type de projet.');required(value('rd62Description').length>=10,'Décrivez les travaux en au moins 10 caractères.');required(draft.budget&&draft.timing,'Choisissez le budget et l’échéancier.');const location=city(value('rd62City')),files=[...byId('rd56Photos').files];required(files.length<=12,'Sélectionnez au maximum 12 photos.');required(!value('rd62Postal')||/^[A-Z]\d[A-Z][ -]?\d[A-Z]\d$/i.test(value('rd62Postal')),'Indiquez un code postal canadien valide.');
+let publicationAudio=null;
+function preparePublicationAudio(){
+ try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+  if(!publicationAudio||publicationAudio.state==='closed')publicationAudio=new Audio();
+  const ctx=publicationAudio;ctx.resume().catch(()=>{});
+  // Unlock audio during the publish tap, before the network request (mobile Safari).
+  const silent=ctx.createBufferSource();silent.buffer=ctx.createBuffer(1,1,ctx.sampleRate);silent.connect(ctx.destination);silent.start();
+ }catch(e){}
+}
+function playPublicationSound(){
+ try{const ctx=publicationAudio;if(!ctx||ctx.state!=='running')return;
+  const start=ctx.currentTime+.02;
+  [659.25,880,1108.73].forEach((frequency,i)=>{const tone=ctx.createOscillator(),gain=ctx.createGain(),at=start+i*.11;
+   tone.type='sine';tone.frequency.value=frequency;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(.07,at+.012);gain.gain.exponentialRampToValueAtTime(.001,at+.24);
+   tone.connect(gain);gain.connect(ctx.destination);tone.onended=()=>{tone.disconnect();gain.disconnect();};tone.start(at);tone.stop(at+.26);
+  });
+ }catch(e){}
+}
+async function publish(){preparePublicationAudio();required(profile?.role==='client','Connectez-vous avec un compte client.');required(draft.service,'Choisissez le type de projet.');required(value('rd62Description').length>=10,'Décrivez les travaux en au moins 10 caractères.');required(draft.budget&&draft.timing,'Choisissez le budget et l’échéancier.');const location=city(value('rd62City')),files=[...byId('rd56Photos').files];required(files.length<=12,'Sélectionnez au maximum 12 photos.');required(!value('rd62Postal')||/^[A-Z]\d[A-Z][ -]?\d[A-Z]\d$/i.test(value('rd62Postal')),'Indiquez un code postal canadien valide.');
  const id=crypto.randomUUID();const p=await result(db.from('rd_projects').insert({id,client_id:user.id,title:value('rd80ProjectName')||draft.type,service:draft.service,description:value('rd62Description'),budget:draft.budget,timing:draft.timing,...location,postal:value('rd62Postal').toUpperCase()}).select().single());selectedProject=p;remember('project',p.id);
  let photoError=false;for(const file of files){try{const blob=await compressPhoto(file);required(blob,'Cette image ne peut pas être utilisée.');const path=p.id+'/'+crypto.randomUUID()+'.jpg';await result(db.storage.from('rd-project-photos').upload(path,blob,{contentType:'image/jpeg'}));await result(db.from('rd_project_photos').insert({project_id:p.id,path}));}catch(e){photoError=true;}}
- draft={};byId('rd80ProjectName').value='';byId('rd62Description').value='';byId('rd56Photos').value='';byId('rd56Preview').innerHTML='';byId('rd56Status').textContent='Aucune photo sélectionnée';go('clientProjectDetail');notify(photoError?'Projet publié. Certaines photos n’ont pas pu être envoyées.':'Projet publié : les entrepreneurs correspondant à vos services et à votre secteur peuvent le voir.');
+ draft={};byId('rd80ProjectName').value='';byId('rd62Description').value='';byId('rd56Photos').value='';byId('rd56Preview').innerHTML='';byId('rd56Status').textContent='Aucune photo sélectionnée';go('clientProjectDetail');playPublicationSound();notify(photoError?'Projet publié. Certaines photos n’ont pas pu être envoyées.':'Projet publié : les entrepreneurs correspondant à vos services et à votre secteur peuvent le voir.');
 }
 async function accept(id){const q=await quote(id);required(q,'Soumission introuvable.');if(!confirm('Choisir cet entrepreneur pour '+money(q.amount)+' ? Les autres offres seront indiquées comme non retenues.'))return;await result(db.rpc('rd_accept_quote',{quote:id}));selectedQuote=await quote(id);remember('quote',id);go('quoteAccepted');}
 async function progress(status){const p=await loadSelectedProject();const question=status==='completed'?'Confirmer que les travaux sont terminés ?':status==='archived'?'Archiver ce projet ? Il ne sera plus proposé aux entrepreneurs.':'Indiquer que les travaux ont commencé ?';if(!confirm(question))return;await result(db.rpc('rd_progress_project',{project:p.id,next_status:status}));selectedProject=await project(p.id);await render();notify('Statut du projet mis à jour.');}
