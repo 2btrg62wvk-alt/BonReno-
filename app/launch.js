@@ -33,6 +33,33 @@
   document.head.append(style);
   let timer = null, backgroundAt = 0, locked = [], previousFocus = null;
   let theme = null, previousTheme = null;
+  let launchAudio=null, launchStarted=0, launchDuration=3000, soundPlayed=false;
+  const launchTones=new Set();
+  function prepareSound(){
+    try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+      if(!launchAudio||launchAudio.state==='closed')launchAudio=new Audio();
+      const resumed=launchAudio.resume();resumed?.then(playSound).catch(()=>{});
+      playSound();
+    }catch(e){/* Autoplay restrictions must never delay the launch. */}
+  }
+  function playSound(){
+    const ctx=launchAudio,elapsed=Date.now()-launchStarted;
+    if(!ctx||ctx.state!=='running'||soundPlayed||document.hidden||!document.getElementById('rd-launch')||elapsed>launchDuration-650)return;
+    soundPlayed=true;
+    try{
+      const cues=launchDuration<1000?[.02,.15,.3]:[.78,1.24,1.65];
+      [440,659.25,880].forEach((frequency,i)=>{
+        const tone=ctx.createOscillator(),gain=ctx.createGain();
+        const at=ctx.currentTime+Math.max(.02,cues[i]-elapsed/1000),length=launchDuration<1000 ? .25 : .43;
+        tone.type='sine';tone.frequency.value=frequency;
+        gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(.028,at+.035);gain.gain.exponentialRampToValueAtTime(.0001,at+length);
+        tone.connect(gain);gain.connect(ctx.destination);launchTones.add(tone);
+        tone.onended=()=>{tone.disconnect();gain.disconnect();launchTones.delete(tone);};
+        tone.start(at);tone.stop(at+length+.02);
+      });
+    }catch(e){}
+  }
+  function stopSound(){launchTones.forEach(tone=>{try{tone.stop();}catch(e){}});}
   function lockContent() {
     if (!document.getElementById('rd-launch')) return;
     document.querySelectorAll('main.app,#rd105').forEach(current => {
@@ -41,7 +68,7 @@
     });
   }
   function finish() {
-    clearTimeout(timer);
+    clearTimeout(timer);stopSound();
     document.getElementById('rd-launch')?.remove();
     locked.forEach(item => {item.element.inert=item.inert;});locked=[];
     if (theme && previousTheme !== null) theme.setAttribute('content', previousTheme);
@@ -52,6 +79,7 @@
   }
   function show() {
     if (document.getElementById('rd-launch')) return;
+    launchStarted=Date.now();soundPlayed=false;
     previousFocus = document.activeElement;
     theme = document.querySelector('meta[name="theme-color"]');
     previousTheme = theme?.getAttribute('content') ?? null;
@@ -72,14 +100,19 @@
     document.documentElement.dataset.rdLaunchState = 'playing';
     lockContent();
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    timer = setTimeout(finish, reduced ? 700 : 3000);
+    launchDuration=reduced?700:3000;
+    timer = setTimeout(finish, launchDuration);
+    prepareSound();
   }
   document.addEventListener('DOMContentLoaded', lockContent, { once: true });
+  // Warm the context on ordinary app interactions for later foreground launches.
+  document.addEventListener('pointerdown',prepareSound,{passive:true});
+  document.addEventListener('keydown',prepareSound);
   document.addEventListener('keydown', event => {
     if (event.key === 'Tab' && document.getElementById('rd-launch')) event.preventDefault();
   }, true);
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) backgroundAt = Date.now();
+    if (document.hidden) {backgroundAt = Date.now();stopSound();}
     else { if (backgroundAt && Date.now() - backgroundAt >= 30000) { finish(); show(); } backgroundAt = 0; }
   });
   window.addEventListener('pageshow', event => { if (event.persisted) { finish(); show(); } });
