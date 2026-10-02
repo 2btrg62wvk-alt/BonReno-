@@ -15,32 +15,54 @@ const clientRoutes=new Set(['clientDashboard','newProject','projectDetails','pro
 const sharedRoutes=new Set(['quoteDetail','quoteAccepted','clientMessages','clientChat']);
 const editingRoutes=new Set(['pro2','services','territory','building','profilePreview']);
 function route(){return location.hash.slice(1).split('?')[0];}
-function go(id){location.hash=id;}
+let navigatePage=id=>{location.hash=id;},transitionRouting=false;
+function go(id){navigatePage(id);}
 function installPageTransitions(){
  const style=document.createElement('style');style.id='rd-page-motion';
- style.textContent='.screen:target,.screen:target > .top,.screen:target > .success{animation:none!important}';document.head.append(style);
- const tabs=new Set(['clientDashboard','clientProjects','clientProjectsPublished','clientMessages','contractorFeed','contractorQuotes','profilePreview']);
- let trail=[route()||'home'],intent='',animation=null,frame=0;
- document.addEventListener('click',e=>{const link=e.target.closest('a,button');if(!link)return;
-  const classes=String(link.className);const label=(link.getAttribute('aria-label')||link.textContent||'').trim();
-  intent=/back|retour|close/i.test(classes+' '+label)||/^[‹❮←✕×]$/.test(label)?'back':link.closest('nav,.bottom-nav,.rd51-nav,.rd58-nav')?'tab':'';
- },true);
- window.addEventListener('hashchange',e=>{
-  const next=new URL(e.newURL).hash.slice(1).split('?')[0]||'home',previous=new URL(e.oldURL).hash.slice(1).split('?')[0]||'home';
-  if(next===previous)return;
-  const known=trail.lastIndexOf(next),back=intent==='back'||known>=0,tab=intent==='tab'||(tabs.has(previous)&&tabs.has(next));intent='';
-  if(known>=0)trail=trail.slice(0,known+1);else{trail.push(next);if(trail.length>60)trail.shift();}
-  if(animation){animation.cancel();animation=null;}if(typeof requestAnimationFrame!=='function')return;cancelAnimationFrame(frame);
-  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
-  frame=requestAnimationFrame(()=>{
-   if((route()||'home')!==next)return;
-   const screen=byId(next)||(['home','intro'].includes(next)?byId('rd105'):null);
-   if(!screen||typeof screen.animate!=='function')return;
-   // Individual translate avoids the fixed-screen transform overrides. No persistent styles.
-   animation=screen.animate([{opacity:tab ? .76 : .6,translate:tab?'0 5px':(back?'-18px 0':'18px 0')},{opacity:1,translate:'0 0'}],{duration:tab?150:230,easing:'cubic-bezier(.22,1,.36,1)'});
-   const current=animation;current.onfinish=()=>{if(animation===current)animation=null;};
-  });
+ style.textContent=`.screen:target,.screen:target > .top,.screen:target > .success{animation:none!important}
+ ::view-transition-group(root){animation-duration:300ms;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+ ::view-transition-old(root){animation:rd-snapshot-out 300ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
+ ::view-transition-new(root){animation:rd-snapshot-in 300ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
+ @keyframes rd-snapshot-out{from{opacity:1}to{opacity:0}}
+ @keyframes rd-snapshot-in{from{opacity:0}to{opacity:1}}
+ @media(prefers-reduced-motion:reduce){::view-transition-group(root),::view-transition-old(root),::view-transition-new(root){animation:none!important}}`;
+ document.head.append(style);
+ let active=null,serial=0;
+ const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ const change=async id=>{if(route()===id)return;await new Promise(resolve=>{window.addEventListener('hashchange',resolve,{once:true});location.hash=id;});};
+ navigatePage=id=>{
+  if(route()===id)return;
+  const ticket=++serial;
+  if(active){active.skipTransition?.();active=null;}
+  if(reduced()){location.hash=id;return;}
+  if(typeof document.startViewTransition==='function'){
+   transitionRouting=true;
+   const transition=document.startViewTransition(async()=>{
+    if(ticket!==serial)return;
+    await change(id);
+    await render();
+    // Snapshot the rendered destination, keeping the previous page visible while loading.
+   });active=transition;
+   transition.ready.catch(()=>{});
+   transition.finished.catch(()=>{}).finally(()=>{if(ticket===serial){active=null;transitionRouting=false;}});
+   transition.updateCallbackDone.catch(()=>{if(ticket===serial){transitionRouting=false;location.hash=id;}});
+  }else{
+   // Older browsers: finish a short fade-out before changing the visible page.
+   const current=byId(route())||byId('rd105');
+   const outgoing=current?.animate?.([{opacity:1},{opacity:0}],{duration:130,fill:'forwards',easing:'ease-out'});
+   const update=async()=>{if(ticket!==serial){outgoing?.cancel();return;}transitionRouting=true;
+    try{await change(id);await render();}finally{outgoing?.cancel();if(ticket===serial)transitionRouting=false;}
+    const incoming=byId(route());incoming?.animate?.([{opacity:0},{opacity:1}],{duration:180,easing:'ease-out'});
+   };if(outgoing)outgoing.finished.then(update,()=>{});else void update();
+  }
+ };
+ document.addEventListener('click',e=>{
+  if(e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+  const link=e.target.closest('a[href^="#"]');if(!link||link.hasAttribute('download')||link.target)return;
+  const destination=link.getAttribute('href').slice(1);if(!destination||!byId(destination))return;
+  e.preventDefault();go(destination);
  });
+ document.addEventListener('click',e=>{if(e.target.closest('#rd105')){e.preventDefault();e.stopPropagation();go('accueil');}},true);
 }
 
 function notify(message){let e=byId('rd-live-notice');if(!e){e=document.createElement('div');e.id='rd-live-notice';e.className='rd-live-notice';e.setAttribute('role','status');document.body.append(e);}e.textContent=message;clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.remove(),6500);}
@@ -206,7 +228,7 @@ function bind(){installPageTransitions();document.documentElement.classList.add(
   else if(form.id==='rd-live-chat-form'){required(value('rd-live-message'),'Écrivez un message.');const q=await loadSelectedQuote();await result(db.from('rd_messages').insert({quote_id:q.id,sender_id:user.id,body:value('rd-live-message')}));byId('rd-live-message').value='';await chatMessages();byId('clientChat').scrollTop=byId('clientChat').scrollHeight;}
   else {required(value('rd-live-new-password').length>=8,'Le mot de passe doit contenir au moins 8 caractères.');await result(db.auth.updateUser({password:value('rd-live-new-password')}));go(profile?.role==='contractor'?'contractorFeed':'clientDashboard');notify('Mot de passe mis à jour.');}
  });});
- window.addEventListener('hashchange',()=>{byId(route())&&(byId(route()).scrollTop=0);void render();});
+ window.addEventListener('hashchange',()=>{byId(route())&&(byId(route()).scrollTop=0);if(!transitionRouting)void render();});
  window.addEventListener('focus',()=>{if(['clientDashboard','contractorFeed','contractorQuotes','clientMessages','clientProjectDetail'].includes(route()))void render();});
  setInterval(()=>{if(document.hidden||busy||!user)return;if(route()==='clientChat')void chatMessages().catch(()=>{});else if(['clientDashboard','contractorFeed','contractorQuotes','clientMessages','clientProjectDetail'].includes(route()))void render();},15000);
 }
