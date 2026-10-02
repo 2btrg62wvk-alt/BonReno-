@@ -1,0 +1,45 @@
+name: Make the app fill the viewport
+on:
+  push:
+    paths: ['.github/workflows/app-fullscreen-v1.yml']
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Remove the outer page frame and empty scrolling
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          p=Path('index.html'); s=p.read_text()
+          class Screens(HTMLParser):
+           def __init__(self):super().__init__();self.ids=[]
+           def handle_starttag(self,t,a):
+            d=dict(a)
+            if 'screen' in d.get('class','').split():self.ids.append(d['id'])
+          x=Screens();x.feed(s)
+          selectors=','.join('#'+i+'#'+i+'#'+i for i in x.ids)
+          css='''<style id="rd-app-fullscreen-v1">
+          /* The viewport is the app shell; only the active page can scroll. */
+          html,body{width:100%;height:100%;margin:0!important;padding:0!important;overflow:hidden!important;overscroll-behavior:none;scroll-behavior:auto!important;background:#f3f2e9!important}
+          main.app{width:100%!important;max-width:none!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
+          SELECTORS{position:fixed!important;inset:0!important;width:100%!important;max-width:none!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;border:0!important;border-radius:0!important;box-sizing:border-box!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:none;scroll-behavior:auto!important;-webkit-overflow-scrolling:touch;animation:none!important;transform:none!important}
+          /* Full-height content fills the page's content box without adding another viewport. */
+          .screen :is(.rd51-client,.rd52,.rd57-shell,.rd58-shell,.rd60-confirm,.rd60-shell){min-height:100%!important}
+          #clientDashboard#clientDashboard#clientDashboard .rd51-client,#contractorFeed#contractorFeed#contractorFeed .rd58-shell{min-height:100%!important}
+          body:has(#rd105) main.app{display:none!important}
+          </style>'''.replace('SELECTORS',selectors)
+          assert 'rd-app-fullscreen-v1' not in s
+          p.write_text(s.replace('</body>',css+'</body>'))
+          PY
+          git config user.name 'RenoDirect Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Make every app screen edge-to-edge with contained scrolling'
+          git push
