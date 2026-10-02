@@ -19,7 +19,7 @@ let navigatePage=id=>{location.hash=id;},transitionRouting=false;
 const entryRoutes=new Set(['','home','intro','accueil','client','pro1','loginClient','loginPro']);
 function signedInRoute(id){return user&&profile&&entryRoutes.has(id)?(profile.role==='contractor'?'contractorFeed':'clientDashboard'):id;}
 function go(id){navigatePage(signedInRoute(id));}
-function guardSessionRoute(){const id=route(),target=signedInRoute(id);if(target===id)return false;history.replaceState(history.state,'','#'+target);byId('rd105')?.remove();return true;}
+function guardSessionRoute(){const id=route(),target=signedInRoute(id);if(target===id)return false;location.replace('#'+target);byId('rd105')?.remove();return true;}
 function installPageTransitions(){
  const style=document.createElement('style');style.id='rd-page-motion';
  style.textContent=`.screen:target,.screen:target > .top,.screen:target > .success{animation:none!important}
