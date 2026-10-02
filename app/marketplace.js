@@ -31,9 +31,9 @@ function installPageTransitions(){
  const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
  const change=async id=>{if(route()===id)return;await new Promise(resolve=>{window.addEventListener('hashchange',resolve,{once:true});location.hash=id;});};
  navigatePage=id=>{
-  if(route()===id)return;
   const ticket=++serial;
   if(active){active.skipTransition?.();active=null;}
+  if(route()===id){transitionRouting=false;return;}
   if(reduced()){location.hash=id;return;}
   if(typeof document.startViewTransition==='function'){
    transitionRouting=true;
