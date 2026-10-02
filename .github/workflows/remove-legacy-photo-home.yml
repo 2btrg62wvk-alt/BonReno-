@@ -1,0 +1,55 @@
+name: Remove legacy photo welcome screen
+on:
+  push:
+    paths: ['.github/workflows/remove-legacy-photo-home.yml']
+permissions: {contents: write}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Unify home navigation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html');s=p.read_text()
+          runtime=re.search(r'<script id="rd105-wow-stone-runtime">(.*?)</script>',s,re.S)
+          assert runtime
+          markup=re.search(r"d.innerHTML='(.*?)';document.body.appendChild",runtime[1],re.S)[1]
+          assert 'Imaginez.' in markup
+          s,count=re.subn(r'<section id="intro" class="screen">.*?</section>\s*','',s,count=1,flags=re.S)
+          assert count==1
+          s=re.sub(r'<script id="rd101-intro-tap-anywhere">.*?</script>','',s,flags=re.S)
+          new='''<script id="rd105-wow-stone-runtime">
+          (function(){
+            var markup=MARKUP;
+            function sync(){
+              var home=!location.hash||location.hash==='#intro'||location.hash==='#home';
+              var current=document.getElementById('rd105');
+              if(!home){if(current)current.remove();return;}
+              if(current)return;
+              var d=document.createElement('div');
+              d.id='rd105';d.innerHTML=markup;
+              d.setAttribute('role','button');d.setAttribute('aria-label','Entrer dans RénoDirect');d.tabIndex=0;
+              function enter(){location.hash='#accueil';sync();}
+              d.addEventListener('click',enter);
+              d.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();enter();}});
+              document.body.appendChild(d);
+            }
+            window.addEventListener('hashchange',sync);
+            window.addEventListener('pageshow',sync);
+            sync();
+          })();
+          </script>'''.replace('MARKUP',repr(markup))
+          s=re.sub(r'<script id="rd105-wow-stone-runtime">.*?</script>',lambda m:new,s,count=1,flags=re.S)
+          p.write_text(s)
+          
+          PY
+          git config user.name 'RenoDirect Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Remove legacy photo welcome screen and unify home navigation'
+          git push
