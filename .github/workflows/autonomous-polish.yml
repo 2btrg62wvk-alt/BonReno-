@@ -1,0 +1,70 @@
+name: RenoDirect autonomous polish
+on:
+  push:
+    paths: ['.github/workflows/autonomous-polish.yml']
+permissions: {contents: write}
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Add safe global product polish
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html'); s=p.read_text()
+          if 'id="rd-product-polish-1"' in s:
+              raise SystemExit('already applied')
+          css='''<style id="rd-product-polish-1">
+          /* RenoDirect product-wide polish: safe, non-destructive */
+          :root{--rd-ink:#071b12;--rd-green:#1d5138;--rd-cream:#f3f2e9;--rd-line:rgba(22,54,37,.14)}
+          html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+          body{margin:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+          button,a,input,select,textarea{font:inherit}
+          button,a{-webkit-tap-highlight-color:transparent}
+          button:not(:disabled),a[href],select{cursor:pointer}
+          input,select,textarea{box-sizing:border-box;max-width:100%}
+          img{max-width:100%}
+          .screen{box-sizing:border-box}
+          @media (hover:hover){
+            a,button{transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease,border-color .18s ease}
+            a:hover,button:hover:not(:disabled){transform:translateY(-1px)}
+          }
+          @media(max-width:620px){
+            input,select,textarea{font-size:16px!important}
+            button,a{touch-action:manipulation}
+          }
+          @media(prefers-reduced-motion:reduce){
+            *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+          }
+          </style>'''
+          js='''<script id="rd-product-polish-js-1">
+          (function(){
+            function fit(){
+              document.documentElement.style.setProperty('--rd-vh',(window.innerHeight*.01)+'px');
+            }
+            fit(); addEventListener('resize',fit,{passive:true});
+            document.addEventListener('click',function(e){
+              var a=e.target.closest&&e.target.closest('a[href^="#"]');
+              if(!a)return;
+              var h=a.getAttribute('href');
+              if(!h||h==='#')return;
+              requestAnimationFrame(function(){
+                var el=document.querySelector(h);
+                if(el) el.scrollTop=0;
+                window.scrollTo(0,0);
+              });
+            });
+          })();
+          </script>'''
+          s=s.replace('</head>',css+'</head>',1).replace('</body>',js+'</body>',1)
+          p.write_text(s)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git commit -m "Polish responsiveness and navigation UX"
+          git push origin main
