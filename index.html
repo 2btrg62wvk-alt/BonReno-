@@ -2232,7 +2232,8 @@ img{max-width:100%}
 
 <section class="screen" id="clientDashboard">
   <div class="rd51-client">
-    <header class="rd51-head">
+    <div class="rd-menu-brand"><span>RénoDirect<span style="color:#9fba8c"> ·</span></span><small>Votre espace</small></div>
+<header class="rd51-head">
       <div>
         <span class="rd51-kicker">ESPACE CLIENT</span><a class="rd62-switch" href="#contractorFeed">Mode test : Entrepreneur →</a>
         <h1>Bonjour.</h1>
@@ -2284,10 +2285,10 @@ img{max-width:100%}
     </section>
 
     <nav class="rd51-nav" aria-label="Navigation client">
-      <a class="active" href="#clientDashboard"><span>⌂</span>Accueil</a>
-      <a href="#newProject"><span>＋</span>Projet</a>
-      <a href="#clientProjectDetail"><span>◇</span>Soumissions</a>
-      <a href="#clientMessages"><span>○</span>Messages</a>
+      <a class="active" href="#clientDashboard"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></svg></span>Accueil</a>
+      <a href="#newProject"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M4 12h16"/></svg></span>Projet</a>
+      <a href="#clientProjectDetail"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg></span>Soumissions</a>
+      <a href="#clientMessages"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H9l-5 4zM8 8h8M8 12h5"/></svg></span>Messages</a>
     </nav>
   </div>
 </section>
@@ -2544,22 +2545,24 @@ img{max-width:100%}
 
 <section class="screen rd58-proscreen" id="contractorFeed">
  <div class="rd58-shell">
-  <header class="rd58-prohead">
+  <div class="rd-menu-brand"><span>RénoDirect<span style="color:#9fba8c"> ·</span></span><small>Espace professionnel</small></div>
+<header class="rd58-prohead">
    <div><span class="rd51-kicker">ESPACE ENTREPRENEUR</span><a class="rd62-switch" href="#clientDashboard">← Mode test : Client</a><h1>Bonjour.</h1><p>Voici les projets qui correspondent à votre entreprise.</p></div>
    <div class="rd58-proavatar">CE</div>
   </header>
 
-  <div class="rd58-filterbar">
-   <span>Pour vous <b id="rd87MatchCount">0</b></span><a href="#contractorFeed">Filtres ⚙</a>
+  <section class="rd-pro-shortcuts" aria-label="Accès rapides entrepreneur"><a href="#contractorQuotes"><span>◇</span><strong>Mes soumissions</strong><small>Retrouvez vos offres envoyées</small></a><a href="#profilePreview"><span>◎</span><strong>Mon entreprise</strong><small>Consultez votre profil professionnel</small></a></section>
+<div class="rd58-filterbar">
+   <span>Projets pour vous <b id="rd87MatchCount">0</b></span><a href="#contractorFeed">Filtres ⚙</a>
   </div>
 <div id="rd62LiveProjects"></div>
 <div class="rd58-why"><strong>Pourquoi ces projets?</strong><p>RénoDirect affiche seulement les projets qui correspondent à vos services et à votre territoire de 50 km.</p></div>
 
-  <nav class="rd58-nav">
-   <a class="active" href="#contractorFeed"><span>⌂</span>Projets</a>
-   <a href="#contractorQuotes"><span>◇</span>Soumissions</a>
-   <a href="#contractorFeed"><span>○</span>Messages</a>
-   <a href="#profilePreview"><span>◎</span>Profil</a>
+  <nav class="rd58-nav" aria-label="Navigation entrepreneur">
+   <a class="active" href="#contractorFeed"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M8 7V3h8v4M4 12h16"/></svg></span>Projets</a>
+   <a href="#contractorQuotes"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg></span>Soumissions</a>
+   <a href="#contractorFeed"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H9l-5 4zM8 8h8M8 12h5"/></svg></span>Messages</a>
+   <a href="#profilePreview"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg></span>Profil</a>
   </nav>
  </div>
 </section>
@@ -2945,4 +2948,66 @@ html:not(.rd74-has-project) #rd74PublishedWrap{display:none!important}
 </style><style id="rd-services-whole-words-v1">
 #services#services .service-option label{position:relative!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:9px!important;padding:14px 12px!important;min-height:108px!important;grid-template-columns:none!important;white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;font-size:13px!important;line-height:1.4!important}
 #services#services .service-option input:checked+label::after{position:absolute!important;top:13px!important;right:12px!important;margin:0!important}
+</style><style id="rd-home-menus-v1">
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed){background:radial-gradient(ellipse at 100% 0%,rgba(76,120,89,.13),transparent 48%),linear-gradient(150deg,#f3f2e9,#eceee5)!important;color:#173327!important;overflow:auto!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-client,.rd58-shell){width:100%!important;max-width:480px!important;min-height:100svh!important;margin:auto!important;padding:calc(24px + env(safe-area-inset-top)) 20px calc(112px + env(safe-area-inset-bottom))!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd-menu-brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px;color:#234731;font-size:17px;font-weight:800;letter-spacing:-.045em}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd-menu-brand small{font-size:9px;font-weight:650;letter-spacing:.10em;text-transform:uppercase;color:#788671}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-head,.rd58-prohead){gap:16px!important;align-items:center!important;margin:0 0 24px!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-head,.rd58-prohead)>div:first-child{min-width:0!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd51-kicker{font-size:10px!important;color:#56705b!important;letter-spacing:.12em!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) h1{font-size:34px!important;line-height:1.08!important;color:#173327!important;margin:10px 0 8px!important;letter-spacing:-.045em!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-head,.rd58-prohead) p{font-size:13px!important;line-height:1.55!important;color:#74806f!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-avatar,.rd58-proavatar){flex:0 0 46px!important;width:46px!important;height:46px!important;display:grid!important;place-items:center!important;border-radius:16px!important;background:#e5ecdd!important;border:1px solid #d4dfca!important;color:#315d40!important;font-size:13px!important;font-weight:750!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd62-switch{display:block!important;width:fit-content!important;max-width:100%!important;background:transparent!important;color:#668064!important;font-size:10px!important;padding:4px 0!important;margin:4px 0!important}
+#clientDashboard#clientDashboard .rd51-new{position:relative!important;display:flex!important;gap:13px!important;padding:22px 18px!important;background:linear-gradient(120deg,#315b3e,#173c29)!important;border-radius:24px!important;color:#fffef6!important;box-shadow:0 12px 28px rgba(30,69,42,.15)!important;margin:0 0 25px!important;overflow:hidden!important}
+#clientDashboard#clientDashboard .rd51-new>span:nth-child(2){min-width:0;flex:1}
+#clientDashboard#clientDashboard .rd51-new strong{font-size:18px!important}
+#clientDashboard#clientDashboard .rd51-new small{font-size:12px!important;line-height:1.5!important;color:#d1dec9!important;margin-top:6px!important}
+#clientDashboard#clientDashboard .rd51-new .rd51-plus{flex:0 0 44px!important;background:rgba(230,240,214,.16)!important;color:#e4edda!important;border:1px solid rgba(236,244,225,.2)!important;border-radius:15px!important}
+#clientDashboard#clientDashboard .rd51-new b{color:#e4edda!important}
+#clientDashboard#clientDashboard .rd51-section{margin-top:22px!important}
+#clientDashboard#clientDashboard .rd51-section-title h2{font-size:19px!important;color:#234731!important}
+#clientDashboard#clientDashboard .rd51-section-title span{background:#e5ecdd!important;color:#56705b!important;font-size:10px!important}
+#clientDashboard#clientDashboard .rd51-project{grid-template-columns:88px minmax(0,1fr)!important;background:#fffef8!important;border:1px solid #e4e8dc!important;border-radius:22px!important;box-shadow:0 7px 24px rgba(30,57,40,.05)!important;color:#233a2a!important}
+#clientDashboard#clientDashboard .rd51-project-copy{min-width:0!important;padding:9px 6px 9px 12px!important}
+#clientDashboard#clientDashboard .rd51-status{color:#62805a!important;font-size:9px!important}
+#clientDashboard#clientDashboard .rd51-project h3{font-size:16px!important;line-height:1.3!important;overflow-wrap:anywhere!important}
+#clientDashboard#clientDashboard .rd51-project p{color:#74806f!important;font-size:12px!important}
+#clientDashboard#clientDashboard .rd51-quick{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;margin:14px 0 24px!important}
+#clientDashboard#clientDashboard .rd51-quick a{padding:19px 15px!important;background:rgba(255,255,250,.9)!important;border:1px solid #e0e6da!important;border-radius:22px!important;box-shadow:0 5px 18px rgba(30,57,40,.03)!important;color:#234731!important}
+#clientDashboard#clientDashboard .rd51-quick span{width:38px;height:38px;display:grid!important;place-items:center!important;border-radius:12px;background:#e8ede1;color:#315d40!important;margin-bottom:14px!important}
+#clientDashboard#clientDashboard .rd51-quick strong{font-size:14px!important}
+#clientDashboard#clientDashboard .rd51-quick small{font-size:12px!important;line-height:1.5!important;color:#74806f!important}
+#clientDashboard#clientDashboard :is(.rd79-activity-item,.rd79-activity-empty){background:rgba(255,255,250,.85)!important;border:1px solid #e0e6da!important;border-radius:20px!important;padding:17px!important;color:#234731!important}
+#clientDashboard#clientDashboard .rd79-activity-empty p{font-size:13px!important;line-height:1.6!important;color:#74806f!important}
+#clientDashboard#clientDashboard .rd79-activity-top strong{font-size:12px!important}
+#clientDashboard#clientDashboard .rd79-activity-copy>b{font-size:14px!important}
+#clientDashboard#clientDashboard .rd79-activity-copy p{font-size:12px!important;line-height:1.5!important}
+#clientDashboard#clientDashboard .rd79-activity-icon{background:#e8ede1!important;color:#315d40!important}
+#contractorFeed#contractorFeed .rd-pro-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 26px}
+#contractorFeed#contractorFeed .rd-pro-shortcuts a{display:block;padding:18px 15px;border-radius:22px;background:rgba(255,255,250,.9);border:1px solid #e0e6da;text-decoration:none;color:#234731;min-width:0}
+#contractorFeed#contractorFeed .rd-pro-shortcuts span{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#e8ede1;color:#315d40;margin-bottom:14px;font-size:22px}
+#contractorFeed#contractorFeed .rd-pro-shortcuts strong{display:block;font-size:14px}
+#contractorFeed#contractorFeed .rd-pro-shortcuts small{display:block;font-size:12px;line-height:1.5;color:#74806f;margin-top:5px}
+#contractorFeed#contractorFeed .rd58-filterbar{gap:12px!important;margin:0 0 15px!important}
+#contractorFeed#contractorFeed .rd58-filterbar span{font-size:19px!important;color:#234731!important}
+#contractorFeed#contractorFeed .rd58-filterbar span b{font-size:11px!important;background:#e5ecdd!important;color:#56705b!important}
+#contractorFeed#contractorFeed .rd58-filterbar a{font-size:12px!important;color:#315d40!important;border:1px solid #d8e2cf!important;padding:9px 12px!important;border-radius:12px!important;white-space:nowrap}
+#contractorFeed#contractorFeed .rd87-empty{padding:28px 20px!important;background:rgba(255,255,250,.85)!important;border:1px dashed #ccd9c3!important;border-radius:22px!important;font-size:13px!important;line-height:1.65!important;color:#74806f!important}
+#contractorFeed#contractorFeed .rd58-job{background:#fffef8!important;border:1px solid #e0e6da!important;border-radius:22px!important;color:#234731!important;box-shadow:0 7px 24px rgba(30,57,40,.05)!important}
+#contractorFeed#contractorFeed .rd58-job h2{font-size:20px!important}
+#contractorFeed#contractorFeed :is(.rd58-desc,.rd58-place){font-size:13px!important;color:#74806f!important}
+#contractorFeed#contractorFeed .rd58-match{background:#e5ecdd!important;color:#56705b!important;font-size:10px!important}
+#contractorFeed#contractorFeed .rd58-why{background:#e7ede0!important;border:1px solid #d8e2cf!important;border-radius:20px!important;padding:18px!important;margin-top:18px!important}
+#contractorFeed#contractorFeed .rd58-why strong{font-size:13px!important;color:#315d40!important}
+#contractorFeed#contractorFeed .rd58-why p{font-size:12px!important;line-height:1.6!important;color:#697767!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-nav,.rd58-nav){position:fixed!important;z-index:60!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;width:calc(100% - 32px)!important;max-width:398px!important;height:74px!important;padding:7px!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;border:1px solid rgba(217,227,207,.85)!important;border-radius:23px!important;background:rgba(255,255,249,.95)!important;box-shadow:0 10px 40px rgba(30,57,40,.13)!important;backdrop-filter:blur(20px)!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-nav,.rd58-nav) a{min-width:0!important;padding:7px 2px!important;font-size:10px!important;font-weight:650!important;color:#74806f!important;gap:5px!important;border-radius:16px!important;white-space:normal!important;text-align:center!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-nav,.rd58-nav) a.active{background:#e5ecdd!important;color:#315d40!important}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-nav,.rd58-nav) svg{width:21px;height:21px;display:block}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) a:focus-visible{outline:3px solid #8fa980;outline-offset:3px}
+:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd-menu-brand{animation:rdClientIn .4s ease both}
+@media(max-width:360px){:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) :is(.rd51-client,.rd58-shell){padding-left:14px!important;padding-right:14px!important}#clientDashboard#clientDashboard .rd51-new{padding:18px 14px!important;gap:10px!important}}
+@media(prefers-reduced-motion:reduce){:is(#clientDashboard,#contractorFeed):is(#clientDashboard,#contractorFeed) .rd-menu-brand{animation:none!important}}
 </style></body></html>
