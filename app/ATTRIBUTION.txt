@@ -1,0 +1,11 @@
+RénoDirect geographic lookup
+Source: GeoNames country export CA.zip, retrieved 2026-10-02.
+https://download.geonames.org/export/dump/
+Québec populated places, filtered and deduplicated by name, retaining the most populated match.
+Coordinates represent locality centres, not street addresses; radius distances are approximate straight-line distances.
+GeoNames data is licensed under Creative Commons Attribution 4.0 International.
+https://creativecommons.org/licenses/by/4.0/
+
+Supabase JavaScript client 2.117.2, distributed under the MIT license.
+Bundled from the official @supabase/supabase-js npm package.
+See SUPABASE-LICENSE.txt.

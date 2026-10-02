@@ -1,0 +1,1 @@
+{"name":"renodirect","private":true,"scripts":{"test":"node tests/marketplace-ui.cjs"},"devDependencies":{"jsdom":"26.1.0"}}
