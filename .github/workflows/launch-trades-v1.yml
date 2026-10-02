@@ -1,0 +1,35 @@
+name: Enable Les metiers launch screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/launch-trades-v1.yml'
+permissions:
+  contents: write
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Enable launch before all app content
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          old='<body><main class="app">'
+          new='<body><script src="/app/launch.js"></script><main class="app">'
+          if '/app/launch.js' not in s:
+              assert s.count(old)==1
+              s=s.replace(old,new,1)
+              p.write_text(s,encoding='utf-8')
+          assert s.index('/app/launch.js') < s.index('<main class="app">')
+          PY
+          node --check app/launch.js
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Show Les metiers launch before welcome and authenticated menus"
+          git push
