@@ -51,5 +51,11 @@ function noError(){assert.equal(w.document.querySelector('.rd-live-error'),null,
  await route('clientMessages');let fail=true;queryDelay=q=>{if(fail&&q.table==='rd_projects'){fail=false;throw Error('Failed to fetch');}};await route('clientProjects');assert.match(w.document.querySelector('#clientProjects .rd-live-error').textContent,/connexion Internet/);queryDelay=null;await click('#clientProjects [data-refresh]');noError();assert.match(w.document.getElementById('clientProjects').textContent,/Projet A/);
  // An unchanged background refresh preserves the selected card and focus.
  await route('clientProjects');const stable=w.document.querySelector('[data-project="race-a"]');stable.focus();await click('[data-project-tab="active"]');assert.equal(w.document.querySelector('[data-project="race-a"]'),stable);
+ // Signed-in navigation cannot return to the public entry flow, including native history back.
+ for(const id of ['accueil','home','intro','client','pro1','loginClient','loginPro']){await route(id);assert.equal(w.location.hash,'#clientDashboard',id);}
+ await route('clientProjects');w.history.back();await pause();assert.equal(w.location.hash,'#clientDashboard');
+ await switchUser('plumber');for(const id of ['accueil','home','client','pro1','loginPro']){await route(id);assert.equal(w.location.hash,'#contractorFeed',id);}
+ await route('profilePreview');assert.equal(w.document.querySelector('#profilePreview a.back').getAttribute('href'),'#contractorFeed');await click('#profilePreview a.back');assert.equal(w.location.hash,'#contractorFeed');
+ await click('#contractorFeed [data-logout]');assert.equal(current,null);assert.equal(w.location.hash,'#accueil');await route('client');assert.equal(w.location.hash,'#client');
  console.log('PASS:  publish → trade-filtered feed → quote → acceptance → work progress → shared messages → completed lists; repeated profile, session refresh, bid/chat drafts, declined history, role guard, delayed selection, storage denial and stable refresh');dom.window.close();
 })().catch(e=>{console.error(e);dom.window.close();process.exitCode=1;});
