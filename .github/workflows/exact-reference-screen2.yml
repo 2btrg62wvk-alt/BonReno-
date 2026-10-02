@@ -1,0 +1,101 @@
+name: Exact reference screen 2
+on:
+  push:
+    paths:
+      - '.github/workflows/exact-reference-screen2.yml'
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Completely replace actual role screen
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("index.html"); s=p.read_text()
+          candidates=[
+            '<section id="accueil" class="screen active rd140-choice"',
+            '<section id="accueil" class="screen active rd110-choice"',
+            '<section id="accueil" class="screen active rd130-choice"',
+            '<section id="accueil" class="screen active rd121-blank"'
+          ]
+          start=-1
+          for c in candidates:
+              i=s.find(c)
+              if i>=0: start=i; break
+          if start<0: raise SystemExit("actual accueil screen not found")
+          end=s.find('</section>',start)
+          if end<0: raise SystemExit("section end not found")
+          end+=len('</section>')
+          html='''<section id="accueil" class="screen active rd150">
+<div class="rd150-ring top"></div><div class="rd150-ring bottom"></div>
+<main class="rd150-inner">
+  <header class="rd150-nav">
+    <a href="#intro" class="rd150-back" aria-label="Retour">‹</a>
+    <div class="rd150-progress"><b></b><i></i><i></i><i></i></div>
+  </header>
+  <div class="rd150-kicker">CHOISISSEZ VOTRE PROFIL</div>
+  <h1>Vous êtes ici pour <em>quoi?</em></h1>
+  <p class="rd150-intro">Choisissez votre espace. RénoDirect adaptera<br class="rd150-wide"> l'expérience à votre façon de rénover.</p>
+  <div class="rd150-cards">
+    <a href="#client" class="rd150-card rd150-client">
+      <span class="rd150-badge"><span class="rd150-house">⌂</span></span>
+      <div class="rd150-text"><h2>Je suis client</h2><p>J’ai un projet et je veux trouver<br>les bons professionnels.</p></div>
+      <span class="rd150-arrow">→</span>
+    </a>
+    <a href="#pro1" class="rd150-card rd150-pro">
+      <span class="rd150-badge"><span class="rd150-helmet">♙</span></span>
+      <div class="rd150-text"><h2>Je suis entrepreneur</h2><p>Je veux découvrir des projets et<br>développer mon entreprise.</p></div>
+      <span class="rd150-arrow">→</span>
+    </a>
+  </div>
+  <footer class="rd150-login">
+    <div class="rd150-divider"><span></span><b>DÉJÀ UN COMPTE ?</b><span></span></div>
+    <div class="rd150-loginlinks"><a href="#loginClient">Se connecter comme client</a><i></i><a href="#loginPro">Se connecter comme entrepreneur</a></div>
+  </footer>
+</main>
+</section>'''
+          s=s[:start]+html+s[end:]
+          css='''<style id="rd150-reference">
+#accueil.rd150{position:relative;width:100%;min-height:100svh;box-sizing:border-box;overflow:hidden;background:#f4f3eb;color:#092319;font-family:Arial,Helvetica,sans-serif;padding:clamp(28px,5vh,60px) clamp(28px,7vw,92px)}
+#accueil.rd150:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 42% 45%,rgba(255,255,255,.7),transparent 48%),linear-gradient(120deg,rgba(219,222,211,.22),transparent 45%);pointer-events:none}
+#accueil .rd150-ring{position:absolute;border:1.5px solid rgba(34,64,47,.22);border-radius:50%;pointer-events:none}.rd150-ring.top{width:390px;height:390px;right:-275px;top:-150px}.rd150-ring.bottom{width:330px;height:330px;left:-245px;bottom:-210px}
+#accueil .rd150-inner{position:relative;z-index:1;width:min(790px,100%);margin:0 auto}
+#accueil .rd150-nav{height:62px;display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(54px,7vh,82px)}
+#accueil .rd150-back{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(244,243,235,.78);box-shadow:0 7px 24px rgba(30,46,37,.08);border:1px solid rgba(25,52,36,.06);color:#173a29;text-decoration:none;font:300 45px/1 Arial}
+#accueil .rd150-progress{display:flex;gap:10px;margin-right:18%}#accueil .rd150-progress>*{display:block;width:58px;height:6px;border-radius:20px;background:#d6d7d0}#accueil .rd150-progress b{background:#1d5138}
+#accueil .rd150-kicker{font-size:14px;line-height:1;font-weight:800;letter-spacing:.27em;color:#395748;margin-bottom:24px}
+#accueil .rd150-inner>h1{font-size:clamp(58px,8.3vw,84px);line-height:.87;letter-spacing:-.06em;margin:0;font-weight:800;color:#061a12}
+#accueil .rd150-inner>h1 em{display:block;font:italic 400 1.08em/.95 Georgia,serif;color:#326047;letter-spacing:-.05em}
+#accueil .rd150-intro{font-size:clamp(19px,2.5vw,25px);line-height:1.5;font-weight:500;color:#41594d;margin:30px 0 48px}
+#accueil .rd150-cards{display:grid;gap:22px}
+#accueil .rd150-card{height:340px;position:relative;overflow:hidden;border-radius:42px;text-decoration:none;color:#fff;display:flex;align-items:flex-end;box-sizing:border-box;padding:36px 42px;isolation:isolate;box-shadow:0 12px 38px rgba(20,40,28,.07)}
+#accueil .rd150-card:before{content:"";position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center}
+#accueil .rd150-card:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(4,31,19,.95) 0%,rgba(4,31,19,.77) 39%,rgba(4,31,19,.23) 72%,rgba(4,31,19,.08) 100%)}
+#accueil .rd150-client:before{background-image:url("https://images.unsplash.com/photo-1556912167-f556f1f39fdf?auto=format&fit=crop&w=1600&q=90")}
+#accueil .rd150-pro:before{background-image:url("https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=90");background-position:center 42%}
+#accueil .rd150-badge{position:absolute;left:42px;top:42px;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:rgba(39,82,59,.55);border:2px solid rgba(255,255,255,.32);backdrop-filter:blur(8px);box-shadow:0 5px 18px rgba(0,0,0,.08)}
+#accueil .rd150-house{font:400 45px/1 Arial}.rd150-helmet{font:400 40px/1 Arial}
+#accueil .rd150-text h2{font-size:clamp(35px,5vw,47px);line-height:1;margin:0 0 18px;letter-spacing:-.045em;font-weight:800}
+#accueil .rd150-text p{font-size:clamp(18px,2.5vw,23px);line-height:1.42;margin:0;color:rgba(255,255,255,.9);font-weight:400}
+#accueil .rd150-arrow{position:absolute;right:38px;bottom:39px;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,255,255,.42);background:rgba(10,25,17,.3);backdrop-filter:blur(8px);font-size:42px;font-weight:300}
+#accueil .rd150-login{margin:48px 28px 0}.rd150-divider{display:flex;align-items:center;gap:25px}.rd150-divider span{height:1px;flex:1;background:rgba(22,52,35,.2)}.rd150-divider b{font-size:12px;letter-spacing:.27em;color:#50665a;white-space:nowrap}
+#accueil .rd150-loginlinks{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:25px}.rd150-loginlinks a{font-size:16px;font-weight:700;color:#173a29;text-underline-offset:5px}.rd150-loginlinks i{width:1px;height:30px;background:rgba(20,53,36,.24)}
+@media(min-width:900px){#accueil .rd150-inner{width:min(1050px,100%)}#accueil .rd150-cards{grid-template-columns:1fr 1fr}#accueil .rd150-card{height:390px}.rd150-wide{display:none}}
+@media(max-width:620px){#accueil.rd150{padding:24px 24px 32px;overflow:auto}#accueil .rd150-nav{margin-bottom:48px}#accueil .rd150-back{width:48px;height:48px;font-size:37px}#accueil .rd150-progress{margin-right:8%}#accueil .rd150-progress>*{width:36px;height:5px}#accueil .rd150-kicker{font-size:11px;margin-bottom:18px}#accueil .rd150-inner>h1{font-size:52px}#accueil .rd150-intro{font-size:17px;margin:23px 0 31px}.rd150-wide{display:none}#accueil .rd150-cards{gap:15px}#accueil .rd150-card{height:255px;border-radius:29px;padding:25px 25px}#accueil .rd150-badge{left:25px;top:25px;width:64px;height:64px}#accueil .rd150-house{font-size:34px}.rd150-helmet{font-size:30px}#accueil .rd150-text h2{font-size:31px;margin-bottom:10px}#accueil .rd150-text p{font-size:15px;line-height:1.4;padding-right:45px}#accueil .rd150-arrow{right:21px;bottom:24px;width:56px;height:56px;font-size:31px}#accueil .rd150-login{margin:30px 8px 0}.rd150-divider{gap:12px}.rd150-divider b{font-size:9px}#accueil .rd150-loginlinks{gap:12px;margin-top:16px;flex-wrap:wrap}.rd150-loginlinks a{font-size:11.5px}.rd150-loginlinks i{height:20px}}
+</style>'''
+          if 'id="rd150-reference"' not in s: s=s.replace('</head>',css+'</head>',1)
+          p.write_text(s)
+          for r in ('href="#client"','href="#pro1"','href="#loginClient"','href="#loginPro"'): assert r in html
+          PY
+      - name: Commit
+        run: |
+          git config user.name "RenoDirect Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 1
+          git commit -m "Replace role screen with exact approved reference"
+          git push origin main
