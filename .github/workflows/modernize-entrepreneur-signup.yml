@@ -1,0 +1,181 @@
+name: Modernize entrepreneur signup
+on:
+  push:
+    paths: ['.github/workflows/modernize-entrepreneur-signup.yml']
+permissions: {contents: write}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Apply verified entrepreneur form design
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          patch = r'''diff --git a/index.html b/index.html
+          index 18a8502..57a3435 100644
+          --- a/index.html
+          +++ b/index.html
+          @@ -1905,6 +1905,59 @@ img{max-width:100%}
+           @media(max-width:380px){#client{padding-left:14px!important;padding-right:14px!important}#client .top.rd-signup-card{padding:23px 20px!important;border-radius:23px!important}#client .grid{gap:10px!important}}
+           @media(prefers-reduced-motion:reduce){#client.rd-client-enter .rd-signup-card{animation:none!important}}
+           </style>
+          +<style id="rd-entrepreneur-modern-v1">
+          +/* Entrepreneur signup — matches the approved client form. */
+          +:is(#pro1,#pro2,#services,#territory){padding:calc(22px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom))!important;background:radial-gradient(ellipse at 100% 0%,rgba(76,120,89,.12),transparent 48%),linear-gradient(150deg,#f3f2e9,#eceee5)!important;background-size:auto!important;color:#173327!important}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(480px,100%);margin:0 auto 24px}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-nav .back{margin:0!important;padding:10px 0!important;min-height:44px;font-size:13px!important;color:#365844!important}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-brand{display:flex;align-items:center;gap:5px;color:#153a29;font-size:16px;font-weight:800;letter-spacing:-.04em}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-brand>span{width:5px;height:5px;border-radius:50%;background:#9fba8c;margin-top:9px}
+          +:is(#pro1,#pro2,#services,#territory) .top.rd-signup-card{width:min(480px,100%)!important;max-width:480px!important;margin:0 auto!important;padding:30px!important;background:rgba(255,255,250,.86)!important;border:1px solid rgba(255,255,255,.9)!important;border-radius:28px!important;box-shadow:0 18px 60px rgba(30,57,40,.07),0 1px 3px rgba(30,57,40,.03)!important}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-heading{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-symbol{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;border-radius:14px;background:#e8ede1;color:#345d43;border:1px solid #dae3d2}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-symbol svg{width:23px;height:23px}
+          +:is(#pro1,#pro2,#services,#territory) .step{color:#54705b!important;font-size:10px!important;letter-spacing:.14em!important;margin:0!important}
+          +:is(#pro1,#pro2,#services,#territory) .form-title{font-size:clamp(28px,5vw,34px)!important;line-height:1.1!important;font-weight:650!important;letter-spacing:-.045em!important;margin:0 0 10px!important;color:#173327!important}
+          +:is(#pro1,#pro2,#services,#territory) .sub{font-size:14px!important;line-height:1.6!important;color:#778276!important;margin:0 0 27px!important;max-width:310px}
+          +:is(#pro1,#pro2,#services,#territory) .grid{gap:14px!important}
+          +:is(#pro1,#pro2,#services,#territory) .field{margin-bottom:17px!important}
+          +:is(#pro1,#pro2,#services,#territory) .field label{font-size:12px!important;letter-spacing:0!important;text-transform:none!important;font-weight:650!important;color:#3c5142!important;margin:0 0 8px 2px!important}
+          +:is(#pro1,#pro2,#services,#territory) .field input{width:100%!important;min-height:52px!important;padding:14px 15px!important;border-radius:13px!important;font-size:16px!important;line-height:1.4!important;background:#f9faf5!important;border:1px solid #e0e6da!important;color:#233a2a!important;box-shadow:0 1px 2px rgba(34,62,43,.025)!important;transition:border-color .2s,box-shadow .2s,background .2s!important}
+          +:is(#pro1,#pro2,#services,#territory) .field input::placeholder{color:#8a9487!important;opacity:1}
+          +:is(#pro1,#pro2,#services,#territory) .field input:focus{background:#fffef9!important;border-color:#69936c!important;box-shadow:0 0 0 3px rgba(74,113,74,.10)!important;transform:none!important}
+          +:is(#pro1,#pro2,#services,#territory) .terms{gap:11px!important;margin:4px 0 0!important;text-transform:none!important;letter-spacing:0!important;font-size:12px!important;font-weight:400!important;line-height:1.6!important;color:#697767!important}
+          +:is(#pro1,#pro2,#services,#territory) .terms input{width:18px!important;height:18px!important;min-height:18px!important;flex:0 0 18px!important;margin:2px 0 0!important;padding:0!important;accent-color:#315d40;box-shadow:none!important}
+          +:is(#pro1,#pro2,#services,#territory) a.primary{display:flex!important;align-items:center;justify-content:center;min-height:54px!important;padding:15px!important;border-radius:15px!important;margin:24px 0 0!important;background:linear-gradient(120deg,#274e35,#183d2a)!important;color:#fffef8!important;font-size:15px!important;font-weight:700!important;box-shadow:0 8px 20px rgba(30,69,42,.13)!important}
+          +:is(#pro1,#pro2,#services,#territory) a.primary:focus-visible,:is(#pro1,#pro2,#services,#territory) .login a:focus-visible,:is(#pro1,#pro2,#services,#territory) .back:focus-visible{outline:3px solid #8fa980;outline-offset:4px}
+          +:is(#pro1,#pro2,#services,#territory) .login{margin:21px 0 0!important;padding:0!important;font-size:12px!important;line-height:1.6!important;color:#7b8576!important}
+          +:is(#pro1,#pro2,#services,#territory) .login a{color:#2d573a!important;font-weight:750;text-decoration:underline;text-decoration-color:#adbea1;text-underline-offset:4px;margin-left:3px}
+          +:is(#pro1,#pro2,#services,#territory).rd-client-enter .rd-signup-card{animation:rdClientIn .45s cubic-bezier(.2,.75,.25,1) both}
+          +@media(min-width:768px){:is(#pro1,#pro2,#services,#territory){padding-top:40px!important;padding-bottom:40px!important}}
+          +@media(max-width:380px){:is(#pro1,#pro2,#services,#territory){padding-left:14px!important;padding-right:14px!important}:is(#pro1,#pro2,#services,#territory) .top.rd-signup-card{padding:23px 20px!important;border-radius:23px!important}:is(#pro1,#pro2,#services,#territory) .grid{gap:10px!important}}
+          +@media(prefers-reduced-motion:reduce){:is(#pro1,#pro2,#services,#territory).rd-client-enter .rd-signup-card{animation:none!important}}
+          +
+          +:is(#pro1,#pro2,#services,#territory){overflow:auto!important;min-height:100svh!important}
+          +:is(#pro1,#pro2,#services,#territory)::before,:is(#pro1,#pro2,#services,#territory)::after{pointer-events:none!important}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-card{animation:rdClientIn .45s cubic-bezier(.2,.75,.25,1) both!important}
+          +:is(#pro1,#pro2,#services,#territory) .rd-signup-heading{margin-bottom:16px}
+          +:is(#pro1,#pro2,#services,#territory) .progress{height:5px!important;background:#e3e8dc!important;margin:0 0 24px!important;box-shadow:none!important}
+          +:is(#pro1,#pro2,#services,#territory) .progress i{background:linear-gradient(90deg,#315d40,#9fba8c)!important}
+          +:is(#pro1,#pro2,#services,#territory) .note,:is(#pro1,#pro2,#services,#territory) .territory-preview{background:#eef2e7!important;border:1px solid #dce5d5!important;border-radius:16px!important;padding:16px!important;box-shadow:none!important;color:#63735e!important;font-size:12px;line-height:1.6}
+          +:is(#pro1,#pro2,#services,#territory) .territory-preview strong{color:#2d5139!important}
+          +:is(#pro1,#pro2,#services,#territory) .territory-preview span,:is(#pro1,#pro2,#services,#territory) .helper{color:#697767!important}
+          +:is(#pro1,#pro2,#services,#territory) .territory-preview::after{display:none!important}
+          +:is(#pro1,#pro2,#services,#territory) .section-label{color:#54705b!important;font-size:11px!important;letter-spacing:.1em!important}
+          +#services .service-grid{gap:10px!important}
+          +#services .service-option label,#territory .radius-choice label{background:#f9faf5!important;color:#3c5142!important;border:1px solid #e0e6da!important;border-radius:14px!important;font-size:13px!important;line-height:1.4!important;box-shadow:none!important;transition:background .2s,border-color .2s,box-shadow .2s}
+          +#services .service-option label{min-height:86px!important;padding:12px!important;gap:8px!important;text-transform:none!important;letter-spacing:0!important}
+          +#services .service-icon{flex-shrink:0}
+          +#services .service-option input:checked+label,#territory .radius-choice input:checked+label{background:#e8efdf!important;border-color:#69936c!important;color:#244a31!important;box-shadow:inset 0 0 0 1px #69936c!important}
+          +#services .service-option input:checked+label::after{color:#315d40!important}
+          +#services .service-option input:focus-visible+label,#territory .radius-choice input:focus-visible+label{outline:3px solid #8fa980;outline-offset:3px}
+          +#territory .radius-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+          +@media(max-width:380px){#services .service-grid{grid-template-columns:1fr!important}}
+          +@media(prefers-reduced-motion:reduce){:is(#pro1,#pro2,#services,#territory) .rd-signup-card{animation:none!important}}
+          +</style>
+           </head>
+           <body><main class="app">
+           
+          @@ -1957,34 +2010,36 @@ img{max-width:100%}
+           </section>
+           
+           <section id="pro1" class="screen">
+          - <div class="top"><a class="back" href="#accueil">‹ Back</a>
+          - <div class="step">ENTREPRENEUR · ÉTAPE 1 SUR 4</div><div class="progress"><i style="width:25%"></i></div>
+          + <nav class="rd-signup-nav" aria-label="Navigation inscription entrepreneur"><a class="back" href="#accueil">← Retour</a><span class="rd-signup-brand">RénoDirect<span></span></span></nav>
+          + <div class="top rd-signup-card">
+          + <div class="rd-signup-heading"><span class="rd-signup-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/></svg></span><div class="step">ENTREPRENEUR · ÉTAPE 1 SUR 4</div></div><div class="progress"><i style="width:25%"></i></div>
+            <h2 class="form-title">Votre profil</h2><p class="sub">Commençons par vos informations personnelles.</p>
+          - <div class="grid"><div class="field"><label>Prénom</label><input placeholder="Jason"></div><div class="field"><label>Nom</label><input placeholder="Mancini"></div></div>
+          - <div class="field"><label>Courriel professionnel</label><input type="email" placeholder="nom@entreprise.ca"></div>
+          - <div class="field"><label>Téléphone</label><input type="tel" placeholder="(514) 555-0123"></div>
+          - <div class="field"><label>Mot de passe</label><input type="password" placeholder="8 caractères minimum"></div>
+          - <div class="field"><label>Confirmer</label><input type="password" placeholder="Répétez le mot de passe"></div>
+          + <div class="grid"><div class="field"><label for="rd-pro1-field-1">Prénom</label><input id="rd-pro1-field-1" placeholder="Jason"></div><div class="field"><label for="rd-pro1-field-2">Nom</label><input id="rd-pro1-field-2" placeholder="Mancini"></div></div>
+          + <div class="field"><label for="rd-pro1-field-3">Courriel professionnel</label><input id="rd-pro1-field-3" type="email" placeholder="nom@entreprise.ca"></div>
+          + <div class="field"><label for="rd-pro1-field-4">Téléphone</label><input id="rd-pro1-field-4" type="tel" placeholder="(514) 555-0123"></div>
+          + <div class="field"><label for="rd-pro1-field-5">Mot de passe</label><input id="rd-pro1-field-5" type="password" placeholder="8 caractères minimum"></div>
+          + <div class="field"><label for="rd-pro1-field-6">Confirmer</label><input id="rd-pro1-field-6" type="password" placeholder="Répétez le mot de passe"></div>
+            <a class="primary" href="#pro2">Continuer →</a>
+            <div class="login">Déjà un compte? <button>Se connecter</button></div></div>
+           </section>
+           
+           <section id="pro2" class="screen">
+          - <div class="top"><a class="back" href="#pro1">‹ Back</a>
+          - <div class="step">ENTREPRENEUR · ÉTAPE 2 SUR 4</div><div class="progress"><i style="width:50%"></i></div>
+          + <nav class="rd-signup-nav" aria-label="Navigation inscription entrepreneur"><a class="back" href="#pro1">← Retour</a><span class="rd-signup-brand">RénoDirect<span></span></span></nav>
+          + <div class="top rd-signup-card">
+          + <div class="rd-signup-heading"><span class="rd-signup-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/></svg></span><div class="step">ENTREPRENEUR · ÉTAPE 2 SUR 4</div></div><div class="progress"><i style="width:50%"></i></div>
+            <h2 class="form-title">Votre entreprise</h2>
+            <p class="sub">Parlez-nous de votre entreprise. Ces informations serviront à créer votre profil professionnel RénoDirect.</p>
+           
+          - <div class="field"><label>Nom légal de l’entreprise</label><input placeholder="Ex. Construction ABC inc."></div>
+          - <div class="field"><label>Nom affiché sur RénoDirect</label><input placeholder="Ex. Construction ABC"></div>
+          - <div class="field"><label>Téléphone de l’entreprise</label><input type="tel" placeholder="(514) 555-0123"></div>
+          - <div class="field"><label>Adresse de l’entreprise</label><input placeholder="123, rue Exemple"></div>
+          + <div class="field"><label for="rd-pro2-field-1">Nom légal de l’entreprise</label><input id="rd-pro2-field-1" placeholder="Ex. Construction ABC inc."></div>
+          + <div class="field"><label for="rd-pro2-field-2">Nom affiché sur RénoDirect</label><input id="rd-pro2-field-2" placeholder="Ex. Construction ABC"></div>
+          + <div class="field"><label for="rd-pro2-field-3">Téléphone de l’entreprise</label><input id="rd-pro2-field-3" type="tel" placeholder="(514) 555-0123"></div>
+          + <div class="field"><label for="rd-pro2-field-4">Adresse de l’entreprise</label><input id="rd-pro2-field-4" placeholder="123, rue Exemple"></div>
+            <div class="grid">
+          -   <div class="field"><label>Ville</label><input placeholder="Laval"></div>
+          -   <div class="field"><label>Code postal</label><input placeholder="H7X 0A0"></div>
+          +   <div class="field"><label for="rd-pro2-field-5">Ville</label><input id="rd-pro2-field-5" placeholder="Laval"></div>
+          +   <div class="field"><label for="rd-pro2-field-6">Code postal</label><input id="rd-pro2-field-6" placeholder="H7X 0A0"></div>
+            </div>
+          - <div class="field"><label>Numéro de licence RBQ</label><input placeholder="0000-0000-00"></div>
+          - <div class="field"><label>Site web <span style="color:#697176;font-weight:500">(facultatif)</span></label><input type="url" placeholder="www.entreprise.ca"></div>
+          + <div class="field"><label for="rd-pro2-field-7">Numéro de licence RBQ</label><input id="rd-pro2-field-7" placeholder="0000-0000-00"></div>
+          + <div class="field"><label for="rd-pro2-field-8">Site web <span style="color:#697176;font-weight:500">(facultatif)</span></label><input id="rd-pro2-field-8" type="url" placeholder="www.entreprise.ca"></div>
+           
+            <div class="note">À l’étape suivante, vous choisirez vos métiers et services. C’est ce qui permettra à RénoDirect de vous montrer seulement les projets qui correspondent à votre entreprise.</div>
+            <a class="primary" href="#services">Continuer →</a>
+          @@ -1994,8 +2049,9 @@ img{max-width:100%}
+           
+           
+           <section id="services" class="screen">
+          - <div class="top"><a class="back" href="#pro2">‹ Back</a>
+          - <div class="step">ENTREPRENEUR · ÉTAPE 3 SUR 4</div><div class="progress"><i style="width:75%"></i></div>
+          + <nav class="rd-signup-nav" aria-label="Navigation inscription entrepreneur"><a class="back" href="#pro2">← Retour</a><span class="rd-signup-brand">RénoDirect<span></span></span></nav>
+          + <div class="top rd-signup-card">
+          + <div class="rd-signup-heading"><span class="rd-signup-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/></svg></span><div class="step">ENTREPRENEUR · ÉTAPE 3 SUR 4</div></div><div class="progress"><i style="width:75%"></i></div>
+            <h2 class="form-title">Quels travaux réalisez-vous ?</h2>
+            <p class="sub">Sélectionnez tous les services offerts par votre entreprise. RénoDirect utilisera ces choix pour vous montrer les projets pertinents.</p>
+           
+          @@ -2022,12 +2078,13 @@ img{max-width:100%}
+           
+           
+           <section id="territory" class="screen">
+          - <div class="top"><a class="back" href="#services">‹ Back</a>
+          - <div class="step">ENTREPRENEUR · ÉTAPE 4 SUR 4</div><div class="progress"><i style="width:100%"></i></div>
+          + <nav class="rd-signup-nav" aria-label="Navigation inscription entrepreneur"><a class="back" href="#services">← Retour</a><span class="rd-signup-brand">RénoDirect<span></span></span></nav>
+          + <div class="top rd-signup-card">
+          + <div class="rd-signup-heading"><span class="rd-signup-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12h18M10 12v3h4v-3"/></svg></span><div class="step">ENTREPRENEUR · ÉTAPE 4 SUR 4</div></div><div class="progress"><i style="width:100%"></i></div>
+            <h2 class="form-title">Où travaillez-vous ?</h2>
+            <p class="sub">Définissez votre zone de service. RénoDirect utilisera ce territoire avec vos services pour sélectionner les projets qui vous correspondent.</p>
+           
+          - <div class="field"><label>Ville principale</label><input placeholder="Ex. Laval"></div>
+          + <div class="field"><label for="rd-territory-field-1">Ville principale</label><input id="rd-territory-field-1" placeholder="Ex. Laval"></div>
+           
+            <div class="section-label">Rayon de travail</div>
+            <div class="radius-grid">
+          @@ -2037,7 +2094,7 @@ img{max-width:100%}
+              <div class="radius-choice"><input id="r100" name="radius" type="radio"><label for="r100">100 km</label></div>
+            </div>
+           
+          - <div class="field" style="margin-top:14px"><label>Rayon personnalisé <span style="color:#697176;font-weight:500">(facultatif)</span></label><input type="number" min="1" max="300" placeholder="Ex. 35 km"></div>
+          + <div class="field" style="margin-top:14px"><label for="rd-territory-field-2">Rayon personnalisé <span style="color:#697176;font-weight:500">(facultatif)</span></label><input id="rd-territory-field-2" type="number" min="1" max="300" placeholder="Ex. 35 km"></div>
+           
+            <div class="territory-preview">
+              <strong>Votre zone de projets</strong>
+          '''
+          Path('/tmp/entrepreneur-modern.patch').write_text(patch)
+          PY
+          git apply /tmp/entrepreneur-modern.patch
+          git config user.name 'RenoDirect Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Modernize all four entrepreneur signup forms'
+          git push
