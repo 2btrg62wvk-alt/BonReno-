@@ -4,7 +4,7 @@
   const style = document.createElement('style');
   style.id = 'rd-launch-style';
   style.textContent = `
-  #rd-launch{position:fixed;inset:0;z-index:2147483000;width:100%;height:100dvh;overflow:hidden;background:#181a17;color:#f4eee2;touch-action:none;overscroll-behavior:none;display:grid;place-items:center;animation:rd-launch-exit 3s ease both}
+  #rd-launch{position:fixed;inset:0;z-index:2147483647;width:100%;height:100dvh;overflow:hidden;background:#181a17;color:#f4eee2;touch-action:none;overscroll-behavior:none;display:grid;place-items:center;animation:rd-launch-exit 3s ease both}
   #rd-launch .rd-launch-scene{position:relative;width:280px;height:330px;max-width:100%;transform:translateY(-10px)}
   #rd-launch .rd-launch-glow{position:absolute;inset:-60px;background:radial-gradient(ellipse,#d5b57812,transparent 68%);animation:rd-launch-glow 3s ease both;pointer-events:none}
   #rd-launch .rd-launch-ring{position:absolute;left:19px;top:28px;width:240px;height:240px;border:1px solid #d5b57826;border-radius:50%;animation:rd-launch-ring 3s ease both}
@@ -31,17 +31,19 @@
   @media(prefers-reduced-motion:reduce){#rd-launch,#rd-launch *{animation:none!important}#rd-launch .rd-launch-trade,#rd-launch .rd-launch-ring{display:none}#rd-launch .rd-launch-roof span{transform:rotate(-30deg)}#rd-launch .rd-launch-roof span:nth-child(2){transform:rotate(30deg)}}
   `;
   document.head.append(style);
-  let timer = null, backgroundAt = 0, main = null, wasInert = false, previousFocus = null;
+  let timer = null, backgroundAt = 0, locked = [], previousFocus = null;
   let theme = null, previousTheme = null;
   function lockContent() {
     if (!document.getElementById('rd-launch')) return;
-    const current = document.querySelector('main.app');
-    if (current && main !== current) { main = current; wasInert = current.inert; current.inert = true; }
+    document.querySelectorAll('main.app,#rd105').forEach(current => {
+      if (locked.some(item => item.element === current)) return;
+      locked.push({element:current,inert:current.inert});current.inert=true;
+    });
   }
   function finish() {
     clearTimeout(timer);
     document.getElementById('rd-launch')?.remove();
-    if (main) { main.inert = wasInert; main = null; }
+    locked.forEach(item => {item.element.inert=item.inert;});locked=[];
     if (theme && previousTheme !== null) theme.setAttribute('content', previousTheme);
     theme = null;
     document.documentElement.dataset.rdLaunchState = 'done';
