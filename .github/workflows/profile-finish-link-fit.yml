@@ -1,0 +1,25 @@
+name: Polish profile finish link
+on:
+  push:
+    paths: ['.github/workflows/profile-finish-link-fit.yml']
+permissions: {contents: write}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Keep edit link readable
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text()
+          css=r'''<style id="rd-profile-finish-back-fit">#building#building .build-wrap .back{width:auto!important;height:auto!important;min-height:44px!important;max-width:100%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:10px 14px!important;white-space:normal!important;background:transparent!important;box-shadow:none!important;border:0!important;border-radius:12px!important}</style>'''
+          if 'id="rd-profile-finish-back-fit"' not in s:p.write_text(s.replace('</body>',css+'</body>',1))
+          PY
+          git config user.name 'RenoDirect Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Keep territory edit link readable on profile animation'
+          git push
