@@ -62,7 +62,7 @@ function installPageTransitions(){
   const destination=link.getAttribute('href').slice(1);if(!destination||!byId(destination))return;
   e.preventDefault();go(destination);
  });
- document.addEventListener('click',e=>{if(e.target.closest('#rd105')){e.preventDefault();e.stopPropagation();go('accueil');}},true);
+ document.addEventListener('click',e=>{if(e.target.closest('#rd105,.rd160-back')){const home=!!e.target.closest('.rd160-back');e.preventDefault();e.stopPropagation();go(home?'home':'accueil');}},true);
 }
 
 function notify(message){let e=byId('rd-live-notice');if(!e){e=document.createElement('div');e.id='rd-live-notice';e.className='rd-live-notice';e.setAttribute('role','status');document.body.append(e);}e.textContent=message;clearTimeout(notify.timer);notify.timer=setTimeout(()=>e.remove(),6500);}
