@@ -26,3 +26,9 @@ html.rd-live-app .rd86-no-quotes .rd77-bids:after,html.rd-live-app #clientProjec
 .rd-live-refresh{border:1px solid #dbe3d2;border-radius:10px;padding:9px 12px;background:#fffef8;color:#315d40;font-size:12px}
 .rd-live-nav{position:fixed;z-index:60;top:calc(100dvh - 86px - env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(398px,calc(100% - 28px));height:74px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;background:#fffef4f0;border:1px solid #dbe3d2;border-radius:23px;box-shadow:0 10px 40px #23473117;backdrop-filter:blur(18px)}
 .rd-live-nav a{color:#54705b!important;text-decoration:none;text-align:center;font-size:12px!important;min-height:44px;display:grid;place-items:center}
+
+/* Keep scrolling inside the current app screen. Back links remain easy to tap. */
+html.rd-live-app,html.rd-live-app body{overscroll-behavior:none}
+html.rd-live-app .screen{overscroll-behavior:contain}
+.rd-live-back{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;margin-left:-12px;border-radius:12px;color:#315d40;text-decoration:none;font-size:14px;font-weight:600}
+.rd-live-back:focus-visible{outline:2px solid #315d40;outline-offset:2px}
