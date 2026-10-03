@@ -74,6 +74,11 @@ select pg_temp.denied(format('select public.rd_progress_project(%L,''completed''
 select set_config('request.jwt.claim.sub',pg_temp.sid('client')::text,true);
 select public.rd_progress_project(pg_temp.sid('plumbing'),'completed');
 select pg_temp.check_test((select status from public.rd_projects where id=pg_temp.sid('plumbing'))='completed','Authorized lifecycle still works');
+select set_config('request.jwt.claim.sub',pg_temp.sid('general')::text,true);
+insert into public.rd_quotes(project_id,contractor_id,amount,duration,start_date,message) values(pg_temp.sid('electric'),auth.uid(),250,'1 jour',current_date,'Offer before client archives');
+select set_config('request.jwt.claim.sub',pg_temp.sid('client')::text,true);
+select public.rd_progress_project(pg_temp.sid('electric'),'archived');
+select pg_temp.check_test((select status from public.rd_quotes where project_id=pg_temp.sid('electric'))='declined','Archived projects close pending offers');
 select pg_temp.check_test(not exists(select 1 from information_schema.role_table_grants where table_schema='public' and grantee in ('anon','authenticated') and privilege_type='TRUNCATE'),'No RLS-bypassing TRUNCATE grants');
 reset role;
 set local role anon;

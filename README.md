@@ -19,6 +19,10 @@ Les sources SQL dans `database/` correspondent aux migrations appliquées via le
 
 `npm ci && npm test` vérifie le parcours avec une simulation de Supabase dans JSDOM. `tests/marketplace-rls.sql` vérifie les règles sous le rôle `authenticated`, en transaction annulée; aucun profil ni projet de test ne reste dans la base.
 
+Audit du 3 octobre 2026 : les trois suites SQL (`marketplace-rls`, `security-rls`, `business-rls`) ont été exécutées sur le projet Supabase, avec annulation des fixtures. Les tests UI couvrent également la récupération au démarrage, le nettoyage des données après déconnexion, les routes de modification par rôle, les erreurs de déconnexion et le rendu de textes contenant du HTML. `rd_save_business_changes` applique la présentation et la réalisation dans une même transaction, sous les permissions RLS du compte appelant; un échec ne laisse pas une présentation partiellement modifiée. Archiver un projet clôt ses offres en attente dans la transaction du changement de statut.
+
+Limites : JSDOM simule Auth et le réseau. La réception des courriels de confirmation/récupération et les interactions sur un iPhone physique nécessitent encore des essais réels. L’avis Supabase sur les mots de passe compromis reste présent; cette protection nécessite Supabase Pro ou supérieur.
+
 ## Réglages Auth à terminer dans Supabase
 
 Projet : `qefpomgdknlcsavkritc`, organisation Projeko.
