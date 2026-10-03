@@ -1,0 +1,78 @@
+name: Publish Projeko branding
+on:
+  push:
+    paths: ['.github/workflows/rebrand-projeko.yml']
+permissions:
+  contents: write
+jobs:
+  rebrand:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install icon rendering dependency
+        run: python3 -m pip install Pillow==11.3.0
+      - name: Replace application branding
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, subprocess, json
+          from PIL import Image, ImageDraw
+          paths = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+          # Keep existing connection origins, account storage keys and historical
+          # migration workflows intact: those are infrastructure, not UI branding.
+          for name in paths:
+              p = Path(name)
+              if name.startswith('.github/') or p.suffix.lower() not in {'.html','.js','.css','.json','.webmanifest','.md','.txt','.sql','.cjs'}:
+                  continue
+              if name == 'app/supabase-2.117.2.js':
+                  continue
+              s = p.read_text()
+              s = re.sub(r'r[ée]no\s*direct(?!\.vercel\.app)', lambda m: 'PROJEKO' if m.group().isupper() else 'projeko' if m.group().islower() else 'Projeko', s, flags=re.I)
+              if name == 'index.html':
+                  # Remove the dormant former photo intro with baked-in branding.
+                  s = re.sub(r'(#intro\s+\.rd31-photo\s*\{[^{}]*?)content\s*:\s*url\("data:image/[^" ]+"\)\s*;?', r'\1content:none;', s)
+                  s = s.replace('/icons/apple-touch-icon-v1.png','/icons/apple-touch-icon-projeko-v2.png').replace('/icons/icon-192-v1.png','/icons/icon-192-projeko-v2.png')
+                  s = s.replace('href="/manifest.webmanifest"','href="/manifest.webmanifest?v=projeko-1"')
+                  s = s.replace('src="/app/launch.js"','src="/app/launch.js?v=projeko-1"').replace('src="/app/marketplace.js"','src="/app/marketplace.js?v=projeko-1"')
+              p.write_text(s)
+          # A clean geometric P, with the existing architectural roof and palette.
+          svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>Projeko</title><rect width="512" height="512" fill="#e5d3b8"/><path fill="#30312e" d="M88 202 256 108 424 202V236L256 142 88 236Z"/><rect x="180" y="220" width="55" height="194" fill="#30312e"/><rect x="180" y="220" width="168" height="120" rx="60" fill="#30312e"/><rect x="235" y="266" width="63" height="28" rx="14" fill="#e5d3b8"/></svg>'''
+          Path('icons/projeko.svg').write_text(svg)
+          scale = 4
+          im = Image.new('RGB',(512*scale,512*scale),'#e5d3b8')
+          d = ImageDraw.Draw(im)
+          d.polygon([(x*scale,y*scale) for x,y in [(88,202),(256,108),(424,202),(424,236),(256,142),(88,236)]],fill='#30312e')
+          d.rounded_rectangle(tuple(v*scale for v in (180,220,348,340)),radius=60*scale,fill='#30312e')
+          d.rectangle(tuple(v*scale for v in (180,220,235,414)),fill='#30312e')
+          d.rounded_rectangle(tuple(v*scale for v in (235,266,298,294)),radius=14*scale,fill='#e5d3b8')
+          for size,name in [(180,'apple-touch-icon-projeko-v2.png'),(192,'icon-192-projeko-v2.png'),(512,'icon-512-projeko-v2.png')]:
+              im.resize((size,size),Image.Resampling.LANCZOS).save(Path('icons')/name,optimize=True)
+          for p in Path('icons').glob('*-v1.png'):
+              p.unlink()
+          manifest_path=Path('manifest.webmanifest')
+          manifest=json.loads(manifest_path.read_text())
+          for icon in manifest['icons']:
+              icon['src']=icon['src'].replace('-v1.png','-projeko-v2.png')
+          manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          for name in ['index.html','app/launch.js','app/marketplace.js','manifest.webmanifest','presentation/iphone.html']:
+              assert not re.search(r'r[ée]no\s*direct',Path(name).read_text(),re.I),name
+          assert manifest['name']==manifest['short_name']=='Projeko'
+          assert all(Path(icon['src'].lstrip('/')).exists() for icon in manifest['icons'])
+          PY
+      - name: Verify application flows
+        run: |
+          npm ci
+          npm test
+          node --check app/launch.js
+          node --check app/marketplace.js
+      - name: Publish branding update
+        run: |
+          git config user.name 'Projeko Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add index.html app/launch.js app/marketplace.js app/ATTRIBUTION.txt manifest.webmanifest icons README.md package.json package-lock.json presentation/iphone.html tests database
+          git diff --cached --quiet && exit 0
+          git commit -m 'Rebrand application to Projeko and replace RD installation icons'
+          git push
