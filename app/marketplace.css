@@ -1,3 +1,35 @@
+/* Menu layout correction: prioritize real projects, not oversized shortcuts.
+   These scoped overrides outrank legacy themes but preserve all route targets. */
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) :is(.rd51-client,.rd58-shell){position:relative!important;padding-top:calc(18px + env(safe-area-inset-top))!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) .rd-menu-brand{margin-bottom:26px!important;min-height:44px!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) .rd-menu-brand small{display:none!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) .rd62-switch{position:absolute!important;top:calc(18px + env(safe-area-inset-top))!important;right:20px!important;margin:0!important;min-height:44px!important;font-size:11px!important;font-weight:500!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) .rd51-kicker{display:none!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) :is(.rd51-head,.rd58-prohead) h1{font-size:26px!important;line-height:1.2!important;letter-spacing:-.8px!important;margin:0 0 7px!important;overflow-wrap:anywhere}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) :is(.rd51-head,.rd58-prohead) p{font-size:12px!important;line-height:1.45!important;max-width:290px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-shell{display:flex!important;flex-direction:column!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-menu-brand{order:0}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-prohead{order:1;margin-bottom:18px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-filterbar{order:2;margin:0 0 8px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed #rd62LiveProjects{order:3}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-why{order:4;border:0!important;background:transparent!important;padding:0 2px!important;margin:6px 0 22px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-why strong{display:none!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-why p{margin:0!important;font-size:11px!important;line-height:1.5!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts{order:5;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:9px!important;margin:0 0 14px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts a{display:grid!important;grid-template-columns:30px minmax(0,1fr) 18px!important;grid-template-rows:auto auto!important;column-gap:12px!important;padding:13px 14px!important;min-height:64px!important;border-radius:14px!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts span{grid-column:1;grid-row:1 / 3;align-self:center;margin:0!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts strong{grid-column:2;grid-row:1;font-size:14px!important;align-self:end}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts small{grid-column:2;grid-row:2;font-size:11px!important;line-height:1.4!important;margin:3px 0 0!important}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd-pro-shortcuts a::after{content:'›';grid-column:3;grid-row:1 / 3;align-self:center;font-size:23px;color:#777a73}
+#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed .rd58-nav{order:6}
+#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-new{min-height:56px!important;padding:13px 16px!important;border-radius:14px!important}
+#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-new small{display:none!important}
+#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-quick a{min-height:76px!important;padding:13px!important;display:grid!important;grid-template-columns:29px minmax(0,1fr)!important;column-gap:10px!important;align-content:center}
+#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-quick a span{grid-row:1 / 3;margin:0!important;align-self:center}
+#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-quick a strong,#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard .rd51-quick a small{grid-column:2}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) :is(.rd51-nav,.rd58-nav) a span{color:inherit!important}
+:is(#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard#clientDashboard,#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed#contractorFeed) :is(.rd51-nav,.rd58-nav) svg{color:inherit!important;stroke:currentColor!important}
+
 /* Shared data states, using the existing cream and green design. */
 .rd-live-card{display:block;padding:20px;margin:12px 0;border:1px solid #dbe3d2;border-radius:20px;background:#fffef8;color:#234731;text-decoration:none;overflow-wrap:anywhere}
 .rd-live-card h2,.rd-live-card h3{font-size:20px!important;line-height:1.2!important;margin:10px 0!important;color:#234731!important}
