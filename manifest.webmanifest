@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "RénoDirect",
-  "short_name": "RénoDirect",
+  "name": "Projeko",
+  "short_name": "Projeko",
   "lang": "fr-CA",
   "start_url": "/",
   "scope": "/",
@@ -10,13 +10,13 @@
   "theme_color": "#e0cdb0",
   "icons": [
     {
-      "src": "/icons/icon-192-v1.png",
+      "src": "/icons/icon-192-projeko-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512-v1.png",
+      "src": "/icons/icon-512-projeko-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

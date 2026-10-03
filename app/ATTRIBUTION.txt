@@ -1,4 +1,4 @@
-RénoDirect geographic lookup
+Projeko geographic lookup
 Source: GeoNames country export CA.zip, retrieved 2026-10-02.
 https://download.geonames.org/export/dump/
 Québec populated places, filtered and deduplicated by name, retaining the most populated match.

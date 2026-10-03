@@ -1,4 +1,4 @@
-# RénoDirect
+# Projeko
 
 Application HTML statique sur Vercel avec comptes et données Supabase.
 
@@ -21,7 +21,7 @@ Les sources SQL dans `database/` correspondent aux migrations appliquées via le
 
 ## Réglages Auth à terminer dans Supabase
 
-Projet : `qefpomgdknlcsavkritc`, organisation RenoDirect.
+Projet : `qefpomgdknlcsavkritc`, organisation Projeko.
 
 - Authentication → URL Configuration : Site URL `https://renodirect.vercel.app`; autoriser `https://renodirect.vercel.app/**` dans Redirect URLs.
 - Garder la confirmation des courriels activée.

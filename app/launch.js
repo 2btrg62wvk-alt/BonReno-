@@ -1,4 +1,4 @@
-/* RénoDirect — automatic launch animation; independent of account and routing. */
+/* Projeko — automatic launch animation; independent of account and routing. */
 (() => {
   'use strict';
   const style = document.createElement('style');
@@ -87,14 +87,14 @@
     const screen = document.createElement('div');
     screen.id = 'rd-launch';
     screen.setAttribute('role', 'status');
-    screen.setAttribute('aria-label', 'RénoDirect');
+    screen.setAttribute('aria-label', 'Projeko');
     screen.innerHTML = `<div class="rd-launch-scene" aria-hidden="true">
       <div class="rd-launch-glow"></div><div class="rd-launch-ring"></div>
       <div class="rd-launch-trade rd-launch-hammer"><svg viewBox="0 0 24 24"><path d="m5 20 9-9M3 18l3 3 10-10-3-3Zm9-13 4-3 5 5-3 4-6-6Z"/></svg></div>
       <div class="rd-launch-trade rd-launch-water"><svg viewBox="0 0 24 24"><path d="M12 2C10 7 5 10 5 15a7 7 0 0 0 14 0c0-5-5-8-7-13ZM8 15a4 4 0 0 0 4 4"/></svg></div>
       <div class="rd-launch-trade rd-launch-paint"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="6" rx="1.5"/><path d="M17 6h3v7h-9v3M9 16h4v6H9Z"/></svg></div>
       <div class="rd-launch-trade rd-launch-power"><svg viewBox="0 0 24 24"><path d="m14 2-9 12h7l-2 8 9-12h-7Z"/></svg></div>
-      <div class="rd-launch-brand"><div class="rd-launch-roof"><span></span><span></span><i></i></div><div class="rd-launch-name">RénoDirect</div></div>
+      <div class="rd-launch-brand"><div class="rd-launch-roof"><span></span><span></span><i></i></div><div class="rd-launch-name">Projeko</div></div>
     </div>`;
     document.body.append(screen);
     document.documentElement.dataset.rdLaunchState = 'playing';
