@@ -8,7 +8,8 @@
   #rd-launch .rd-launch-scene{position:relative;width:280px;height:330px;max-width:100%;transform:translateY(-10px)}
   #rd-launch .rd-launch-glow{position:absolute;inset:-60px;background:radial-gradient(ellipse,#d5b57812,transparent 68%);animation:rd-launch-glow 3s ease both;pointer-events:none}
   #rd-launch .rd-launch-ring{position:absolute;left:19px;top:28px;width:240px;height:240px;border:1px solid #d5b57826;border-radius:50%;animation:rd-launch-ring 3s ease both}
-  #rd-launch .rd-launch-brand{position:absolute;top:105px;left:0;right:0;text-align:center}
+  #rd-launch .rd-launch-brand{position:absolute;top:85px;left:0;right:0;text-align:center}
+  #rd-launch .rd-launch-mark{display:block;width:88px;height:88px;margin:0 auto 14px;border-radius:20px;animation:rd-launch-name 3s cubic-bezier(.22,1,.36,1) both}
   #rd-launch .rd-launch-roof{position:relative;width:146px;height:54px;margin:0 auto 14px;color:#d5b578}
   #rd-launch .rd-launch-roof span{position:absolute;width:85px;height:4px;top:42px;left:0;border-radius:4px;background:currentColor;transform-origin:left center;animation:rd-launch-roof-left 3s ease both}
   #rd-launch .rd-launch-roof span:nth-child(2){left:73px;top:0;animation-name:rd-launch-roof-right}
@@ -94,7 +95,7 @@
       <div class="rd-launch-trade rd-launch-water"><svg viewBox="0 0 24 24"><path d="M12 2C10 7 5 10 5 15a7 7 0 0 0 14 0c0-5-5-8-7-13ZM8 15a4 4 0 0 0 4 4"/></svg></div>
       <div class="rd-launch-trade rd-launch-paint"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="14" height="6" rx="1.5"/><path d="M17 6h3v7h-9v3M9 16h4v6H9Z"/></svg></div>
       <div class="rd-launch-trade rd-launch-power"><svg viewBox="0 0 24 24"><path d="m14 2-9 12h7l-2 8 9-12h-7Z"/></svg></div>
-      <div class="rd-launch-brand"><div class="rd-launch-roof"><span></span><span></span><i></i></div><div class="rd-launch-name">Projeko</div></div>
+      <div class="rd-launch-brand"><img class="rd-launch-mark" src="/icons/icon-192-projeko-v3.png" alt="" width="88" height="88"><div class="rd-launch-name">Projeko</div></div>
     </div>`;
     document.body.append(screen);
     document.documentElement.dataset.rdLaunchState = 'playing';
