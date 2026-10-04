@@ -70,3 +70,9 @@
 #contractorQuotes .rd-live-empty{margin-top:20px!important;padding:22px 0!important;border:0!important;background:transparent!important;color:#7b807d!important;font-size:15px!important}
 @media(max-width:360px){#contractorQuotes .rd-live-tabs button{font-size:10.5px!important}.pj-tabs a{font-size:10px!important}}
 
+
+/* Account actions */
+.pj-account-actions{width:min(100%,520px);margin:0 auto;padding:8px 24px 105px;background:#fff}
+.pj-logout{width:100%;min-height:46px;border:1px solid #e8ebe8;border-radius:7px;background:#fff;color:#202322;font:500 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.pj-logout:active{background:#f5f6f3}
+
