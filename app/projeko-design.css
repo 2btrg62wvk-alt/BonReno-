@@ -164,3 +164,13 @@
 @supports(height:100svh){
  #clientChat .rd-live-detail,#clientChat .pj-chat{min-height:calc(100svh - env(safe-area-inset-top))!important}
 }
+
+/* Final iOS chat viewport correction */
+#clientChat{box-sizing:border-box!important;height:100dvh!important;min-height:100dvh!important;overflow:hidden!important}
+#clientChat .rd-live-detail{box-sizing:border-box!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;padding:0!important;overflow:hidden!important}
+#clientChat .pj-chat{box-sizing:border-box!important;display:grid!important;grid-template-rows:auto minmax(0,1fr) auto!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+#clientChat .pj-chat-messages{min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important}
+#clientChat .pj-chat-compose{margin:0!important;padding:10px 14px calc(10px + env(safe-area-inset-bottom))!important}
+@supports(height:100svh){
+ #clientChat,#clientChat .rd-live-detail,#clientChat .pj-chat{height:100svh!important;min-height:100svh!important;max-height:100svh!important}
+}
