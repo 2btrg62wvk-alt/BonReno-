@@ -353,3 +353,5 @@ async function initialize(){let booting=true,pending=null,recovery=false;
  }catch(e){notify(err(e));}}
  void initialize();
 })();
+
+/* Capture branch: native 4x browser rendering for sharp 4K UI assets. */
