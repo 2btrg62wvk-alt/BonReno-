@@ -157,3 +157,23 @@ html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!importa
 #clientChat.active .pj-chat{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
 #clientChat.active .pj-chat-messages{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
 #clientChat.active .pj-chat-compose{position:relative!important;bottom:auto!important;flex:0 0 auto!important}
+
+/* iMessage-like conversation treatment */
+#clientChat .pj-imessage{background:#fff!important}
+#clientChat .pj-imessage .pj-chat-header{grid-template-columns:42px minmax(0,1fr) 42px!important;gap:0!important;padding:calc(5px + env(safe-area-inset-top)) 10px 7px!important;background:rgba(248,248,248,.96)!important;border-bottom:.5px solid #d8d8da!important}
+#clientChat .pj-imessage .pj-chat-back{width:42px!important;height:58px!important;justify-self:start;color:#896a36!important;font-size:40px!important;font-weight:250!important;line-height:1!important}
+#clientChat .pj-chat-contact{display:flex;min-width:0;flex-direction:column;align-items:center;justify-content:center;color:#111!important;text-decoration:none!important}
+#clientChat .pj-imessage .pj-chat-avatar{width:36px!important;height:36px!important;margin:0 0 3px!important;background:#d9d9dc!important;color:#fff!important;font-size:11px!important;font-weight:650!important}
+#clientChat .pj-chat-contact strong{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:500;line-height:14px}
+#clientChat .pj-chat-contact span{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#8e8e93;font-size:9px;line-height:11px}
+#clientChat .pj-chat-header-spacer{width:42px}
+#clientChat .pj-imessage .pj-chat-messages{padding:12px 10px 10px!important}
+#clientChat .pj-imessage .pj-message-row{margin-bottom:7px!important}
+#clientChat .pj-imessage .pj-message-bubble{max-width:76%!important;padding:7px 11px!important;border-radius:18px!important;background:#e9e9eb!important;color:#000!important;font-size:16px!important;line-height:20px!important;letter-spacing:-.15px!important}
+#clientChat .pj-imessage .pj-message-row.mine .pj-message-bubble{background:#896a36!important;color:#fff!important}
+#clientChat .pj-imessage .pj-message-row small{margin:3px 7px 1px!important;color:#8e8e93!important;font-size:8px!important}
+#clientChat .pj-imessage .pj-chat-compose{grid-template-columns:32px minmax(0,1fr) 32px!important;align-items:center!important;gap:7px!important;padding:7px 10px calc(7px + env(safe-area-inset-bottom))!important;border-top:0!important;background:#fff!important}
+#clientChat .pj-chat-plus{display:grid!important;place-items:center!important;width:30px!important;height:30px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#e9e9eb!important;color:#555!important;font-size:25px!important;font-weight:300!important;line-height:1!important}
+#clientChat .pj-imessage .pj-chat-compose textarea{min-height:34px!important;height:34px!important;max-height:100px!important;padding:6px 34px 6px 12px!important;border:1px solid #c7c7cc!important;border-radius:18px!important;background:#fff!important;color:#000!important;font-size:16px!important;line-height:20px!important}
+#clientChat .pj-imessage .pj-chat-compose textarea::placeholder{color:#8e8e93!important}
+#clientChat .pj-chat-send{display:grid!important;place-items:center!important;width:30px!important;height:30px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#896a36!important;color:#fff!important;font-size:21px!important;font-weight:700!important;line-height:1!important}
