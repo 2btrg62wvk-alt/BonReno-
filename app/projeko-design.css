@@ -177,3 +177,23 @@ html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!importa
 #clientChat .pj-imessage .pj-chat-compose textarea{min-height:34px!important;height:34px!important;max-height:100px!important;padding:6px 34px 6px 12px!important;border:1px solid #c7c7cc!important;border-radius:18px!important;background:#fff!important;color:#000!important;font-size:16px!important;line-height:20px!important}
 #clientChat .pj-imessage .pj-chat-compose textarea::placeholder{color:#8e8e93!important}
 #clientChat .pj-chat-send{display:grid!important;place-items:center!important;width:30px!important;height:30px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#896a36!important;color:#fff!important;font-size:21px!important;font-weight:700!important;line-height:1!important}
+
+/* True full-screen chat on mobile */
+@media(max-width:699px){
+ #clientChat.screen,#clientChat.screen:target,#clientChat.active{
+  position:fixed!important;inset:0!important;z-index:1000!important;
+  box-sizing:border-box!important;width:100vw!important;max-width:none!important;
+  height:100dvh!important;min-height:100dvh!important;margin:0!important;padding:0!important;
+  overflow:hidden!important;background:#fff!important
+ }
+ #clientChat .rd-live-detail{
+  box-sizing:border-box!important;width:100vw!important;max-width:none!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  margin:0!important;padding:0!important;overflow:hidden!important
+ }
+ #clientChat .pj-chat,#clientChat .pj-imessage{
+  box-sizing:border-box!important;width:100vw!important;max-width:none!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  margin:0!important;overflow:hidden!important
+ }
+}
