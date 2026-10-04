@@ -226,3 +226,13 @@
   scroll-padding-bottom:118px!important;
  }
 }
+
+/* Message viewport is measured in JS while keyboard is open */
+@media(max-width:699px){
+ #clientChat.keyboard-open .pj-chat-messages{
+  padding-bottom:12px!important;
+  scroll-padding-bottom:12px!important;
+  min-height:0!important;
+  flex:none!important;
+ }
+}
