@@ -129,3 +129,23 @@
 .pj-accept-confirm{display:block;width:100%;min-height:52px;border:0;border-radius:7px;background:#202322;color:#fff;font:600 15px/1 inherit;cursor:pointer;touch-action:manipulation}
 .pj-accept-confirm:active{opacity:.8;transform:scale(.99)}
 .pj-accept-cancel{display:block;width:100%;min-height:44px;margin-top:7px;border:0;background:transparent;color:#737875;font:500 13px/1 inherit;cursor:pointer}
+
+/* Projeko messaging */
+#clientChat .rd-live-detail{box-sizing:border-box!important;width:100%!important;max-width:100%!important;height:100dvh!important;min-height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;background:#fff!important}
+#clientChat .pj-chat{box-sizing:border-box;display:grid;grid-template-rows:auto 1fr auto;height:100dvh;max-width:620px;margin:0 auto;background:#fff}
+.pj-chat-header{display:grid;grid-template-columns:36px 42px minmax(0,1fr) auto;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid #eceeeb;background:rgba(255,255,255,.97)}
+.pj-chat-back{display:grid;place-items:center;width:36px;height:40px;color:#202322!important;text-decoration:none!important;font-size:27px;font-weight:350}
+.pj-chat-avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#f2efe8;color:#202322;font-size:12px;font-weight:650}
+.pj-chat-person{display:flex;min-width:0;flex-direction:column;gap:3px}.pj-chat-person strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}.pj-chat-person span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#7b807d;font-size:11px}
+.pj-chat-quote{padding:10px 0 10px 8px;color:#896a36!important;text-decoration:none!important;font-size:11px;font-weight:600}
+.pj-chat-messages{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 16px 16px;background:#fff}
+.pj-message-row{display:flex;flex-direction:column;align-items:flex-start;margin:0 0 13px}.pj-message-row.mine{align-items:flex-end}
+.pj-message-bubble{max-width:min(78%,390px);padding:11px 14px;border-radius:18px 18px 18px 5px;background:#f0f1ee;color:#202322;font-size:15px;line-height:1.38;overflow-wrap:anywhere}
+.pj-message-row.mine .pj-message-bubble{border-radius:18px 18px 5px 18px;background:#202322;color:#fff}
+.pj-message-row small{margin:5px 6px 0;color:#9a9e9b;font-size:9px}
+.pj-chat-empty{display:grid;place-items:center;height:100%;color:#9a9e9b;font-size:12px}
+#clientChat .pj-chat-compose{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:end;gap:9px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eceeeb;background:#fff}
+#clientChat .pj-chat-compose textarea{box-sizing:border-box!important;width:100%!important;min-height:44px!important;max-height:110px!important;margin:0!important;padding:11px 14px!important;border:1px solid #dfe2de!important;border-radius:22px!important;background:#f7f7f5!important;color:#202322!important;font-size:16px!important;line-height:20px!important;resize:none!important}
+#clientChat .pj-chat-compose button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:#202322;color:#fff;cursor:pointer;touch-action:manipulation}
+#clientChat .pj-chat-compose button svg{width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
+#clientChat .pj-chat-compose button:active{opacity:.75;transform:scale(.96)}
