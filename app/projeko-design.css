@@ -197,3 +197,23 @@ html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!importa
   margin:0!important;overflow:hidden!important
  }
 }
+
+/* Mobile chat width correction: never exceed the actual app viewport */
+@media(max-width:699px){
+ #clientChat.screen,#clientChat.screen:target,#clientChat.active{
+  left:0!important;right:0!important;width:auto!important;max-width:none!important;
+  margin:0!important;padding:0!important;overflow-x:hidden!important
+ }
+ #clientChat .rd-live-detail,#clientChat .pj-chat,#clientChat .pj-imessage{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  margin:0!important;padding-left:0!important;padding-right:0!important;
+  overflow-x:hidden!important
+ }
+ #clientChat .pj-chat-header,#clientChat .pj-chat-messages,#clientChat .pj-chat-compose{
+  box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important
+ }
+ #clientChat .pj-message-row{box-sizing:border-box!important;width:100%!important;min-width:0!important}
+ #clientChat .pj-message-bubble{box-sizing:border-box!important;max-width:76%!important}
+ #clientChat .pj-chat-compose{grid-template-columns:32px minmax(0,1fr) 32px!important}
+ #clientChat .pj-chat-compose textarea{min-width:0!important;width:100%!important}
+}
