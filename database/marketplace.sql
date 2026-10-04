@@ -104,7 +104,7 @@ begin
  if auth.uid() is null then raise exception 'Connexion requise'; end if;
  select * into p from public.rd_projects where id=project for update;
  if not (p.client_id=auth.uid() or exists(select 1 from public.rd_quotes where id=p.accepted_quote_id and contractor_id=auth.uid())) then raise exception 'Accès refusé'; end if;
- if not ((next_status='in_progress' and p.status='accepted') or (next_status='completed' and p.status='in_progress' and p.client_id=auth.uid()) or (next_status='archived' and p.status='open' and p.client_id=auth.uid())) then raise exception 'Changement de statut refusé'; end if;
+ if not ((next_status='in_progress' and p.status='accepted') or (next_status='completed' and p.status in ('accepted','in_progress') and p.client_id=auth.uid()) or (next_status='archived' and p.status='open' and p.client_id=auth.uid())) then raise exception 'Changement de statut refusé'; end if;
  update public.rd_projects set status=next_status where id=project;
 end $$;
 create function public.rd_progress_project(project uuid,next_status text) returns void language sql security invoker set search_path='' as $$select rd_private.progress_project(project,next_status)$$;
