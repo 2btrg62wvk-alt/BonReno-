@@ -150,11 +150,8 @@
 #clientChat .pj-chat-compose button svg{width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
 #clientChat .pj-chat-compose button:active{opacity:.75;transform:scale(.96)}
 
-/* Lock chat page; only the message list may scroll */
-html.rd-live-app:has(#clientChat.active),
-html.rd-live-app:has(#clientChat.active) body{height:100%;overflow:hidden!important;overscroll-behavior:none!important}
-#clientChat.active{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important}
-#clientChat.active .rd-live-detail{height:100%!important;min-height:0!important;overflow:hidden!important;padding:0!important}
-#clientChat.active .pj-chat{display:grid!important;grid-template-rows:auto minmax(0,1fr) auto!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important}
-#clientChat.active .pj-chat-header,#clientChat.active .pj-chat-compose{min-height:0!important;overflow:visible!important;flex:none!important}
-#clientChat.active .pj-chat-messages{min-height:0!important;height:auto!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
+/* Natural iOS chat scrolling */
+#clientChat{overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:auto!important}
+#clientChat .rd-live-detail{min-height:100dvh!important;height:auto!important;overflow:visible!important}
+#clientChat .pj-chat{min-height:100dvh!important;height:auto!important;display:flex!important;flex-direction:column!important;overflow:visible!important}
+#clientChat .pj-chat-messages{flex:1 0 auto!important;min-height:0!important;overflow:visible!important}
