@@ -175,11 +175,6 @@
   height:100%!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important
  }
  #clientChat .pj-chat{height:100%!important;min-height:0!important}
- #clientChat.keyboard-open .pj-chat-compose{
-  transform:translateY(calc(-1 * var(--chat-keyboard,0px)))!important;
-  margin-bottom:6px!important;
- }
- #clientChat.keyboard-open .pj-chat-messages{
-  padding-bottom:calc(var(--chat-keyboard,0px) + 12px)!important
- }
+ #clientChat.keyboard-open .pj-chat-compose{margin-bottom:6px!important;will-change:transform!important}
+ #clientChat.keyboard-open .pj-chat-messages{padding-bottom:12px!important}
 }
