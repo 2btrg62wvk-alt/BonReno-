@@ -114,3 +114,18 @@
 #clientProfile .pj-profile-back a{display:inline-flex;align-items:center;gap:6px;min-height:42px;color:#202322;text-decoration:none;font:550 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 #clientProfile .pj-profile-back svg{width:18px!important;height:18px!important;transform:rotate(180deg);fill:none!important;stroke:currentColor!important;stroke-width:1.65!important}
 #clientProfile .pj-profile-top{padding-top:10px}
+
+/* Projeko quote acceptance confirmation */
+.pj-accept-modal{position:fixed;inset:0;z-index:2147483200;display:flex;align-items:flex-end;justify-content:center;padding:18px;background:rgba(20,22,21,.38);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.pj-accept-sheet{position:relative;box-sizing:border-box;width:min(100%,500px);padding:28px 24px calc(20px + env(safe-area-inset-bottom));border-radius:20px;background:#fff;color:#202322;box-shadow:0 18px 60px rgba(0,0,0,.18)}
+.pj-accept-close{position:absolute;top:15px;right:16px;width:36px;height:36px;border:0;border-radius:50%;background:#f4f4f1;color:#555;font-size:25px;line-height:32px;cursor:pointer}
+.pj-accept-kicker{margin:0 0 9px;color:#896a36;font-size:10px;font-weight:700;letter-spacing:1.1px}
+.pj-accept-sheet h2{margin:0;font-size:27px;line-height:1.1;letter-spacing:-.8px}
+.pj-accept-company{margin:8px 0 22px;color:#737875;font-size:15px}
+.pj-accept-price{padding:17px 0;border-top:1px solid #e8ebe8;border-bottom:1px solid #e8ebe8}
+.pj-accept-price strong,.pj-accept-price span{display:block}.pj-accept-price strong{font-size:24px;letter-spacing:-.5px}.pj-accept-price span{margin-top:4px;color:#737875;font-size:11px}
+.pj-no-payment{margin:18px 0;padding:15px;border-radius:10px;background:#f7f4ed}.pj-no-payment strong,.pj-no-payment span{display:block}.pj-no-payment strong{margin-bottom:6px;color:#6f5428;font-size:14px}.pj-no-payment span{color:#4f5351;font-size:12px;line-height:1.5}
+.pj-accept-other{margin:0 0 20px;color:#737875;font-size:11px;line-height:1.5}
+.pj-accept-confirm{display:block;width:100%;min-height:52px;border:0;border-radius:7px;background:#202322;color:#fff;font:600 15px/1 inherit;cursor:pointer;touch-action:manipulation}
+.pj-accept-confirm:active{opacity:.8;transform:scale(.99)}
+.pj-accept-cancel{display:block;width:100%;min-height:44px;margin-top:7px;border:0;background:transparent;color:#737875;font:500 13px/1 inherit;cursor:pointer}
