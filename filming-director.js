@@ -27,5 +27,5 @@ async function film(){
 }
 window.addEventListener('message',e=>{if(e.data==='filming-start')film().catch(e=>parent.postMessage({error:e.message},'*'));});
 window.confirm=()=>true;
-const ready=setInterval(()=>{if(find('#clientDashboard .pk-menu')){clearInterval(ready);location.hash='clientDashboard';parent.postMessage('filming-ready','*');}},100);
+const ready=setInterval(()=>{if(find('#clientDashboard .pk-menu')){clearInterval(ready);const button=document.createElement('button');button.id='filming-start';button.textContent='Lancer le parcours';button.style='position:fixed;left:12px;top:12px;z-index:9999;padding:12px';button.onclick=()=>{button.remove();film().catch(e=>console.error('FILMING',e.message));};document.body.append(button);parent.postMessage('filming-ready','*');}},100);
 })();
