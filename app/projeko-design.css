@@ -238,6 +238,17 @@
 }
 
 /* Keep controls reachable on small screens and prevent iOS focus zoom. */
+/* One measured viewport and one grid: no competing floating keyboard anchors.
+   This changes containment only; approved colours, bubbles and controls stay intact. */
+@layer projekodesign {
+#clientChat#clientChat.screen{inset:auto 0!important;top:0!important;height:100dvh!important;overflow:hidden!important}
+#clientChat#clientChat .pj-chat{grid-template-rows:auto minmax(0,1fr) auto!important;height:100%!important}
+#clientChat#clientChat .pj-chat-messages{height:auto!important;max-height:none!important;min-height:0!important;padding-bottom:14px!important;scroll-padding-bottom:14px!important;overflow-anchor:none!important}
+#clientChat#clientChat .pj-chat-compose{position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;margin:0 10px calc(7px + env(safe-area-inset-bottom))!important;z-index:5!important}
+#clientChat#clientChat.keyboard-open .pj-chat-compose{margin-bottom:6px!important}
+#clientChat#clientChat .pj-chat-input-wrap textarea{max-height:120px!important;overflow-y:auto!important;resize:none!important}
+#clientChat#clientChat [data-chat-retry]{font:inherit;color:inherit;background:none;border:0;padding:4px 0;cursor:pointer}
+}
 @layer projekodesign {
 .pj-accept-modal{overflow-y:auto}
 .pj-accept-sheet{max-height:calc(100dvh - 36px);overflow-y:auto}
