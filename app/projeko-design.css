@@ -155,3 +155,12 @@
 #clientChat .rd-live-detail{min-height:100dvh!important;height:auto!important;overflow:visible!important}
 #clientChat .pj-chat{min-height:100dvh!important;height:auto!important;display:flex!important;flex-direction:column!important;overflow:visible!important}
 #clientChat .pj-chat-messages{flex:1 0 auto!important;min-height:0!important;overflow:visible!important}
+
+/* Chat composer: sit at the real bottom on short conversations */
+#clientChat .rd-live-detail{box-sizing:border-box!important;min-height:calc(100dvh - env(safe-area-inset-top))!important}
+#clientChat .pj-chat{box-sizing:border-box!important;min-height:calc(100dvh - env(safe-area-inset-top))!important}
+#clientChat .pj-chat-messages{flex:1 1 auto!important}
+#clientChat .pj-chat-compose{margin-top:auto!important;padding-bottom:calc(10px + env(safe-area-inset-bottom))!important}
+@supports(height:100svh){
+ #clientChat .rd-live-detail,#clientChat .pj-chat{min-height:calc(100svh - env(safe-area-inset-top))!important}
+}
