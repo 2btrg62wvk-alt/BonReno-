@@ -192,9 +192,22 @@
  }
 }
 
-/* Composer resting position: closer to the iPhone bottom edge */
+
+/* Final mobile composer anchor */
 @media(max-width:699px){
+ #clientChat .pj-chat{position:relative!important}
  #clientChat:not(.keyboard-open) .pj-chat-compose{
-  transform:translateY(88px)!important;
+  position:absolute!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:calc(8px + env(safe-area-inset-bottom))!important;
+  top:auto!important;
+  width:auto!important;
+  margin:0!important;
+  transform:none!important;
+  z-index:50!important;
+ }
+ #clientChat:not(.keyboard-open) .pj-chat-messages{
+  padding-bottom:96px!important;
  }
 }
