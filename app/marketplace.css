@@ -254,3 +254,20 @@ html.rd-live-app .screen:target{background:#fff!important;color:var(--pj-ink)!im
 #contractorFeed:target{padding:0!important;background:var(--pj-paper)!important;overflow-y:auto!important}#contractorFeed:target>.pj-app{width:100%!important}
 @media(min-width:700px){.pj-app{margin:32px auto;min-height:calc(100dvh - 64px);border:1px solid var(--pj-line);border-radius:20px;overflow:clip}.pj-tabs{border-radius:0 0 20px 20px}}@media(max-width:360px){.pj-header,.pj-main{padding-left:18px;padding-right:18px}.pj-main h1{font-size:29px!important}}
 
+/* Projeko stabilization pass — one navigation system everywhere */
+/* Never allow the retired dashboard navigation to coexist with the Projeko tabs. */
+.rd51-nav,.rd58-nav{display:none!important}
+.pj-primary{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;padding:13px 16px;border-radius:7px;background:#202322;color:#fff!important;text-decoration:none;font-size:14px;font-weight:550;margin:0 0 28px}
+.pj-section-space{margin-top:4px}.pj-rowlink{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid #e8ebe8;color:#202322!important;text-decoration:none;font-size:14px}.pj-rowlink span{flex:1}.pj-rowlink svg{width:17px;color:#737875}
+.pj-avatar{border:0!important;box-shadow:none!important}
+.rd-live-detail{box-sizing:border-box!important;width:min(100%,520px)!important;max-width:520px!important;min-height:100dvh!important;margin:0 auto!important;padding:calc(28px + env(safe-area-inset-top)) 24px calc(96px + env(safe-area-inset-bottom))!important;background:#fff!important;color:#202322!important;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+.rd-live-detail>.pj-tabs{position:fixed!important;left:50%!important;bottom:0!important;transform:translateX(-50%)!important;width:min(100%,520px)!important}
+#profilePreview{background:#f5f6f3!important;padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
+#profilePreview>.rd-business{width:min(100%,520px)!important;max-width:520px!important;margin:0 auto!important;padding-bottom:100px!important;background:#fff!important}
+#profilePreview>.pj-tabs{position:fixed!important;left:50%!important;bottom:0!important;transform:translateX(-50%)!important;width:min(100%,520px)!important}
+#contractorQuotes .rd-live-back,#clientMessages .rd-live-back{display:none!important}
+#contractorQuotes .rd-live-heading,#clientMessages .rd-live-heading{margin-top:0!important}
+.rd-live-tabs{display:flex!important;overflow-x:auto!important;scrollbar-width:none!important;gap:0!important;border-bottom:1px solid #e8ebe8!important;margin:0 0 22px!important}.rd-live-tabs::-webkit-scrollbar{display:none}.rd-live-tabs button{white-space:nowrap!important;flex:0 0 auto!important;padding:12px 14px!important;background:transparent!important;border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;color:#737875!important}.rd-live-tabs button.active{color:#202322!important;border-bottom-color:#896a36!important}
+.rd-live-card{position:relative!important}.rd-live-card:active,.pj-project:active,.pj-tabs a:active{opacity:.65}
+@media(min-width:700px){.rd-live-detail{margin:32px auto!important;min-height:calc(100dvh - 64px)!important;border:1px solid #e8ebe8!important;border-radius:20px!important}.rd-live-detail>.pj-tabs,#profilePreview>.pj-tabs{bottom:32px!important;border:1px solid #e8ebe8!important;border-radius:0 0 20px 20px!important}}
+
