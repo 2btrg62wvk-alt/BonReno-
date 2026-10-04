@@ -215,7 +215,7 @@ async function render(){guardSessionRoute();const r=route(),version=++routeVersi
   if(!user||!profile){go(requiredRole==='contractor'||['profilePreview','building'].includes(r)?'loginPro':'loginClient');return;}
   if(requiredRole&&profile.role!==requiredRole){notify('Ce menu appartient à un compte '+(requiredRole==='client'?'client':'entrepreneur')+'.');go(profile.role==='client'?'clientDashboard':'contractorFeed');return;}
  }
- if(renderedRoute!==r){renderedRoute=r;if(r==='contractorFeed'){paint(byId('rd62LiveProjects'),empty('Chargement des projets…'));byId('rd87MatchCount').textContent='…';}if(r==='clientDashboard'){const section=$('#clientDashboard .rd51-section');section.querySelectorAll('.rd51-project,.rd-live-card,.rd-live-empty').forEach(e=>e.remove());section.dataset.cards='';section.insertAdjacentHTML('beforeend',empty('Chargement de vos projets…'));const activity=$('#clientDashboard .rd79-activity');if(activity)paint(activity,empty('Chargement…'));}if(['profilePreview','businessProfile'].includes(r))paint(byId(r),'<div class="rd-business"><p role="status">Chargement du profil…</p></div>');if(['clientProjects','clientProjectDetail','contractorProject','contractorBid','quoteDetail','contractorQuotes','quoteAccepted','clientMessages','clientChat'].includes(r))shell(r,'<p class="rd-live-copy" role="status">Chargement…</p>');}
+ if(renderedRoute!==r){renderedRoute=r;if(['profilePreview','businessProfile'].includes(r))paint(byId(r),'<div class="rd-business"><p role="status">Chargement du profil…</p></div>');if(['clientProjects','clientProjectDetail','contractorProject','contractorBid','quoteDetail','contractorQuotes','quoteAccepted','clientMessages','clientChat'].includes(r))shell(r,'<p class="rd-live-copy" role="status">Chargement…</p>');}
  try{
   if(r==='clientDashboard')await renderDashboard(version);
   else if(r==='clientProjects'||r==='clientProjectsPublished'){if(r==='clientProjectsPublished'){go('clientProjects');return;}await renderClientProjects(version);}
@@ -323,9 +323,7 @@ function clearSessionData(){
  for(const id of ['profilePreview','businessProfile','clientProjects','clientProjectDetail','contractorProject','contractorBid','quoteDetail','contractorQuotes','quoteAccepted','clientMessages','clientChat','resetPassword']){if(byId(id))paint(byId(id),'');}
  document.querySelectorAll('#client input,#pro1 input,#pro2 input,#territory input,#services input,#loginClient input,#loginPro input,#projectDetails input,#projectDetails textarea,#projectLocation input').forEach(input=>{if(['checkbox','radio'].includes(input.type))input.checked=false;else input.value='';});
  byId('rd56Preview').innerHTML='';byId('rd56Status').textContent='Aucune photo sélectionnée';
- const section=$('#clientDashboard .rd51-section');section.querySelectorAll('.rd51-project,.rd-live-card,.rd-live-empty').forEach(e=>e.remove());section.dataset.cards='';
- $('#clientDashboard .rd51-head h1').textContent='Bonjour.';$('#clientDashboard .rd51-avatar').textContent='';$('#clientDashboard .rd79-activity')&&paint($('#clientDashboard .rd79-activity'),'');
- paint(byId('rd62LiveProjects'),'');byId('rd87MatchCount').textContent='0';$('#contractorFeed .rd58-prohead h1').textContent='Bonjour.';$('#contractorFeed .rd58-why p').textContent='';byId('rd-live-review')?.remove();byId('rd-live-notice')?.remove();document.querySelectorAll('.rd-live-error').forEach(e=>e.remove());
+ paint(byId('clientDashboard'),'');paint(byId('contractorFeed'),'');byId('rd-live-review')?.remove();byId('rd-live-notice')?.remove();document.querySelectorAll('.rd-live-error').forEach(e=>e.remove());
 }
 let authVersion=0;
 async function applyAuthState(event,session){const ticket=++authVersion;try{
