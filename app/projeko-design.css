@@ -372,3 +372,28 @@ html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!importa
 #clientChat .pj-chat-file-preview>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#555650;font-size:12px}
 #clientChat .pj-chat-file-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#eeeae2;color:#8e692f;font-size:18px}
 #clientChat .pj-chat-file-remove{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:24px!important;height:24px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#e5e3df!important;color:#5f605d!important;font-size:18px!important;line-height:1!important}
+
+/* Chat interaction fix: fixed shell, independently scrollable thread */
+@media(max-width:699px){
+ #clientChat.active{touch-action:manipulation!important}
+ #clientChat.active .pj-chat{
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr) auto!important;
+  height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;
+  overflow:hidden!important
+ }
+ #clientChat.active .pj-chat-header{grid-row:1!important;flex:none!important}
+ #clientChat.active .pj-chat-date{grid-row:2!important;flex:none!important}
+ #clientChat.active .pj-chat-messages{
+  grid-row:3!important;display:block!important;
+  min-height:0!important;height:auto!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior-y:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important
+ }
+ #clientChat.active .pj-chat-compose{
+  grid-row:4!important;position:relative!important;inset:auto!important;
+  flex:none!important;z-index:5!important
+ }
+}
