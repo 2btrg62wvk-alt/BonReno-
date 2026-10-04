@@ -76,3 +76,6 @@
 .pj-logout{width:100%;min-height:46px;border:1px solid #e8ebe8;border-radius:7px;background:#fff;color:#202322;font:500 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
 .pj-logout:active{background:#f5f6f3}
 
+
+/* Header logout */
+.pj-head-actions{display:flex;align-items:center;gap:12px}.pj-header-logout{border:0;background:transparent;color:#896a36;padding:8px 0;font:500 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}.pj-header-logout:active{opacity:.55}
