@@ -217,3 +217,28 @@ html.rd-live-app .screen:target{background:#fff!important;color:var(--pj-ink)!im
 :is(#clientProjects,#clientProjectsPublished,#clientProjectDetail,#quoteDetail,#contractorProject,#contractorBid,#contractorQuotes,#quoteAccepted,#clientMessages,#clientChat,#clientAcceptedProject){background:var(--pj-paper)!important}
 @media(min-width:700px){:is(#clientDashboard,#contractorFeed) :is(.rd51-client,.rd58-shell),.rd-live-detail{margin:32px auto!important;min-height:calc(100dvh - 64px)!important;border:1px solid var(--pj-line)!important;border-radius:20px!important;overflow:clip!important}.rd-live-nav,:is(#clientDashboard,#contractorFeed) :is(.rd51-nav,.rd58-nav){bottom:32px!important;border:1px solid var(--pj-line)!important;border-radius:0 0 20px 20px!important}}
 @media(max-width:360px){:is(#clientDashboard,#contractorFeed) :is(.rd51-client,.rd58-shell),.rd-live-detail{padding-left:18px!important;padding-right:18px!important}:is(#clientDashboard,#contractorFeed) :is(.rd51-head,.rd58-prohead) h1,.rd-live-heading{font-size:29px!important}}
+
+/* Projeko entrepreneur screenshot hotfix v3 */
+/* The legacy nav renders an icon span plus an SVG. Keep only the current SVG. */
+#contractorFeed .rd58-nav a>span,
+#clientDashboard .rd51-nav a>span{display:none!important}
+#contractorFeed .rd58-nav a,
+#clientDashboard .rd51-nav a{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important}
+#contractorFeed .rd58-nav a svg,
+#clientDashboard .rd51-nav a svg{display:block!important;width:21px!important;height:21px!important;margin:0!important}
+#contractorFeed .rd58-nav,
+#clientDashboard .rd51-nav{grid-template-columns:repeat(4,minmax(0,1fr))!important;min-height:68px!important}
+#contractorFeed .rd58-shell{padding-bottom:calc(92px + env(safe-area-inset-bottom))!important}
+#contractorFeed .rd58-prohead{margin-bottom:14px!important}
+#contractorFeed .rd58-filterbar{margin:10px 0 18px!important;align-items:center!important}
+#contractorFeed .rd58-filterbar span{font-size:16px!important}
+#contractorFeed .rd58-filterbar a{min-height:40px!important;padding:8px 12px!important}
+#contractorFeed .rd58-filterbar a::after{content:none!important}
+#contractorFeed .rd58-filterbar a{font-size:0!important}
+#contractorFeed .rd58-filterbar a::before{content:"Mes services";font-size:12px!important}
+#contractorFeed .rd58-why{margin:10px 0 18px!important;padding:0!important;border:0!important}
+#contractorFeed .rd-pro-shortcuts{margin:8px 0 14px!important}
+#contractorFeed .rd-pro-shortcuts a{min-height:64px!important;padding:14px 0!important}
+#contractorFeed .rd-pro-shortcuts a span{display:grid!important;width:28px!important;height:28px!important}
+#contractorFeed .rd-pro-shortcuts strong{font-size:14px!important}
+#contractorFeed .rd-pro-shortcuts small{font-size:11px!important}
