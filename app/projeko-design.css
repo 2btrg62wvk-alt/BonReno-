@@ -161,62 +161,21 @@
 #clientChat .pj-chat-file-preview img{display:block!important;flex:0 0 54px!important;width:54px!important;height:54px!important;max-width:54px!important;max-height:54px!important;object-fit:cover!important;border-radius:11px!important}#clientChat .pj-chat-file-preview>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#666;font-size:11px}#clientChat .pj-chat-file-remove{position:absolute!important;right:5px!important;top:5px!important;display:grid!important;place-items:center!important;width:23px!important;height:23px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#e8e6e1!important;color:#555!important;font-size:17px!important}
 #clientChat .pj-chat-attachment{display:block;max-width:76%;text-decoration:none!important}#clientChat .pj-chat-image{overflow:hidden;border-radius:21px 21px 21px 8px}#clientChat .mine .pj-chat-image{border-radius:21px 21px 8px 21px}#clientChat .pj-chat-image img{display:block;max-width:100%;max-height:320px;object-fit:cover}#clientChat .pj-chat-document{display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:17px;background:#eceae5;color:#222!important}#clientChat .mine .pj-chat-document{background:#9b7132;color:#fff!important}
 
-/* iOS keyboard: size chat to the actual visual viewport */
-@media(max-width:699px){
- #clientChat.screen,#clientChat.screen:target,#clientChat.active{
-  top:var(--chat-vtop,0px)!important;
-  bottom:auto!important;
-  height:var(--chat-vh,100dvh)!important;
-  min-height:0!important;
-  max-height:var(--chat-vh,100dvh)!important
- }
- #clientChat .rd-live-detail,#clientChat .pj-chat{
-  height:100%!important;min-height:0!important;max-height:100%!important
- }
-}
 
-/* iOS PWA keyboard fallback */
+/* Chat must override the global .rd-live-detail shell */
 @media(max-width:699px){
- #clientChat.active:has(#rd-live-message:focus){
-  height:var(--chat-live-height,var(--chat-vh,100dvh))!important;
-  max-height:var(--chat-live-height,var(--chat-vh,100dvh))!important;
- }
- #clientChat.active:has(#rd-live-message:focus) .pj-chat-compose{
-  margin-bottom:4px!important;
-  padding-bottom:7px!important;
- }
-}
-
-/* iOS keyboard canonical behavior: do not pin the screen to the layout viewport */
-@media(max-width:699px){
+ html.rd-live-app body:has(#clientChat.active){overflow:hidden!important}
  #clientChat.screen,#clientChat.screen:target,#clientChat.active{
-  position:absolute!important;
-  inset:0!important;
-  top:0!important;
-  width:100%!important;
-  height:100%!important;
-  min-height:100%!important;
-  max-height:none!important;
-  overflow:hidden!important;
+  position:fixed!important;left:0!important;right:0!important;top:0!important;bottom:auto!important;
+  width:100%!important;height:var(--chat-vh,100dvh)!important;min-height:0!important;max-height:none!important;
+  margin:0!important;padding:0!important;overflow:hidden!important
  }
  #clientChat .rd-live-detail{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  min-height:0!important;
+  position:static!important;box-sizing:border-box!important;
+  width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;
+  margin:0!important;padding:0!important;overflow:hidden!important
  }
- #clientChat .pj-chat{
-  width:100%!important;
-  height:100%!important;
-  min-height:0!important;
-  max-height:none!important;
- }
- #clientChat.active:has(#rd-live-message:focus){
-  height:100%!important;
-  max-height:none!important;
- }
- #clientChat.active:has(#rd-live-message:focus) .pj-chat-compose{
-  margin-bottom:0!important;
- }
+ #clientChat .pj-chat{height:100%!important;min-height:0!important;max-height:none!important}
+ #clientChat .pj-chat-compose{margin-bottom:calc(6px + env(safe-area-inset-bottom))!important}
+ #clientChat:has(#rd-live-message:focus) .pj-chat-compose{margin-bottom:6px!important}
 }
