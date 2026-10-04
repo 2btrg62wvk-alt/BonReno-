@@ -365,3 +365,10 @@ html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!importa
 #clientChat .mine .pj-chat-document{background:linear-gradient(145deg,#b28a49,#8e692f);color:#fff!important;border-color:transparent}
 #clientChat .pj-chat-document span{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:rgba(255,255,255,.3);font-size:14px}
 #clientChat .pj-chat-document b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:550}
+
+#clientChat .pj-luxe-chat .pj-chat-compose:has(.pj-chat-file-preview){grid-template-rows:auto auto}
+#clientChat .pj-chat-file-preview{grid-column:1/-1;position:relative;display:flex;align-items:center;gap:10px;min-width:0;margin:1px 4px 5px;padding:8px 38px 8px 8px;border-radius:18px;background:rgba(255,255,255,.82);box-shadow:0 4px 18px rgba(40,34,25,.06)}
+#clientChat .pj-chat-file-preview img{width:54px;height:54px;border-radius:13px;object-fit:cover}
+#clientChat .pj-chat-file-preview>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#555650;font-size:12px}
+#clientChat .pj-chat-file-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#eeeae2;color:#8e692f;font-size:18px}
+#clientChat .pj-chat-file-remove{position:absolute;right:8px;top:8px;display:grid;place-items:center;width:24px!important;height:24px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#e5e3df!important;color:#5f605d!important;font-size:18px!important;line-height:1!important}
