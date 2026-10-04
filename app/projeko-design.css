@@ -149,3 +149,11 @@
 #clientChat .pj-chat-compose button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:#202322;color:#fff;cursor:pointer;touch-action:manipulation}
 #clientChat .pj-chat-compose button svg{width:20px!important;height:20px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
 #clientChat .pj-chat-compose button:active{opacity:.75;transform:scale(.96)}
+
+/* Chat: prevent page-level iOS rubber-band while keeping message scrolling natural */
+html.rd-live-app:has(#clientChat.active),
+html.rd-live-app:has(#clientChat.active) body{overscroll-behavior-y:none!important}
+#clientChat.active{overscroll-behavior-y:none!important}
+#clientChat.active .pj-chat{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+#clientChat.active .pj-chat-messages{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
+#clientChat.active .pj-chat-compose{position:relative!important;bottom:auto!important;flex:0 0 auto!important}
