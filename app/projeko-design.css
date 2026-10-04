@@ -211,3 +211,10 @@
   padding-bottom:96px!important;
  }
 }
+
+/* JS now owns the composer position in both closed/open keyboard states */
+@media(max-width:699px){
+ #clientChat .pj-chat-compose{
+  z-index:2147483000!important;
+ }
+}
