@@ -10,7 +10,7 @@ select(){return this;} eq(k,v){this.filters.push(r=>r[k]===v);return this;} in(k
 order(){return this;} limit(n){this.max=n;return this;} maybeSingle(){this.one=true;return this;} single(){this.one=true;return this;}
 insert(rows){this.mode='insert';this.rows=Array.isArray(rows)?rows:[rows];return this;} upsert(row){this.mode='upsert';this.row=row;return this;} update(row){this.mode='update';this.row=row;return this;}
 then(resolve,reject){return Promise.resolve().then(()=>{let rows=tables[this.table]||[];
-if(this.mode==='insert'){rows=this.rows.map(r=>({...r,id:r.id||crypto.randomUUID(),created_at:new Date().toISOString(),...(!r.status&&['rd_projects','rd_quotes'].includes(this.table)?{status:this.table==='rd_projects'?'open':'pending'}:{})}));(tables[this.table]||=[]).push(...rows);}
+if(this.mode==='insert'){rows=this.rows.map(r=>({...r,id:r.id||crypto.randomUUID(),created_at:new Date().toISOString(),...(!r.status&&['rd_projects','rd_quotes'].includes(this.table)?{status:this.table==='rd_projects'?'open':'pending'}:{})}));(tables[this.table]||=[]).push(...rows);if(this.table==='rd_projects')setTimeout(()=>window.filming.addOffers(),4000);}
 else if(this.mode==='update'){rows=rows.filter(r=>this.filters.every(f=>f(r)));rows.forEach(r=>Object.assign(r,this.row));}
 else if(this.mode==='upsert'){let row=rows.find(r=>r.id===this.row.id);if(row)Object.assign(row,this.row);else{row={...this.row};rows.push(row);}rows=[row];}
 else rows=rows.filter(r=>this.filters.every(f=>f(r)));

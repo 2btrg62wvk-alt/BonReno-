@@ -1,7 +1,7 @@
 <!doctype html><html lang="fr"><meta charset="utf-8"><title>Projeko — tournage isolé</title><body>Chargement du parcours…<script>
 fetch('/index.html').then(r=>r.text()).then(html=>{
 html=html.replace(/<script src="\/app\/supabase-[^"]+"><\/script>/,'<script src="/filming-fixture.js"><\/script>');
-html=html.replace('</head>','<style>body{width:540px!important;max-width:540px!important;margin:0 auto!important}.screen:target{max-width:540px!important}</style></head>');
+html=html.replace('</head>','<style>body{width:640px!important;max-width:640px!important;margin:0!important;zoom:4;min-height:936px!important;background:#fff!important}.screen:target{max-width:540px!important;min-height:936px!important;margin:0 auto!important}</style></head>');
 html=html.replace('</body>','<script src="/filming-director.js"><\/script></body>');
 location.hash='clientDashboard';document.open();document.write(html);document.close();
 });
