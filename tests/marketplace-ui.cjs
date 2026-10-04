@@ -6,7 +6,7 @@ const tables={rd_profiles:Object.entries(users).map(([k,v])=>({id:v.id,role:k===
 tables.rd_business_pages=[];tables.rd_portfolio=[];
 let current=users.client,authCallback,queryDelay=null;const intervals=[];
 const recoveryBoot=process.argv.includes('--recovery');let passwordUpdates=0;
-const dom=new JSDOM(fs.readFileSync(path.join(__dirname,'../index.html'),'utf8'),{url:'https://renodirect.vercel.app/#clientDashboard',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window;
+const dom=new JSDOM(fs.readFileSync(path.join(__dirname,'../index.html'),'utf8'),{url:'https://projeko.vercel.app/#clientDashboard',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window;
 w.HTMLElement.prototype.scrollIntoView=function(){};w.confirm=()=>true;w.fetch=async()=>({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(__dirname,'../app/cities.json')))});w.setInterval=(fn,ms)=>{intervals.push({fn,ms});return intervals.length;};
 class Query {
  upsert(row){this.mode='upsert';this.row=row;return this;}

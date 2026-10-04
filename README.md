@@ -27,7 +27,7 @@ Limites : JSDOM simule Auth et le réseau. La réception des courriels de confir
 
 Projet : `qefpomgdknlcsavkritc`, organisation Projeko.
 
-- Authentication → URL Configuration : Site URL `https://renodirect.vercel.app`; autoriser `https://renodirect.vercel.app/**` dans Redirect URLs.
+- Authentication → URL Configuration : Site URL `https://projeko.vercel.app`; autoriser `https://projeko.vercel.app/**` dans Redirect URLs.
 - Garder la confirmation des courriels activée.
 - Configurer un service SMTP pour les courriels de confirmation et de récupération destinés aux utilisateurs publics. Le SMTP par défaut Supabase est limité; le parcours public d’inscription ne doit pas être considéré comme vérifié avant cette configuration et un essai de confirmation.
 
