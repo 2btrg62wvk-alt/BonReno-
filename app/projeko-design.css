@@ -191,3 +191,10 @@
   overflow-y:auto!important;touch-action:pan-y!important
  }
 }
+
+/* Composer resting position: closer to the iPhone bottom edge */
+@media(max-width:699px){
+ #clientChat:not(.keyboard-open) .pj-chat-compose{
+  transform:translateY(88px)!important;
+ }
+}
