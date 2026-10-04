@@ -218,3 +218,11 @@
   z-index:2147483000!important;
  }
 }
+
+/* Keep the last bubble fully above the floating composer */
+@media(max-width:699px){
+ #clientChat.keyboard-open .pj-chat-messages{
+  padding-bottom:118px!important;
+  scroll-padding-bottom:118px!important;
+ }
+}
