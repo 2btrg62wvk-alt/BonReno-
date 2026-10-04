@@ -2,7 +2,7 @@
 (() => {
 const user={id:'demo-client',email:'demo@example.invalid'};
 const names=['Atelier Nord','Maison & Matière','Équipe Horizon','Rénovation Lignée'];
-const tables={rd_profiles:[{id:user.id,role:'client',display_name:'Alex Martin',company_name:'',city:'Laval',latitude:45.57,longitude:-73.69,services:[],radius_km:50,rbq:''},...names.map((name,i)=>({id:'pro-'+i,role:'contractor',display_name:name,company_name:name,city:'Laval',latitude:45.57,longitude:-73.69,services:['general'],radius_km:50,rbq:''}))],rd_projects:[],rd_quotes:[],rd_messages:[],rd_project_photos:[],rd_account_details:[],rd_business_pages:[],rd_portfolio:[]};
+const tables={rd_profiles:[{id:user.id,role:'client',display_name:'Alex Martin',company_name:'',city:'Laval',latitude:45.57,longitude:-73.69,services:[],radius_km:50,rbq:''},...names.map((name,i)=>({id:'pro-'+i,role:'contractor',display_name:name,company_name:name,city:'Laval',latitude:45.57,longitude:-73.69,services:['bathroom'],radius_km:50,rbq:''}))],rd_projects:[],rd_quotes:[],rd_messages:[],rd_project_photos:[],rd_account_details:[],rd_business_pages:[],rd_portfolio:[]};
 let authCallback;
 class Query{
 constructor(table){this.table=table;this.filters=[];this.mode='select';}
@@ -18,5 +18,5 @@ if(this.max)rows=rows.slice(0,this.max);return {data:this.one?rows[0]||null:rows
 }
 const db={from:t=>new Query(t),auth:{getSession:async()=>({data:{session:{user}},error:null}),onAuthStateChange:fn=>(authCallback=fn,{data:{subscription:{unsubscribe(){}}}})},storage:{from:()=>({createSignedUrls:async()=>({data:[]})})},rpc:async(name,args)=>{if(name==='rd_accept_quote'){let q=tables.rd_quotes.find(q=>q.id===args.quote);let p=tables.rd_projects.find(p=>p.id===q.project_id);tables.rd_quotes.filter(q=>q.project_id===p.id).forEach(row=>row.status=row.id===q.id?'accepted':'declined');p.status='accepted';p.accepted_quote_id=q.id;return {data:p.id,error:null};}return {data:null,error:null};}};
 window.supabase={createClient:()=>db};
-window.filming={tables,addOffers(){const p=tables.rd_projects[0];[18750,21400,19900,22800].forEach((amount,i)=>tables.rd_quotes.push({id:'offer-'+i,project_id:p.id,contractor_id:'pro-'+i,amount,status:'pending',duration:['3 semaines','4 semaines','3 semaines','4 semaines'][i],start_date:'2026-11-16',message:'Réfection des armoires, installation du comptoir et nouvelle céramique. Main-d’œuvre et matériaux inclus. Taxes en sus.',created_at:new Date().toISOString()}));window.dispatchEvent(new Event('focus'));}};
+window.filming={tables,addOffers(){const p=tables.rd_projects[0];[18750,21400,19900,22800].forEach((amount,i)=>tables.rd_quotes.push({id:'offer-'+i,project_id:p.id,contractor_id:'pro-'+i,amount,status:'pending',duration:['3 semaines','4 semaines','3 semaines','4 semaines'][i],start_date:'2026-11-16',message:'Douche, nouvelle céramique et installation de la vanité. Main-d’œuvre et matériaux inclus. Taxes en sus.',created_at:new Date().toISOString()}));window.dispatchEvent(new Event('focus'));}};
 })();

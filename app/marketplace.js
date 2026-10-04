@@ -23,11 +23,11 @@ function guardSessionRoute(){const id=route(),target=signedInRoute(id);if(target
 function installPageTransitions(){
  const style=document.createElement('style');style.id='rd-page-motion';
  style.textContent=`.screen:target,.screen:target > .top,.screen:target > .success{animation:none!important}
- ::view-transition-group(root){animation-duration:300ms;animation-timing-function:cubic-bezier(.22,1,.36,1)}
- ::view-transition-old(root){animation:rd-snapshot-out 300ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
- ::view-transition-new(root){animation:rd-snapshot-in 300ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
- @keyframes rd-snapshot-out{from{opacity:1}to{opacity:0}}
- @keyframes rd-snapshot-in{from{opacity:0}to{opacity:1}}
+ ::view-transition-group(root){animation-duration:180ms;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+ ::view-transition-old(root){animation:rd-snapshot-out 180ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
+ ::view-transition-new(root){animation:rd-snapshot-in 180ms cubic-bezier(.22,1,.36,1) both;mix-blend-mode:normal}
+ @keyframes rd-snapshot-out{from{opacity:1;transform:translateX(0)}to{opacity:1;transform:translateX(-100%)}}
+ @keyframes rd-snapshot-in{from{opacity:1;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
  @media(prefers-reduced-motion:reduce){::view-transition-group(root),::view-transition-old(root),::view-transition-new(root){animation:none!important}}`;
  document.head.append(style);
  let active=null,serial=0;
