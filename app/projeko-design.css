@@ -174,3 +174,15 @@
   height:100%!important;min-height:0!important;max-height:100%!important
  }
 }
+
+/* iOS PWA keyboard fallback */
+@media(max-width:699px){
+ #clientChat.active:has(#rd-live-message:focus){
+  height:var(--chat-live-height,var(--chat-vh,100dvh))!important;
+  max-height:var(--chat-live-height,var(--chat-vh,100dvh))!important;
+ }
+ #clientChat.active:has(#rd-live-message:focus) .pj-chat-compose{
+  margin-bottom:4px!important;
+  padding-bottom:7px!important;
+ }
+}
