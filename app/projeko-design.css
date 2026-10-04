@@ -186,3 +186,37 @@
   padding-bottom:7px!important;
  }
 }
+
+/* iOS keyboard canonical behavior: do not pin the screen to the layout viewport */
+@media(max-width:699px){
+ #clientChat.screen,#clientChat.screen:target,#clientChat.active{
+  position:absolute!important;
+  inset:0!important;
+  top:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-height:none!important;
+  overflow:hidden!important;
+ }
+ #clientChat .rd-live-detail{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+ }
+ #clientChat .pj-chat{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+ }
+ #clientChat.active:has(#rd-live-message:focus){
+  height:100%!important;
+  max-height:none!important;
+ }
+ #clientChat.active:has(#rd-live-message:focus) .pj-chat-compose{
+  margin-bottom:0!important;
+ }
+}
